@@ -771,7 +771,7 @@ export default function VisionPage() {
 
               <button
                 type="button"
-                onClick={() => window.location.reload()}``
+                 onClick={() => window.location.reload()}
                 className="rounded-full bg-[#765b70] px-5 py-3 text-sm text-white"
               >
                 Try again
