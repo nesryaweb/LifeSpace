@@ -899,7 +899,7 @@ const loadProjects = useCallback(async () => {
     );
   }
 
-  // Add a new task either to the main list or under its parent.
+  // Add a new task either to the  list or under its parent.
   function addTaskToList(newTask, parentId = null) {
     setTasks((current) => {
       if (!parentId) {
@@ -1055,7 +1055,7 @@ const loadProjects = useCallback(async () => {
 
   async function deleteTask(task) {
     const confirmed = window.confirm(
-      `Delete "${task.title}"? Its subtasks will remain as standalone tasks.`
+      `Delete "${task.title}"? Its subtasks will re as standalone tasks.`
     );
 
     if (!confirmed) return;
@@ -1086,7 +1086,7 @@ const loadProjects = useCallback(async () => {
 
 
   return (
-    <main className="min-h-screen  px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
+    < className="min-h-screen  px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">

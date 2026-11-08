@@ -375,7 +375,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 text-[#51464B] sm:px-7 lg:px-10">
+    < className="min-h-screen px-4 py-8 text-[#51464B] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>

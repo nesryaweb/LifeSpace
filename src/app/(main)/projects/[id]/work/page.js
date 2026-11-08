@@ -464,7 +464,7 @@ export default function ProjectWorkPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#faf7f8] px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
+    < className="min-h-screen bg-[#faf7f8] px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-5xl">
         <header className="mb-8 flex items-center gap-3">
           <Link

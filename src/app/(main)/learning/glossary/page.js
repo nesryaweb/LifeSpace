@@ -230,7 +230,7 @@ export default function LearningGlossaryPage() {
   );
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto w-full max-w-[1400px]">
         <Link
           href="/learning"

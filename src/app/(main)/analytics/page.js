@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -78,7 +77,7 @@ function getLastMonths(count = 6) {
     const date = new Date(
       today.getFullYear(),
       today.getMonth() - (count - 1 - index),
-      1
+      1,
     );
 
     return {
@@ -169,13 +168,7 @@ function SectionTitle({ icon: Icon, title, description }) {
   );
 }
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  detail,
-  color = COLORS.blush,
-}) {
+function StatCard({ icon: Icon, label, value, detail, color = COLORS.blush }) {
   return (
     <div className={cardClass}>
       <div className="flex items-start justify-between gap-3">
@@ -184,9 +177,7 @@ function StatCard({
           <p className="mt-2 text-2xl font-semibold tracking-tight text-[#443744]">
             {value}
           </p>
-          {detail && (
-            <p className="mt-1 text-xs text-[#A49AA3]">{detail}</p>
-          )}
+          {detail && <p className="mt-1 text-xs text-[#A49AA3]">{detail}</p>}
         </div>
 
         <div
@@ -219,11 +210,7 @@ function ChartTooltip({ active, payload, label }) {
       <p className="mb-1 text-xs font-medium text-[#756875]">{label}</p>
 
       {payload.map((item) => (
-        <p
-          key={item.dataKey}
-          className="text-xs"
-          style={{ color: item.color }}
-        >
+        <p key={item.dataKey} className="text-xs" style={{ color: item.color }}>
           {item.name}: {formatNumber(item.value)}
         </p>
       ))}
@@ -262,15 +249,15 @@ export default function AnalyticsPage() {
         endpoints.map((url) =>
           fetch(url, {
             cache: "no-store",
-          })
-        )
+          }),
+        ),
       );
 
       const failedResponse = responses.find((response) => !response.ok);
 
       if (failedResponse) {
         throw new Error(
-          `One of the modules could not be loaded (${failedResponse.status}).`
+          `One of the modules could not be loaded (${failedResponse.status}).`,
         );
       }
 
@@ -294,7 +281,7 @@ export default function AnalyticsPage() {
     } catch (err) {
       console.error("Analytics loading error:", err);
       setError(
-        err.message || "Something went wrong while loading your analytics."
+        err.message || "Something went wrong while loading your analytics.",
       );
     } finally {
       setLoading(false);
@@ -310,7 +297,7 @@ export default function AnalyticsPage() {
     const todayStart = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate()
+      today.getDate(),
     );
 
     const tasks = data.tasks;
@@ -320,27 +307,20 @@ export default function AnalyticsPage() {
     const learningPaths = data.learningPaths;
     const journalEntries = data.journalEntries;
 
-    const completedTasks = tasks.filter(
-      (task) => task.status === "DONE"
-    );
+    const completedTasks = tasks.filter((task) => task.status === "DONE");
 
     const inProgressTasks = tasks.filter(
-      (task) => task.status === "IN_PROGRESS"
+      (task) => task.status === "IN_PROGRESS",
     );
 
-    const todoTasks = tasks.filter(
-      (task) => task.status === "TODO"
-    );
+    const todoTasks = tasks.filter((task) => task.status === "TODO");
 
     const overdueTasks = tasks.filter((task) => {
       if (!task.dueDate || task.status === "DONE") return false;
 
       const dueDate = new Date(task.dueDate);
 
-      return (
-        !Number.isNaN(dueDate.getTime()) &&
-        dueDate < todayStart
-      );
+      return !Number.isNaN(dueDate.getTime()) && dueDate < todayStart;
     });
 
     const taskCompletionRate = tasks.length
@@ -348,35 +328,29 @@ export default function AnalyticsPage() {
       : 0;
 
     const activeProjects = projects.filter(
-      (project) => project.status === "ACTIVE"
+      (project) => project.status === "ACTIVE",
     );
 
     const completedProjects = projects.filter(
-      (project) => project.status === "COMPLETED"
+      (project) => project.status === "COMPLETED",
     );
 
     const projectProgress =
       projects.length > 0
         ? projects.reduce(
             (total, project) => total + (Number(project.progress) || 0),
-            0
+            0,
           ) / projects.length
         : 0;
 
-    const activeGoals = goals.filter(
-      (goal) => goal.status === "ACTIVE"
-    );
+    const activeGoals = goals.filter((goal) => goal.status === "ACTIVE");
 
-    const completedGoals = goals.filter(
-      (goal) => goal.status === "COMPLETED"
-    );
+    const completedGoals = goals.filter((goal) => goal.status === "COMPLETED");
 
-    const pausedGoals = goals.filter(
-      (goal) => goal.status === "PAUSED"
-    );
+    const pausedGoals = goals.filter((goal) => goal.status === "PAUSED");
 
     const financialGoals = goals.filter(
-      (goal) => goal.type === "FINANCIAL" && goal.financialGoal
+      (goal) => goal.type === "FINANCIAL" && goal.financialGoal,
     );
 
     const financialTotals = financialGoals.reduce((groups, goal) => {
@@ -409,8 +383,7 @@ export default function AnalyticsPage() {
       const amount = Number(transaction.amount) || 0;
 
       if (transaction.type === "INCOME") {
-        incomeByCurrency[currency] =
-          (incomeByCurrency[currency] || 0) + amount;
+        incomeByCurrency[currency] = (incomeByCurrency[currency] || 0) + amount;
       }
 
       if (transaction.type === "EXPENSE") {
@@ -431,12 +404,12 @@ export default function AnalyticsPage() {
 
     const learningLessonCount = learningPaths.reduce(
       (total, path) => total + (Number(path.totalLessons) || 0),
-      0
+      0,
     );
 
     const completedLearningLessons = learningPaths.reduce(
       (total, path) => total + (Number(path.completedLessons) || 0),
-      0
+      0,
     );
 
     const learningProgress = learningLessonCount
@@ -444,7 +417,7 @@ export default function AnalyticsPage() {
       : 0;
 
     const journalThisMonth = journalEntries.filter((entry) =>
-      isSameMonth(entry.entryDate, today.getFullYear(), today.getMonth())
+      isSameMonth(entry.entryDate, today.getFullYear(), today.getMonth()),
     );
 
     const months = getLastMonths(6);
@@ -462,7 +435,7 @@ export default function AnalyticsPage() {
     }));
 
     const monthIndex = new Map(
-      months.map((month, index) => [month.key, index])
+      months.map((month, index) => [month.key, index]),
     );
 
     completedTasks.forEach((task) => {
@@ -508,7 +481,8 @@ export default function AnalyticsPage() {
       { name: "Completed", value: completedProjects.length },
       {
         name: "Other",
-        value: projects.length - activeProjects.length - completedProjects.length,
+        value:
+          projects.length - activeProjects.length - completedProjects.length,
       },
     ].filter((item) => item.value > 0);
 
@@ -623,13 +597,13 @@ export default function AnalyticsPage() {
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#968A95]">
             Start adding tasks, goals, projects, journal entries, learning
-            paths, and finance transactions. Your real activity will appear
-            here automatically.
+            paths, and finance transactions. Your real activity will appear here
+            automatically.
           </p>
         </div>
       )}
 
-      {/* Main overview */}
+      {/*  overview */}
       <section>
         <div className="mb-4 flex items-center gap-2">
           <Heart size={17} className="text-[#C58AA5]" />
@@ -716,18 +690,13 @@ export default function AnalyticsPage() {
                   color: COLORS.rose,
                 },
               ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-xl bg-[#FBF9FA] p-3"
-                >
+                <div key={item.label} className="rounded-xl bg-[#FBF9FA] p-3">
                   <div className="flex items-center gap-2">
                     <span
                       className="h-2 w-2 rounded-full"
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className="text-xs text-[#968A95]">
-                      {item.label}
-                    </span>
+                    <span className="text-xs text-[#968A95]">{item.label}</span>
                   </div>
 
                   <p className="mt-1 text-xl font-semibold text-[#443744]">
@@ -793,7 +762,7 @@ export default function AnalyticsPage() {
         />
 
         {analytics.monthlyActivity.some(
-          (month) => month.completedTasks || month.journalEntries
+          (month) => month.completedTasks || month.journalEntries,
         ) ? (
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -820,10 +789,7 @@ export default function AnalyticsPage() {
                   tickLine={false}
                 />
                 <Tooltip content={<ChartTooltip />} />
-                <Legend
-                  iconType="circle"
-                  wrapperStyle={{ fontSize: "12px" }}
-                />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: "12px" }} />
                 <Bar
                   dataKey="completedTasks"
                   name="Completed tasks"
@@ -937,9 +903,7 @@ export default function AnalyticsPage() {
                 >
                   {item.value}
                 </p>
-                <p className="mt-1 text-xs text-[#968A95]">
-                  {item.label}
-                </p>
+                <p className="mt-1 text-xs text-[#968A95]">{item.label}</p>
               </div>
             ))}
           </div>
@@ -962,11 +926,7 @@ export default function AnalyticsPage() {
                       ? goal.financialGoal?.progress
                       : goal.progress
                   }
-                  color={
-                    goal.type === "FINANCIAL"
-                      ? COLORS.sage
-                      : COLORS.blush
-                  }
+                  color={goal.type === "FINANCIAL" ? COLORS.sage : COLORS.blush}
                 />
               </div>
             ))}
@@ -1013,10 +973,7 @@ export default function AnalyticsPage() {
                     color: COLORS.rose,
                   },
                 ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-xl bg-[#FBF9FA] p-4"
-                  >
+                  <div key={item.label} className="rounded-xl bg-[#FBF9FA] p-4">
                     <div className="flex items-center gap-2 text-sm text-[#968A95]">
                       <item.icon size={16} style={{ color: item.color }} />
                       {item.label}
@@ -1032,7 +989,7 @@ export default function AnalyticsPage() {
                             >
                               {formatCurrency(amount, currency)}
                             </p>
-                          )
+                          ),
                         )
                       ) : (
                         <p className="text-lg font-semibold text-[#443744]">
@@ -1045,10 +1002,7 @@ export default function AnalyticsPage() {
 
                 <div className="rounded-xl bg-[#FBF9FA] p-4">
                   <div className="flex items-center gap-2 text-sm text-[#968A95]">
-                    <CircleDollarSign
-                      size={16}
-                      className="text-[#A991C8]"
-                    />
+                    <CircleDollarSign size={16} className="text-[#A991C8]" />
                     Net cash flow
                   </div>
 
@@ -1057,7 +1011,7 @@ export default function AnalyticsPage() {
                       new Set([
                         ...Object.keys(analytics.incomeByCurrency),
                         ...Object.keys(analytics.expensesByCurrency),
-                      ])
+                      ]),
                     ).map((currency) => {
                       const net =
                         (analytics.incomeByCurrency[currency] || 0) -
@@ -1082,7 +1036,7 @@ export default function AnalyticsPage() {
             )}
 
             {analytics.monthlyFinance.some(
-              (month) => month.income || month.expenses
+              (month) => month.income || month.expenses,
             ) && (
               <div className="mb-7">
                 <p className="mb-3 text-sm font-medium text-[#756875]">
@@ -1134,8 +1088,8 @@ export default function AnalyticsPage() {
 
                 <p className="mt-2 text-xs text-[#A49AA3]">
                   Monthly chart combines transaction amounts. If you use
-                  multiple currencies, view the totals above by currency
-                  rather than comparing the chart as a single-currency total.
+                  multiple currencies, view the totals above by currency rather
+                  than comparing the chart as a single-currency total.
                 </p>
               </div>
             )}
@@ -1167,10 +1121,7 @@ export default function AnalyticsPage() {
                           </span>
                         </div>
 
-                        <ProgressBar
-                          value={progress}
-                          color={COLORS.sage}
-                        />
+                        <ProgressBar value={progress} color={COLORS.sage} />
                       </div>
                     );
                   })}
@@ -1200,16 +1151,14 @@ export default function AnalyticsPage() {
                   <p className="text-xs text-[#968A95]">{item.label}</p>
 
                   {Object.entries(item.values).length ? (
-                    Object.entries(item.values).map(
-                      ([currency, amount]) => (
-                        <p
-                          key={currency}
-                          className="mt-1 text-base font-semibold text-[#443744]"
-                        >
-                          {formatCurrency(amount, currency)}
-                        </p>
-                      )
-                    )
+                    Object.entries(item.values).map(([currency, amount]) => (
+                      <p
+                        key={currency}
+                        className="mt-1 text-base font-semibold text-[#443744]"
+                      >
+                        {formatCurrency(amount, currency)}
+                      </p>
+                    ))
                   ) : (
                     <p className="mt-1 text-base font-semibold text-[#443744]">
                       —
@@ -1279,10 +1228,7 @@ export default function AnalyticsPage() {
                     </span>
                   </div>
 
-                  <ProgressBar
-                    value={path.progress}
-                    color={COLORS.lavender}
-                  />
+                  <ProgressBar value={path.progress} color={COLORS.lavender} />
                 </div>
               ))}
             </div>
@@ -1326,10 +1272,7 @@ export default function AnalyticsPage() {
             {analytics.journalEntries.length ? (
               <div className="space-y-3">
                 {[...analytics.journalEntries]
-                  .sort(
-                    (a, b) =>
-                      new Date(b.entryDate) - new Date(a.entryDate)
-                  )
+                  .sort((a, b) => new Date(b.entryDate) - new Date(a.entryDate))
                   .slice(0, 4)
                   .map((entry) => (
                     <div
@@ -1346,13 +1289,10 @@ export default function AnalyticsPage() {
                       </div>
 
                       <span className="shrink-0 text-xs text-[#A49AA3]">
-                        {new Date(entry.entryDate).toLocaleDateString(
-                          "en",
-                          {
-                            month: "short",
-                            day: "numeric",
-                          }
-                        )}
+                        {new Date(entry.entryDate).toLocaleDateString("en", {
+                          month: "short",
+                          day: "numeric",
+                        })}
                       </span>
                     </div>
                   ))}

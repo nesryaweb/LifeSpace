@@ -817,7 +817,7 @@ export default function VisionPage() {
   // Display loading and connection errors before showing the board.
   if (!loaded) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
+      < className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
         <div className="text-center">
           {loadError ? (
             <>
@@ -844,7 +844,7 @@ export default function VisionPage() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
+    < className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
       {/* Save error message */}
       {saveError && (
         <div className="fixed bottom-5 right-5 z-[9999] rounded-xl bg-red-100 px-4 py-3 text-sm text-red-700 shadow-lg">

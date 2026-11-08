@@ -1,4 +1,3 @@
-
 "use client";
 
 export default function PageLoader({ loading }) {
@@ -56,7 +55,7 @@ export default function PageLoader({ loading }) {
           background: #f2e8ef;
         }
 
-        .page-main {
+        .page- {
           overflow: hidden;
           transform: rotate(-3deg);
           animation: openPage 5s ease-in-out infinite;
@@ -209,70 +208,86 @@ export default function PageLoader({ loading }) {
         /* The notebook resets and rebuilds every 5 seconds */
 
         @keyframes openPage {
-          0%, 8% {
+          0%,
+          8% {
             transform: rotateY(-75deg) rotate(-3deg);
           }
-          22%, 78% {
+          22%,
+          78% {
             transform: rotateY(0) rotate(-3deg);
           }
-          92%, 100% {
+          92%,
+          100% {
             transform: rotateY(-75deg) rotate(-3deg);
           }
         }
 
         @keyframes drawLine {
-          0%, 18% {
+          0%,
+          18% {
             transform: scaleX(0);
           }
-          30%, 78% {
+          30%,
+          78% {
             transform: scaleX(1);
           }
-          90%, 100% {
+          90%,
+          100% {
             transform: scaleX(0);
           }
         }
 
         @keyframes tabIn {
-          0%, 12% {
+          0%,
+          12% {
             opacity: 0;
             transform: translateY(12px);
           }
-          22%, 78% {
+          22%,
+          78% {
             opacity: 1;
             transform: translateY(0);
           }
-          90%, 100% {
+          90%,
+          100% {
             opacity: 0;
             transform: translateY(12px);
           }
         }
 
         @keyframes stickerIn {
-          0%, 30% {
+          0%,
+          30% {
             transform: rotate(8deg) scale(0);
           }
-          42%, 78% {
+          42%,
+          78% {
             transform: rotate(8deg) scale(1);
           }
-          90%, 100% {
+          90%,
+          100% {
             transform: rotate(8deg) scale(0);
           }
         }
 
         @keyframes flowerIn {
-          0%, 36% {
+          0%,
+          36% {
             transform: scale(0) rotate(-40deg);
           }
-          48%, 78% {
+          48%,
+          78% {
             transform: scale(1) rotate(8deg);
           }
-          90%, 100% {
+          90%,
+          100% {
             transform: scale(0) rotate(-40deg);
           }
         }
 
         @keyframes twinkle {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0;
             transform: scale(0.5) rotate(0);
           }
@@ -283,7 +298,8 @@ export default function PageLoader({ loading }) {
         }
 
         @keyframes captionPulse {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.65;
           }
           50% {
@@ -301,7 +317,8 @@ export default function PageLoader({ loading }) {
         }
 
         @keyframes shadow {
-          0%, 100% {
+          0%,
+          100% {
             transform: scaleX(0.9);
             opacity: 0.18;
           }

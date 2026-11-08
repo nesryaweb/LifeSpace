@@ -446,7 +446,7 @@ export default function ProjectDetailPage() {
   async function deleteMilestone(milestone) {
     if (
       !confirm(
-        `Delete "${milestone.title}"? Its tasks will remain in this project, but will no longer belong to this milestone.`
+        `Delete "${milestone.title}"? Its tasks will re in this project, but will no longer belong to this milestone.`
       )
     ) {
       return;
@@ -820,7 +820,7 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#FAF7F5] px-5 py-10">
+      < className="min-h-screen bg-[#FAF7F5] px-5 py-10">
         <div className="mx-auto max-w-6xl animate-pulse">
           <div className="h-5 w-32 rounded bg-[#EEE5E5]" />
           <div className="mt-8 h-10 w-2/3 rounded-lg bg-[#EEE5E5]" />
@@ -833,7 +833,7 @@ export default function ProjectDetailPage() {
 
   if (error || !project) {
     return (
-      <main className="min-h-screen bg-[#FAF7F5] px-5 py-16">
+      < className="min-h-screen bg-[#FAF7F5] px-5 py-16">
         <div className="mx-auto max-w-xl rounded-3xl border border-[#EEE3E3] bg-white p-8 text-center shadow-sm">
           <FolderKanban
             className="mx-auto text-[#B78AA0]"
@@ -864,7 +864,7 @@ export default function ProjectDetailPage() {
   const projectDue = formatDate(project.dueDate);
 
   return (
-    <main className="min-h-screen bg-[#FAF7F5] px-4 py-6 text-[#51464B] sm:px-7 lg:px-10">
+    < className="min-h-screen bg-[#FAF7F5] px-4 py-6 text-[#51464B] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/projects"

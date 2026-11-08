@@ -10,7 +10,7 @@ export default function MainLayoutClient({ children }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
 
-  // Hide the loader when the destination page has changed.
+  // Hide the loader when the destination page changes.
   useEffect(() => {
     setLoading(false);
   }, [pathname]);
@@ -30,7 +30,11 @@ export default function MainLayoutClient({ children }) {
 
     const link = event.target.closest("a[href]");
 
-    if (!link || link.target === "_blank" || link.hasAttribute("download")) {
+    if (
+      !link ||
+      link.target === "_blank" ||
+      link.hasAttribute("download")
+    ) {
       return;
     }
 
@@ -46,21 +50,21 @@ export default function MainLayoutClient({ children }) {
 
   return (
     <div
-      className="flex min-h-screen bg-[#FAF7F5]"
+      className="flex min-h-screen w-full bg-[#FAF7F5]"
       onClickCapture={handleNavigation}
     >
       <AppSidebar />
 
-         <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9"
+      <main
+        className="min-h-screen min-w-0 flex-1 px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9"
         style={{
           backgroundImage:
             "radial-gradient(circle, #eedabfde 1px, transparent 2px)",
           backgroundSize: "30px 30px",
         }}
       >
-        
-            <div className="mx-auto max-w-[1400px]">
-        {children}
+        <div className="mx-auto w-full max-w-[1400px]">
+          {children}
         </div>
       </main>
 

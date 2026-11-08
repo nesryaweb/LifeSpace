@@ -788,7 +788,7 @@ export default function LearningPathPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen px-4 py-8 text-[#51434A] sm:px-7 lg:px-10">
+      < className="min-h-screen px-4 py-8 text-[#51434A] sm:px-7 lg:px-10">
         <div className="mx-auto flex min-h-[60vh] max-w-[1400px] items-center justify-center">
           <div className="flex flex-col items-center gap-3 text-[#A18BAE]">
             <LoaderCircle size={30} className="animate-spin" />
@@ -801,7 +801,7 @@ export default function LearningPathPage() {
 
   if (error || !path) {
     return (
-      <main className="min-h-screen px-4 py-8 sm:px-7 lg:px-10">
+      < className="min-h-screen px-4 py-8 sm:px-7 lg:px-10">
         <div className="mx-auto max-w-[1400px]">
           <Link
             href="/learning"
@@ -875,7 +875,7 @@ export default function LearningPathPage() {
   });
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto w-full max-w-[1400px]">
         <Link
           href="/learning"

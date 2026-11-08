@@ -323,7 +323,7 @@ export default function GoalDetailPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#FAF7F6]">
+      < className="flex min-h-screen items-center justify-center bg-[#FAF7F6]">
         <div className="flex flex-col items-center gap-3">
           <LoaderCircle size={28} className="animate-spin text-[#B77E99]" />
           <p className="text-xs text-[#998B91]">Opening your goal...</p>
@@ -334,7 +334,7 @@ export default function GoalDetailPage() {
 
   if (!goal) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#FAF7F6] px-5">
+      < className="flex min-h-screen items-center justify-center bg-[#FAF7F6] px-5">
         <div className="max-w-md rounded-2xl border border-[#ECE3E7] bg-white p-8 text-center">
           <AlertCircle size={28} className="mx-auto mb-3 text-[#B77E99]" />
           <h1 className="text-lg font-semibold text-[#55434C]">
@@ -366,7 +366,7 @@ export default function GoalDetailPage() {
       : 0);
 
   return (
-    <main className="min-h-screen bg-[#FAF7F6] px-4 py-6 sm:px-7 lg:px-10 lg:py-9">
+    < className="min-h-screen bg-[#FAF7F6] px-4 py-6 sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto max-w-[1200px]">
         <Link
           href="/goals"
