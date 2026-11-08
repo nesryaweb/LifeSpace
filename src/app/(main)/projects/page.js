@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -96,9 +95,7 @@ function getCompletedTaskCount(project) {
     return project.completedTaskCount;
   }
 
-  return (
-    project.tasks?.filter((task) => task.status === "DONE").length || 0
-  );
+  return project.tasks?.filter((task) => task.status === "DONE").length || 0;
 }
 
 function getProjectGoals(project) {
@@ -233,7 +230,7 @@ export default function ProjectsPage() {
         project.title?.toLowerCase().includes(query) ||
         project.description?.toLowerCase().includes(query) ||
         getProjectGoals(project).some((goal) =>
-          goal.title?.toLowerCase().includes(query)
+          goal.title?.toLowerCase().includes(query),
         );
 
       return matchesStatus && matchesSearch;
@@ -244,9 +241,8 @@ export default function ProjectsPage() {
     return {
       total: projects.filter((project) => project.status !== "ARCHIVED").length,
       active: projects.filter((project) => project.status === "ACTIVE").length,
-      completed: projects.filter(
-        (project) => project.status === "COMPLETED"
-      ).length,
+      completed: projects.filter((project) => project.status === "COMPLETED")
+        .length,
       planned: projects.filter((project) => project.status === "PLANNED")
         .length,
     };
@@ -254,7 +250,7 @@ export default function ProjectsPage() {
 
   const selectedGoals = useMemo(
     () => goals.filter((goal) => selectedGoalIds.includes(goal.id)),
-    [goals, selectedGoalIds]
+    [goals, selectedGoalIds],
   );
 
   function resetForm() {
@@ -293,14 +289,12 @@ export default function ProjectsPage() {
     setSelectedGoalIds((current) =>
       current.includes(goalId)
         ? current.filter((id) => id !== goalId)
-        : [...current, goalId]
+        : [...current, goalId],
     );
   }
 
   function removeGoal(goalId) {
-    setSelectedGoalIds((current) =>
-      current.filter((id) => id !== goalId)
-    );
+    setSelectedGoalIds((current) => current.filter((id) => id !== goalId));
   }
 
   async function saveProject(event) {
@@ -322,14 +316,12 @@ export default function ProjectsPage() {
 
     try {
       const response = await fetch(
-        editingProject
-          ? `/api/projects/${editingProject.id}`
-          : "/api/projects",
+        editingProject ? `/api/projects/${editingProject.id}` : "/api/projects",
         {
           method: editingProject ? "PATCH" : "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await response.json();
@@ -351,7 +343,7 @@ export default function ProjectsPage() {
   async function deleteProject(project) {
     if (
       !confirm(
-        `Delete "${project.title}"? This will also delete its project milestones and tasks.`
+        `Delete "${project.title}"? This will also delete its project milestones and tasks.`,
       )
     ) {
       return;
@@ -375,7 +367,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    < className="min-h-screen px-4 py-8 text-[#51464B] sm:px-7 lg:px-10">
+    <main className="min-h-screen px-4 py-8 text-[#51464B] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
           <div>
@@ -590,10 +582,7 @@ export default function ProjectsPage() {
 
                 {goals.length === 0 ? (
                   <div className="rounded-xl border border-dashed border-[#E8DADB] bg-[#FDFBFA] p-4 text-center">
-                    <Target
-                      size={20}
-                      className="mx-auto text-[#B18A9D]"
-                    />
+                    <Target size={20} className="mx-auto text-[#B18A9D]" />
                     <p className="mt-2 text-xs font-medium text-[#88777F]">
                       No available goals yet
                     </p>
@@ -642,9 +631,7 @@ export default function ProjectsPage() {
                       {goalDropdownOpen && (
                         <div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-56 overflow-y-auto rounded-xl border border-[#EDE2E3] bg-white p-2 shadow-xl">
                           {goals.map((goal) => {
-                            const selected = selectedGoalIds.includes(
-                              goal.id
-                            );
+                            const selected = selectedGoalIds.includes(goal.id);
 
                             return (
                               <button
@@ -731,7 +718,7 @@ export default function ProjectsPage() {
                         <option key={item.value} value={item.value}>
                           {item.label}
                         </option>
-                      )
+                      ),
                     )}
                   </select>
                 </FormField>
@@ -907,9 +894,7 @@ function ProjectCard({ project, onEdit, onDelete }) {
             ))}
           </div>
         ) : (
-          <p className="text-[11px] text-[#B1A3A8]">
-            No goals connected
-          </p>
+          <p className="text-[11px] text-[#B1A3A8]">No goals connected</p>
         )}
       </div>
 

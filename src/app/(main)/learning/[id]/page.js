@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -199,9 +198,7 @@ function FormField({ label, hint, children }) {
       </label>
       {children}
       {hint && (
-        <p className="mt-1.5 text-[11px] leading-5 text-[#A397A5]">
-          {hint}
-        </p>
+        <p className="mt-1.5 text-[11px] leading-5 text-[#A397A5]">{hint}</p>
       )}
     </div>
   );
@@ -215,8 +212,7 @@ function NoteStatusBadge({ status }) {
   };
 
   const label =
-    NOTE_STATUSES.find((item) => item.value === status)?.label ||
-    "Learning";
+    NOTE_STATUSES.find((item) => item.value === status)?.label || "Learning";
 
   return (
     <span
@@ -285,22 +281,16 @@ export default function LearningPathPage() {
       const notesData = await notesResponse.json();
 
       if (!pathResponse.ok) {
-        throw new Error(
-          pathData.error || "Could not load this learning path."
-        );
+        throw new Error(pathData.error || "Could not load this learning path.");
       }
 
       if (!notesResponse.ok) {
-        throw new Error(
-          notesData.error || "Could not load learning notes."
-        );
+        throw new Error(notesData.error || "Could not load learning notes.");
       }
 
       setPath({
         ...pathData,
-        notes: Array.isArray(notesData)
-          ? notesData
-          : notesData.notes || [],
+        notes: Array.isArray(notesData) ? notesData : notesData.notes || [],
       });
     } catch (err) {
       setError(err.message || "Something went wrong.");
@@ -393,7 +383,7 @@ export default function LearningPathPage() {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: newStatus }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -417,7 +407,7 @@ export default function LearningPathPage() {
     try {
       const response = await fetch(
         `/api/learning/${pathId}/lessons/${lesson.id}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       const data = await response.json();
@@ -484,7 +474,7 @@ export default function LearningPathPage() {
         }
       } catch {
         setResourceError(
-          "Please enter a valid URL beginning with https:// or http://."
+          "Please enter a valid URL beginning with https:// or http://.",
         );
         return;
       }
@@ -543,7 +533,7 @@ export default function LearningPathPage() {
     try {
       const response = await fetch(
         `/api/learning/${pathId}/resources/${resource.id}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       const data = await response.json();
@@ -621,10 +611,7 @@ export default function LearningPathPage() {
   function addKeyword() {
     setNoteForm((current) => ({
       ...current,
-      keywords: [
-        ...current.keywords,
-        createEmptyKeyword(),
-      ],
+      keywords: [...current.keywords, createEmptyKeyword()],
     }));
   }
 
@@ -632,9 +619,7 @@ export default function LearningPathPage() {
     setNoteForm((current) => ({
       ...current,
       keywords: current.keywords.map((keyword, i) =>
-        i === index
-          ? { ...keyword, [field]: value }
-          : keyword
+        i === index ? { ...keyword, [field]: value } : keyword,
       ),
     }));
   }
@@ -662,18 +647,15 @@ export default function LearningPathPage() {
         meaning: keyword.meaning.trim(),
         example: keyword.example.trim(),
       }))
-      .filter(
-        (keyword) =>
-          keyword.name || keyword.meaning || keyword.example
-      );
+      .filter((keyword) => keyword.name || keyword.meaning || keyword.example);
 
     const incompleteKeyword = keywords.find(
-      (keyword) => !keyword.name || !keyword.meaning
+      (keyword) => !keyword.name || !keyword.meaning,
     );
 
     if (incompleteKeyword) {
       setNoteError(
-        "Every keyword needs both a name and a meaning. You can remove an empty keyword card."
+        "Every keyword needs both a name and a meaning. You can remove an empty keyword card.",
       );
       return;
     }
@@ -738,10 +720,9 @@ export default function LearningPathPage() {
     setActionError("");
 
     try {
-      const response = await fetch(
-        `/api/learning/${pathId}/notes/${note.id}`,
-        { method: "DELETE" }
-      );
+      const response = await fetch(`/api/learning/${pathId}/notes/${note.id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
@@ -761,16 +742,13 @@ export default function LearningPathPage() {
     setActionError("");
 
     try {
-      const response = await fetch(
-        `/api/learning/${pathId}/notes/${note.id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            isFavorite: !note.isFavorite,
-          }),
-        }
-      );
+      const response = await fetch(`/api/learning/${pathId}/notes/${note.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isFavorite: !note.isFavorite,
+        }),
+      });
 
       const data = await response.json();
 
@@ -788,7 +766,7 @@ export default function LearningPathPage() {
 
   if (loading) {
     return (
-      < className="min-h-screen px-4 py-8 text-[#51434A] sm:px-7 lg:px-10">
+      <main className="min-h-screen px-4 py-8 text-[#51434A] sm:px-7 lg:px-10">
         <div className="mx-auto flex min-h-[60vh] max-w-[1400px] items-center justify-center">
           <div className="flex flex-col items-center gap-3 text-[#A18BAE]">
             <LoaderCircle size={30} className="animate-spin" />
@@ -801,7 +779,7 @@ export default function LearningPathPage() {
 
   if (error || !path) {
     return (
-      < className="min-h-screen px-4 py-8 sm:px-7 lg:px-10">
+      <main className="min-h-screen px-4 py-8 sm:px-7 lg:px-10">
         <div className="mx-auto max-w-[1400px]">
           <Link
             href="/learning"
@@ -830,15 +808,13 @@ export default function LearningPathPage() {
   const notes = path.notes || [];
 
   const completedLessons = lessons.filter(
-    (lesson) => lesson.status === "COMPLETED"
+    (lesson) => lesson.status === "COMPLETED",
   ).length;
 
   const totalLessons = lessons.length;
 
   const progress =
-    totalLessons > 0
-      ? Math.round((completedLessons / totalLessons) * 100)
-      : 0;
+    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
   const favoriteNotes = notes.filter((note) => note.isFavorite).length;
 
@@ -868,14 +844,13 @@ export default function LearningPathPage() {
       (noteFilter === "REVIEW" && Boolean(note.reviewDate)) ||
       (noteFilter === "UNDERSTOOD" && note.status === "UNDERSTOOD") ||
       (noteFilter === "LEARNING" && note.status === "LEARNING") ||
-      (noteFilter === "NOT_UNDERSTOOD" &&
-        note.status === "NOT_UNDERSTOOD");
+      (noteFilter === "NOT_UNDERSTOOD" && note.status === "NOT_UNDERSTOOD");
 
     return matchesSearch && matchesFilter;
   });
 
   return (
-    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto w-full max-w-[1400px]">
         <Link
           href="/learning"
@@ -1272,13 +1247,14 @@ export default function LearningPathPage() {
               >
                 <Plus size={15} />
                 Add note
-              </button><Link
-  href="/learning/glossary"
-  className="inline-flex items-center gap-2 rounded-xl border border-[#E6DDEC] bg-white px-4 py-2.5 text-xs font-semibold text-[#9277AE] transition hover:bg-[#F7F2FA]"
->
-  <Library size={15} />
-  My glossary
-</Link>
+              </button>
+              <Link
+                href="/learning/glossary"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E6DDEC] bg-white px-4 py-2.5 text-xs font-semibold text-[#9277AE] transition hover:bg-[#F7F2FA]"
+              >
+                <Library size={15} />
+                My glossary
+              </Link>
             </div>
           </div>
 
@@ -1799,7 +1775,9 @@ export default function LearningPathPage() {
                     <NotebookPen size={18} />
                   </div>
                   <h2 className="text-lg font-semibold text-[#625464]">
-                    {editingNote ? "Edit learning note" : "Create a learning note"}
+                    {editingNote
+                      ? "Edit learning note"
+                      : "Create a learning note"}
                   </h2>
                 </div>
                 <p className="mt-2 text-xs text-[#A397A5]">
@@ -1900,7 +1878,9 @@ export default function LearningPathPage() {
                     updateNoteField("examples", event.target.value)
                   }
                   rows={4}
-                  placeholder={"Example 1:\nExample 2:\n\nHow is this used in practice?"}
+                  placeholder={
+                    "Example 1:\nExample 2:\n\nHow is this used in practice?"
+                  }
                   className="w-full resize-y rounded-xl border border-[#F0E3E9] bg-[#FFFBFC] px-4 py-3 text-sm leading-6 text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#D9A9BC]"
                 />
               </FormField>
@@ -1913,8 +1893,8 @@ export default function LearningPathPage() {
                       Keywords & meanings
                     </h3>
                     <p className="mt-1 text-[11px] leading-5 text-[#A397A5]">
-                      Build your personal glossary. Each keyword needs a meaning.
-                      You can add as many as you like.
+                      Build your personal glossary. Each keyword needs a
+                      meaning. You can add as many as you like.
                     </p>
                   </div>
 
@@ -1930,10 +1910,7 @@ export default function LearningPathPage() {
 
                 {noteForm.keywords.length === 0 ? (
                   <div className="rounded-2xl border border-dashed border-[#E5DCEB] bg-[#FCFAFD] px-4 py-6 text-center">
-                    <Tag
-                      size={20}
-                      className="mx-auto mb-2 text-[#B69ACF]"
-                    />
+                    <Tag size={20} className="mx-auto mb-2 text-[#B69ACF]" />
                     <p className="text-xs font-medium text-[#9277AE]">
                       No keywords added yet
                     </p>
@@ -1969,11 +1946,7 @@ export default function LearningPathPage() {
                               type="text"
                               value={keyword.name}
                               onChange={(event) =>
-                                updateKeyword(
-                                  index,
-                                  "name",
-                                  event.target.value
-                                )
+                                updateKeyword(index, "name", event.target.value)
                               }
                               placeholder="e.g. Variable"
                               className="w-full rounded-xl border border-[#E9E0E8] bg-white px-4 py-3 text-sm text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#B69ACF]"
@@ -1990,7 +1963,7 @@ export default function LearningPathPage() {
                                 updateKeyword(
                                   index,
                                   "meaning",
-                                  event.target.value
+                                  event.target.value,
                                 )
                               }
                               rows={3}
@@ -2009,7 +1982,7 @@ export default function LearningPathPage() {
                                 updateKeyword(
                                   index,
                                   "example",
-                                  event.target.value
+                                  event.target.value,
                                 )
                               }
                               rows={2}
@@ -2041,7 +2014,9 @@ export default function LearningPathPage() {
                     updateNoteField("keyTakeaways", event.target.value)
                   }
                   rows={3}
-                  placeholder={"• The most important idea...\n• Remember that...\n• I should practice..."}
+                  placeholder={
+                    "• The most important idea...\n• Remember that...\n• I should practice..."
+                  }
                   className="w-full resize-y rounded-xl border border-[#E6EEE6] bg-[#FBFDFB] px-4 py-3 text-sm leading-6 text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#A7BDA8]"
                 />
               </FormField>
@@ -2057,7 +2032,9 @@ export default function LearningPathPage() {
                     updateNoteField("questions", event.target.value)
                   }
                   rows={3}
-                  placeholder={"What is still unclear?\nWhat do I need to research further?"}
+                  placeholder={
+                    "What is still unclear?\nWhat do I need to research further?"
+                  }
                   className="w-full resize-y rounded-xl border border-[#F0E8D9] bg-[#FFFEFA] px-4 py-3 text-sm leading-6 text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#D7BD8F]"
                 />
               </FormField>
@@ -2089,10 +2066,7 @@ export default function LearningPathPage() {
                     className="w-full rounded-xl border border-[#E9E0E8] bg-[#FFFCFD] px-4 py-3 text-sm text-[#625464] outline-none focus:border-[#A7BDA8]"
                   >
                     {NOTE_DIFFICULTIES.map((difficulty) => (
-                      <option
-                        key={difficulty.value}
-                        value={difficulty.value}
-                      >
+                      <option key={difficulty.value} value={difficulty.value}>
                         {difficulty.label}
                       </option>
                     ))}

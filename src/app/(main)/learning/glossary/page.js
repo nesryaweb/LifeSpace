@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -38,9 +37,7 @@ function EmptyState({ icon: Icon, title, description, children }) {
         <Icon size={25} />
       </div>
 
-      <h3 className="text-sm font-semibold text-[#766779]">
-        {title}
-      </h3>
+      <h3 className="text-sm font-semibold text-[#766779]">{title}</h3>
 
       <p className="mt-2 max-w-sm text-xs leading-5 text-[#A397A5]">
         {description}
@@ -155,7 +152,7 @@ export default function LearningGlossaryPage() {
             meaning: form.meaning.trim(),
             example: form.example.trim(),
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -185,12 +182,9 @@ export default function LearningGlossaryPage() {
     setError("");
 
     try {
-      const response = await fetch(
-        `/api/learning/keywords/${keyword.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/learning/keywords/${keyword.id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
@@ -199,7 +193,7 @@ export default function LearningGlossaryPage() {
       }
 
       setKeywords((current) =>
-        current.filter((item) => item.id !== keyword.id)
+        current.filter((item) => item.id !== keyword.id),
       );
     } catch (err) {
       setError(err.message || "Could not delete this keyword.");
@@ -226,11 +220,11 @@ export default function LearningGlossaryPage() {
 
   const totalUses = keywords.reduce(
     (total, keyword) => total + (keyword.noteCount || 0),
-    0
+    0,
   );
 
   return (
-    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto w-full max-w-[1400px]">
         <Link
           href="/learning"
@@ -253,8 +247,8 @@ export default function LearningGlossaryPage() {
             </h1>
 
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#96899E]">
-              All the important words and concepts you have collected
-              while learning, together in one place.
+              All the important words and concepts you have collected while
+              learning, together in one place.
             </p>
           </div>
 
@@ -277,9 +271,7 @@ export default function LearningGlossaryPage() {
               </div>
 
               <div>
-                <p className="text-xs text-[#A397A5]">
-                  Saved keywords
-                </p>
+                <p className="text-xs text-[#A397A5]">Saved keywords</p>
                 <p className="mt-1 text-2xl font-semibold text-[#716083]">
                   {keywords.length}
                 </p>
@@ -294,9 +286,7 @@ export default function LearningGlossaryPage() {
               </div>
 
               <div>
-                <p className="text-xs text-[#A397A5]">
-                  Note connections
-                </p>
+                <p className="text-xs text-[#A397A5]">Note connections</p>
                 <p className="mt-1 text-2xl font-semibold text-[#78977D]">
                   {totalUses}
                 </p>
@@ -475,8 +465,8 @@ export default function LearningGlossaryPage() {
         )}
 
         <p className="mt-7 text-center text-[11px] leading-5 text-[#A397A5]">
-          Your glossary is automatically built from the keywords you add
-          to your learning notes.
+          Your glossary is automatically built from the keywords you add to your
+          learning notes.
         </p>
       </div>
 
@@ -518,9 +508,7 @@ export default function LearningGlossaryPage() {
                 <input
                   type="text"
                   value={form.name}
-                  onChange={(event) =>
-                    updateField("name", event.target.value)
-                  }
+                  onChange={(event) => updateField("name", event.target.value)}
                   className="w-full rounded-xl border border-[#E9E0E8] bg-[#FFFCFD] px-4 py-3 text-sm text-[#625464] outline-none focus:border-[#B69ACF]"
                 />
               </div>

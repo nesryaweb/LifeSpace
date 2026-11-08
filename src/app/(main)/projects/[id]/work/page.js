@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -39,24 +38,21 @@ function dateLabel(value) {
   return date.toLocaleDateString("en", {
     month: "short",
     day: "numeric",
-    year: date.getFullYear() !== new Date().getFullYear()
-      ? "numeric"
-      : undefined,
+    year:
+      date.getFullYear() !== new Date().getFullYear() ? "numeric" : undefined,
   });
 }
 
 function TaskForm({ onSave, onCancel, initialTask, saving }) {
   const [title, setTitle] = useState(initialTask?.title || "");
   const [description, setDescription] = useState(
-    initialTask?.description || ""
+    initialTask?.description || "",
   );
-  const [priority, setPriority] = useState(
-    initialTask?.priority || "MEDIUM"
-  );
+  const [priority, setPriority] = useState(initialTask?.priority || "MEDIUM");
   const [dueDate, setDueDate] = useState(
     initialTask?.dueDate
       ? new Date(initialTask.dueDate).toISOString().slice(0, 10)
-      : ""
+      : "",
   );
   const [error, setError] = useState("");
 
@@ -164,17 +160,21 @@ function TaskItem({ task, onToggle, onEdit, onDelete }) {
               : "text-[#c5a3b3] hover:text-[#B47C96]"
           }`}
         >
-          {task.status === "DONE"
-            ? <CircleCheck size={19} />
-            : <Circle size={19} />}
+          {task.status === "DONE" ? (
+            <CircleCheck size={19} />
+          ) : (
+            <Circle size={19} />
+          )}
         </button>
 
         <div className="min-w-0 flex-1">
-          <p className={`text-sm font-medium ${
-            task.status === "DONE"
-              ? "text-[#a69ba5] line-through"
-              : "text-[#514352]"
-          }`}>
+          <p
+            className={`text-sm font-medium ${
+              task.status === "DONE"
+                ? "text-[#a69ba5] line-through"
+                : "text-[#514352]"
+            }`}
+          >
             {task.title}
           </p>
 
@@ -207,9 +207,11 @@ function TaskItem({ task, onToggle, onEdit, onDelete }) {
               >
                 <ListTodo size={12} />
                 {completed}/{subtasks.length}
-                {expanded
-                  ? <ChevronDown size={12} />
-                  : <ChevronRight size={12} />}
+                {expanded ? (
+                  <ChevronDown size={12} />
+                ) : (
+                  <ChevronRight size={12} />
+                )}
               </button>
             )}
           </div>
@@ -237,20 +239,26 @@ function TaskItem({ task, onToggle, onEdit, onDelete }) {
         <div className="space-y-2 border-t border-[#f1e9ed] bg-[#fdfafb] p-3 pl-10">
           {subtasks.map((subtask) => (
             <div key={subtask.id} className="flex items-center gap-2">
-              <span className={
-                subtask.status === "DONE"
-                  ? "text-[#91a789]"
-                  : "text-[#c5a3b3]"
-              }>
-                {subtask.status === "DONE"
-                  ? <CircleCheck size={14} />
-                  : <Circle size={14} />}
+              <span
+                className={
+                  subtask.status === "DONE"
+                    ? "text-[#91a789]"
+                    : "text-[#c5a3b3]"
+                }
+              >
+                {subtask.status === "DONE" ? (
+                  <CircleCheck size={14} />
+                ) : (
+                  <Circle size={14} />
+                )}
               </span>
-              <span className={`text-xs ${
-                subtask.status === "DONE"
-                  ? "text-[#aaa0a9] line-through"
-                  : "text-[#655765]"
-              }`}>
+              <span
+                className={`text-xs ${
+                  subtask.status === "DONE"
+                    ? "text-[#aaa0a9] line-through"
+                    : "text-[#655765]"
+                }`}
+              >
                 {subtask.title}
               </span>
             </div>
@@ -313,13 +321,10 @@ export default function ProjectWorkPage() {
     loadData();
   }, [loadData]);
 
-  const allTasks = [
-    ...tasks,
-    ...tasks.flatMap((task) => task.subtasks || []),
-  ];
+  const allTasks = [...tasks, ...tasks.flatMap((task) => task.subtasks || [])];
 
   const completedCount = allTasks.filter(
-    (task) => task.status === "DONE"
+    (task) => task.status === "DONE",
   ).length;
 
   const progress = allTasks.length
@@ -334,17 +339,14 @@ export default function ProjectWorkPage() {
     setSaving(true);
 
     try {
-      const response = await fetch(
-        `/api/projects/${projectId}/milestones`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: milestoneTitle.trim(),
-            dueDate: milestoneDate || null,
-          }),
-        }
-      );
+      const response = await fetch(`/api/projects/${projectId}/milestones`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: milestoneTitle.trim(),
+          dueDate: milestoneDate || null,
+        }),
+      });
 
       const data = await response.json();
 
@@ -380,7 +382,7 @@ export default function ProjectWorkPage() {
             projectId,
             milestoneId: taskForm?.milestoneId || null,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -448,9 +450,12 @@ export default function ProjectWorkPage() {
   }
 
   async function deleteMilestone(milestone) {
-    if (!window.confirm(
-      `Delete "${milestone.title}"? Its tasks will become standalone tasks.`
-    )) return;
+    if (
+      !window.confirm(
+        `Delete "${milestone.title}"? Its tasks will become standalone tasks.`,
+      )
+    )
+      return;
 
     const response = await fetch(`/api/milestones/${milestone.id}`, {
       method: "DELETE",
@@ -464,7 +469,7 @@ export default function ProjectWorkPage() {
   }
 
   return (
-    < className="min-h-screen bg-[#faf7f8] px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
+    <main className="min-h-screen bg-[#faf7f8] px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-5xl">
         <header className="mb-8 flex items-center gap-3">
           <Link
@@ -605,17 +610,21 @@ export default function ProjectWorkPage() {
                           }`}
                           title="Toggle milestone completion"
                         >
-                          {milestone.completedAt
-                            ? <CircleCheck size={19} />
-                            : <Circle size={19} />}
+                          {milestone.completedAt ? (
+                            <CircleCheck size={19} />
+                          ) : (
+                            <Circle size={19} />
+                          )}
                         </button>
 
                         <div className="min-w-0 flex-1">
-                          <p className={`text-sm font-semibold ${
-                            milestone.completedAt
-                              ? "text-[#a69ba5] line-through"
-                              : "text-[#514352]"
-                          }`}>
+                          <p
+                            className={`text-sm font-semibold ${
+                              milestone.completedAt
+                                ? "text-[#a69ba5] line-through"
+                                : "text-[#514352]"
+                            }`}
+                          >
                             {index + 1}. {milestone.title}
                           </p>
 

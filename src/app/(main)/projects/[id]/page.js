@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -120,11 +119,7 @@ function updateTaskStatusInTree(items, taskId, status) {
     if (item.subtasks?.length) {
       return {
         ...item,
-        subtasks: updateTaskStatusInTree(
-          item.subtasks,
-          taskId,
-          status
-        ),
+        subtasks: updateTaskStatusInTree(item.subtasks, taskId, status),
       };
     }
 
@@ -199,28 +194,25 @@ export default function ProjectDetailPage() {
       setError("");
 
       try {
-        const [
-          projectResponse,
-          milestoneResponse,
-          taskResponse,
-        ] = await Promise.all([
-          fetch(`/api/projects/${projectId}`, {
-            cache: "no-store",
-          }),
-          fetch(`/api/projects/${projectId}/milestones`, {
-            cache: "no-store",
-          }),
-          fetch(`/api/tasks?projectId=${projectId}&parentId=none`, {
-            cache: "no-store",
-          }),
-        ]);
+        const [projectResponse, milestoneResponse, taskResponse] =
+          await Promise.all([
+            fetch(`/api/projects/${projectId}`, {
+              cache: "no-store",
+            }),
+            fetch(`/api/projects/${projectId}/milestones`, {
+              cache: "no-store",
+            }),
+            fetch(`/api/tasks?projectId=${projectId}&parentId=none`, {
+              cache: "no-store",
+            }),
+          ]);
 
         async function readResponse(response, endpointName) {
           const text = await response.text();
 
           if (!text) {
             throw new Error(
-              `${endpointName} returned an empty response (HTTP ${response.status}).`
+              `${endpointName} returned an empty response (HTTP ${response.status}).`,
             );
           }
 
@@ -228,42 +220,32 @@ export default function ProjectDetailPage() {
             return JSON.parse(text);
           } catch {
             throw new Error(
-              `${endpointName} returned an invalid response (HTTP ${response.status}).`
+              `${endpointName} returned an invalid response (HTTP ${response.status}).`,
             );
           }
         }
 
-        const projectData = await readResponse(
-          projectResponse,
-          "Project API"
-        );
+        const projectData = await readResponse(projectResponse, "Project API");
 
         const milestoneData = await readResponse(
           milestoneResponse,
-          "Milestones API"
+          "Milestones API",
         );
 
-        const taskData = await readResponse(
-          taskResponse,
-          "Tasks API"
-        );
+        const taskData = await readResponse(taskResponse, "Tasks API");
 
         if (!projectResponse.ok) {
-          throw new Error(
-            projectData.error || "Could not load this project."
-          );
+          throw new Error(projectData.error || "Could not load this project.");
         }
 
         if (!milestoneResponse.ok) {
           throw new Error(
-            milestoneData.error || "Could not load project milestones."
+            milestoneData.error || "Could not load project milestones.",
           );
         }
 
         if (!taskResponse.ok) {
-          throw new Error(
-            taskData.error || "Could not load project tasks."
-          );
+          throw new Error(taskData.error || "Could not load project tasks.");
         }
 
         const loadedProject = projectData.project || projectData;
@@ -293,10 +275,8 @@ export default function ProjectDetailPage() {
             });
         });
 
-        const combinedTasks = Array.from(
-          projectTaskMap.values()
-        ).sort(
-          (a, b) => (a.position || 0) - (b.position || 0)
+        const combinedTasks = Array.from(projectTaskMap.values()).sort(
+          (a, b) => (a.position || 0) - (b.position || 0),
         );
 
         setProject(loadedProject);
@@ -316,7 +296,7 @@ export default function ProjectDetailPage() {
         }
       }
     },
-    [projectId]
+    [projectId],
   );
 
   // Initial page load.
@@ -340,7 +320,7 @@ export default function ProjectDetailPage() {
   }, [tasks]);
 
   const completedTasks = allTasks.filter(
-    (task) => task.status === "DONE"
+    (task) => task.status === "DONE",
   ).length;
 
   const progress = allTasks.length
@@ -352,7 +332,7 @@ export default function ProjectDetailPage() {
 
     const total = milestones.reduce(
       (sum, milestone) => sum + (milestone.progress || 0),
-      0
+      0,
     );
 
     return Math.round(total / milestones.length);
@@ -446,19 +426,16 @@ export default function ProjectDetailPage() {
   async function deleteMilestone(milestone) {
     if (
       !confirm(
-        `Delete "${milestone.title}"? Its tasks will re in this project, but will no longer belong to this milestone.`
+        `Delete "${milestone.title}"? Its tasks will re in this project, but will no longer belong to this milestone.`,
       )
     ) {
       return;
     }
 
     try {
-      const response = await fetch(
-        `/api/milestones/${milestone.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/milestones/${milestone.id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json().catch(() => ({}));
 
@@ -531,7 +508,7 @@ export default function ProjectDetailPage() {
           method: editing ? "PATCH" : "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await response.json();
@@ -549,72 +526,14 @@ export default function ProjectDetailPage() {
     }
   }
 
- async function toggleTask(task) {
-  const previousStatus = task.status;
-  const nextStatus =
-    previousStatus === "DONE" ? "TODO" : "DONE";
+  async function toggleTask(task) {
+    const previousStatus = task.status;
+    const nextStatus = previousStatus === "DONE" ? "TODO" : "DONE";
 
-  // Update the task immediately in the interface.
-  setTasks((current) =>
-    updateTaskStatusInTree(current, task.id, nextStatus)
-  );
+    // Update the task immediately in the interface.
+    setTasks((current) => updateTaskStatusInTree(current, task.id, nextStatus));
 
-  // Update milestone task lists and progress immediately too.
-  setMilestones((current) =>
-    current.map((milestone) => {
-      if (!milestone.tasks?.length) return milestone;
-
-      const updatedTasks = updateTaskStatusInTree(
-        milestone.tasks,
-        task.id,
-        nextStatus
-      );
-
-      const counts = countTasks(updatedTasks);
-
-      return {
-        ...milestone,
-        tasks: updatedTasks,
-        taskCount: counts.total,
-        completedTaskCount: counts.completed,
-        progress: counts.total
-          ? Math.round(
-              (counts.completed / counts.total) * 100
-            )
-          : 0,
-      };
-    })
-  );
-
-  // Save in the background.
-  try {
-    const response = await fetch(`/api/tasks/${task.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: nextStatus,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Could not update the task."
-      );
-    }
-  } catch (err) {
-    // Revert only if this click's change is still current.
-    setTasks((current) =>
-      updateTaskStatusInTree(
-        current,
-        task.id,
-        previousStatus
-      )
-    );
-
+    // Update milestone task lists and progress immediately too.
     setMilestones((current) =>
       current.map((milestone) => {
         if (!milestone.tasks?.length) return milestone;
@@ -622,7 +541,7 @@ export default function ProjectDetailPage() {
         const updatedTasks = updateTaskStatusInTree(
           milestone.tasks,
           task.id,
-          previousStatus
+          nextStatus,
         );
 
         const counts = countTasks(updatedTasks);
@@ -633,17 +552,62 @@ export default function ProjectDetailPage() {
           taskCount: counts.total,
           completedTaskCount: counts.completed,
           progress: counts.total
-            ? Math.round(
-                (counts.completed / counts.total) * 100
-              )
+            ? Math.round((counts.completed / counts.total) * 100)
             : 0,
         };
-      })
+      }),
     );
 
-    alert(err.message);
+    // Save in the background.
+    try {
+      const response = await fetch(`/api/tasks/${task.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: nextStatus,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not update the task.");
+      }
+    } catch (err) {
+      // Revert only if this click's change is still current.
+      setTasks((current) =>
+        updateTaskStatusInTree(current, task.id, previousStatus),
+      );
+
+      setMilestones((current) =>
+        current.map((milestone) => {
+          if (!milestone.tasks?.length) return milestone;
+
+          const updatedTasks = updateTaskStatusInTree(
+            milestone.tasks,
+            task.id,
+            previousStatus,
+          );
+
+          const counts = countTasks(updatedTasks);
+
+          return {
+            ...milestone,
+            tasks: updatedTasks,
+            taskCount: counts.total,
+            completedTaskCount: counts.completed,
+            progress: counts.total
+              ? Math.round((counts.completed / counts.total) * 100)
+              : 0,
+          };
+        }),
+      );
+
+      alert(err.message);
+    }
   }
-}
 
   async function deleteTask(task) {
     if (!confirm(`Delete "${task.title}"?`)) return;
@@ -695,15 +659,10 @@ export default function ProjectDetailPage() {
             type="button"
             onClick={() => toggleTask(task)}
             className="mt-0.5 shrink-0 text-[#B78AA0] transition hover:scale-110"
-            aria-label={
-              done ? "Mark task incomplete" : "Complete task"
-            }
+            aria-label={done ? "Mark task incomplete" : "Complete task"}
           >
             {done ? (
-              <CircleCheck
-                size={19}
-                className="text-[#8BA58A]"
-              />
+              <CircleCheck size={19} className="text-[#8BA58A]" />
             ) : (
               <Circle size={19} />
             )}
@@ -712,9 +671,7 @@ export default function ProjectDetailPage() {
           <div className="min-w-0 flex-1">
             <button
               type="button"
-              onClick={() =>
-                hasSubtasks && toggleExpanded(task.id)
-              }
+              onClick={() => hasSubtasks && toggleExpanded(task.id)}
               className="flex max-w-full items-center gap-1 text-left"
             >
               {hasSubtasks && (
@@ -729,9 +686,7 @@ export default function ProjectDetailPage() {
 
               <span
                 className={`break-words text-sm font-medium ${
-                  done
-                    ? "text-[#A69B9D] line-through"
-                    : "text-[#51464B]"
+                  done ? "text-[#A69B9D] line-through" : "text-[#51464B]"
                 }`}
               >
                 {task.title}
@@ -763,9 +718,8 @@ export default function ProjectDetailPage() {
               {hasSubtasks && (
                 <span className="text-[11px] text-[#A99AA0]">
                   {
-                    task.subtasks.filter(
-                      (item) => item.status === "DONE"
-                    ).length
+                    task.subtasks.filter((item) => item.status === "DONE")
+                      .length
                   }
                   /{task.subtasks.length} subtasks
                 </span>
@@ -806,11 +760,7 @@ export default function ProjectDetailPage() {
         {hasSubtasks && expanded && (
           <div className="ml-2">
             {task.subtasks.map((subtask) => (
-              <TaskRow
-                key={subtask.id}
-                task={subtask}
-                depth={depth + 1}
-              />
+              <TaskRow key={subtask.id} task={subtask} depth={depth + 1} />
             ))}
           </div>
         )}
@@ -820,7 +770,7 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      < className="min-h-screen bg-[#FAF7F5] px-5 py-10">
+      <main className="min-h-screen bg-[#FAF7F5] px-5 py-10">
         <div className="mx-auto max-w-6xl animate-pulse">
           <div className="h-5 w-32 rounded bg-[#EEE5E5]" />
           <div className="mt-8 h-10 w-2/3 rounded-lg bg-[#EEE5E5]" />
@@ -833,12 +783,9 @@ export default function ProjectDetailPage() {
 
   if (error || !project) {
     return (
-      < className="min-h-screen bg-[#FAF7F5] px-5 py-16">
+      <main className="min-h-screen bg-[#FAF7F5] px-5 py-16">
         <div className="mx-auto max-w-xl rounded-3xl border border-[#EEE3E3] bg-white p-8 text-center shadow-sm">
-          <FolderKanban
-            className="mx-auto text-[#B78AA0]"
-            size={32}
-          />
+          <FolderKanban className="mx-auto text-[#B78AA0]" size={32} />
 
           <h1 className="mt-4 text-xl font-semibold text-[#51464B]">
             Could not open this project
@@ -864,7 +811,7 @@ export default function ProjectDetailPage() {
   const projectDue = formatDate(project.dueDate);
 
   return (
-    < className="min-h-screen bg-[#FAF7F5] px-4 py-6 text-[#51464B] sm:px-7 lg:px-10">
+    <main className="min-h-screen bg-[#FAF7F5] px-4 py-6 text-[#51464B] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/projects"
@@ -939,9 +886,7 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="rounded-2xl bg-[#F4F5F0] p-4">
-              <p className="text-xs font-medium text-[#899181]">
-                Milestones
-              </p>
+              <p className="text-xs font-medium text-[#899181]">Milestones</p>
 
               <div className="mt-2 flex items-end justify-between">
                 <span className="text-3xl font-semibold text-[#73816D]">
@@ -954,17 +899,12 @@ export default function ProjectDetailPage() {
               </div>
 
               <div className="mt-3">
-                <ProgressBar
-                  value={milestoneProgress}
-                  color="bg-[#91A18A]"
-                />
+                <ProgressBar value={milestoneProgress} color="bg-[#91A18A]" />
               </div>
             </div>
 
             <div className="rounded-2xl bg-[#F3EFF6] p-4">
-              <p className="text-xs font-medium text-[#96889F]">
-                Tasks
-              </p>
+              <p className="text-xs font-medium text-[#96889F]">Tasks</p>
 
               <div className="mt-2 flex items-end justify-between">
                 <span className="text-3xl font-semibold text-[#85738E]">
@@ -977,10 +917,7 @@ export default function ProjectDetailPage() {
               </div>
 
               <div className="mt-3">
-                <ProgressBar
-                  value={progress}
-                  color="bg-[#A797B2]"
-                />
+                <ProgressBar value={progress} color="bg-[#A797B2]" />
               </div>
             </div>
           </div>
@@ -991,10 +928,7 @@ export default function ProjectDetailPage() {
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <MilestoneIcon
-                    size={19}
-                    className="text-[#A98297]"
-                  />
+                  <MilestoneIcon size={19} className="text-[#A98297]" />
 
                   <h2 className="text-lg font-semibold text-[#574A50]">
                     Milestones
@@ -1019,10 +953,7 @@ export default function ProjectDetailPage() {
             <div className="space-y-3">
               {milestones.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-[#E8DADB] bg-white px-5 py-10 text-center">
-                  <MilestoneIcon
-                    size={27}
-                    className="mx-auto text-[#C4A8B5]"
-                  />
+                  <MilestoneIcon size={27} className="mx-auto text-[#C4A8B5]" />
 
                   <p className="mt-3 text-sm font-medium text-[#79666F]">
                     No milestones yet
@@ -1042,8 +973,7 @@ export default function ProjectDetailPage() {
                 </div>
               ) : (
                 milestones.map((milestone) => {
-                  const isExpanded =
-                    expandedMilestones[milestone.id];
+                  const isExpanded = expandedMilestones[milestone.id];
 
                   return (
                     <div
@@ -1053,9 +983,7 @@ export default function ProjectDetailPage() {
                       <div className="flex items-start gap-3">
                         <button
                           type="button"
-                          onClick={() =>
-                            toggleMilestoneExpanded(milestone.id)
-                          }
+                          onClick={() => toggleMilestoneExpanded(milestone.id)}
                           className="mt-0.5 rounded-lg p-1 text-[#A58D98] hover:bg-[#F8F1F3]"
                         >
                           {isExpanded ? (
@@ -1118,9 +1046,7 @@ export default function ProjectDetailPage() {
 
                           <button
                             type="button"
-                            onClick={() =>
-                              openEditMilestone(milestone)
-                            }
+                            onClick={() => openEditMilestone(milestone)}
                             title="Edit milestone"
                             className="rounded-lg p-1.5 text-[#9A8190] hover:bg-[#F5EDF1]"
                           >
@@ -1129,9 +1055,7 @@ export default function ProjectDetailPage() {
 
                           <button
                             type="button"
-                            onClick={() =>
-                              deleteMilestone(milestone)
-                            }
+                            onClick={() => deleteMilestone(milestone)}
                             title="Delete milestone"
                             className="rounded-lg p-1.5 text-[#B98A91] hover:bg-[#F8E8E9]"
                           >
@@ -1148,14 +1072,11 @@ export default function ProjectDetailPage() {
 
                           {(() => {
                             const milestoneTasks = Array.isArray(
-                              milestone.tasks
+                              milestone.tasks,
                             )
-                              ? milestone.tasks.filter(
-                                  (task) => !task.parentId
-                                )
+                              ? milestone.tasks.filter((task) => !task.parentId)
                               : tasks.filter(
-                                  (task) =>
-                                    task.milestoneId === milestone.id
+                                  (task) => task.milestoneId === milestone.id,
                                 );
 
                             return milestoneTasks.length === 0 ? (
@@ -1218,10 +1139,7 @@ export default function ProjectDetailPage() {
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <ListTodo
-                    size={19}
-                    className="text-[#A98297]"
-                  />
+                  <ListTodo size={19} className="text-[#A98297]" />
 
                   <h2 className="text-lg font-semibold text-[#574A50]">
                     Project tasks
@@ -1246,10 +1164,7 @@ export default function ProjectDetailPage() {
             <div className="overflow-hidden rounded-2xl border border-[#EFE5E4] bg-white shadow-[0_3px_15px_rgba(100,70,80,0.025)]">
               {tasks.length === 0 ? (
                 <div className="px-5 py-12 text-center">
-                  <ListTodo
-                    size={28}
-                    className="mx-auto text-[#C4A8B5]"
-                  />
+                  <ListTodo size={28} className="mx-auto text-[#C4A8B5]" />
 
                   <p className="mt-3 text-sm font-medium text-[#79666F]">
                     No tasks for this project yet
@@ -1278,10 +1193,7 @@ export default function ProjectDetailPage() {
 
             <div className="mt-4 rounded-2xl border border-[#EDE5EF] bg-[#F7F3F8] p-4">
               <div className="flex items-start gap-3">
-                <Target
-                  size={18}
-                  className="mt-0.5 text-[#9A85A5]"
-                />
+                <Target size={18} className="mt-0.5 text-[#9A85A5]" />
 
                 <div>
                   <p className="text-xs font-semibold text-[#776781]">
@@ -1306,8 +1218,8 @@ export default function ProjectDetailPage() {
                     </div>
                   ) : (
                     <p className="mt-1 text-xs leading-5 text-[#9A8DA0]">
-                      This project isn't linked to a goal yet. You can
-                      connect projects and goals from the Goals section.
+                      This project isn't linked to a goal yet. You can connect
+                      projects and goals from the Goals section.
                     </p>
                   )}
                 </div>
@@ -1325,9 +1237,7 @@ export default function ProjectDetailPage() {
           >
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-[#594A51]">
-                {editingMilestone
-                  ? "Edit milestone"
-                  : "New milestone"}
+                {editingMilestone ? "Edit milestone" : "New milestone"}
               </h2>
 
               <button
@@ -1345,9 +1255,7 @@ export default function ProjectDetailPage() {
                   required
                   autoFocus
                   value={milestoneTitle}
-                  onChange={(event) =>
-                    setMilestoneTitle(event.target.value)
-                  }
+                  onChange={(event) => setMilestoneTitle(event.target.value)}
                   placeholder="e.g. Complete the first version"
                   className={inputClass}
                 />
@@ -1369,9 +1277,7 @@ export default function ProjectDetailPage() {
                 <input
                   type="date"
                   value={milestoneDueDate}
-                  onChange={(event) =>
-                    setMilestoneDueDate(event.target.value)
-                  }
+                  onChange={(event) => setMilestoneDueDate(event.target.value)}
                   className={inputClass}
                 />
               </FormField>
@@ -1380,11 +1286,7 @@ export default function ProjectDetailPage() {
             <ModalActions
               onCancel={() => setShowMilestoneForm(false)}
               saving={saving}
-              saveLabel={
-                editingMilestone
-                  ? "Save changes"
-                  : "Create milestone"
-              }
+              saveLabel={editingMilestone ? "Save changes" : "Create milestone"}
             />
           </form>
         </div>
@@ -1428,9 +1330,7 @@ export default function ProjectDetailPage() {
                   required
                   autoFocus
                   value={taskTitle}
-                  onChange={(event) =>
-                    setTaskTitle(event.target.value)
-                  }
+                  onChange={(event) => setTaskTitle(event.target.value)}
                   placeholder="What needs to be done?"
                   className={inputClass}
                 />
@@ -1440,9 +1340,7 @@ export default function ProjectDetailPage() {
                 <textarea
                   rows={3}
                   value={taskDescription}
-                  onChange={(event) =>
-                    setTaskDescription(event.target.value)
-                  }
+                  onChange={(event) => setTaskDescription(event.target.value)}
                   placeholder="Add details (optional)"
                   className={inputClass}
                 />
@@ -1452,16 +1350,11 @@ export default function ProjectDetailPage() {
                 <FormField label="Priority">
                   <select
                     value={taskPriority}
-                    onChange={(event) =>
-                      setTaskPriority(event.target.value)
-                    }
+                    onChange={(event) => setTaskPriority(event.target.value)}
                     className={inputClass}
                   >
                     {PRIORITY_OPTIONS.map((option) => (
-                      <option
-                        key={option.value}
-                        value={option.value}
-                      >
+                      <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -1472,9 +1365,7 @@ export default function ProjectDetailPage() {
                   <input
                     type="date"
                     value={taskDueDate}
-                    onChange={(event) =>
-                      setTaskDueDate(event.target.value)
-                    }
+                    onChange={(event) => setTaskDueDate(event.target.value)}
                     className={inputClass}
                   />
                 </FormField>
@@ -1484,18 +1375,13 @@ export default function ProjectDetailPage() {
                 <FormField label="Milestone">
                   <select
                     value={taskMilestoneId}
-                    onChange={(event) =>
-                      setTaskMilestoneId(event.target.value)
-                    }
+                    onChange={(event) => setTaskMilestoneId(event.target.value)}
                     className={inputClass}
                   >
                     <option value="">No milestone</option>
 
                     {milestones.map((milestone) => (
-                      <option
-                        key={milestone.id}
-                        value={milestone.id}
-                      >
+                      <option key={milestone.id} value={milestone.id}>
                         {milestone.title}
                       </option>
                     ))}
@@ -1554,9 +1440,7 @@ export default function ProjectDetailPage() {
                 <input
                   required
                   value={projectTitle}
-                  onChange={(event) =>
-                    setProjectTitle(event.target.value)
-                  }
+                  onChange={(event) => setProjectTitle(event.target.value)}
                   className={inputClass}
                 />
               </FormField>
@@ -1576,16 +1460,11 @@ export default function ProjectDetailPage() {
                 <FormField label="Status">
                   <select
                     value={projectStatus}
-                    onChange={(event) =>
-                      setProjectStatus(event.target.value)
-                    }
+                    onChange={(event) => setProjectStatus(event.target.value)}
                     className={inputClass}
                   >
                     {STATUS_OPTIONS.map((option) => (
-                      <option
-                        key={option.value}
-                        value={option.value}
-                      >
+                      <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -1595,16 +1474,11 @@ export default function ProjectDetailPage() {
                 <FormField label="Priority">
                   <select
                     value={projectPriority}
-                    onChange={(event) =>
-                      setProjectPriority(event.target.value)
-                    }
+                    onChange={(event) => setProjectPriority(event.target.value)}
                     className={inputClass}
                   >
                     {PRIORITY_OPTIONS.map((option) => (
-                      <option
-                        key={option.value}
-                        value={option.value}
-                      >
+                      <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
                     ))}
@@ -1616,9 +1490,7 @@ export default function ProjectDetailPage() {
                 <input
                   type="date"
                   value={projectDueDate}
-                  onChange={(event) =>
-                    setProjectDueDate(event.target.value)
-                  }
+                  onChange={(event) => setProjectDueDate(event.target.value)}
                   className={inputClass}
                 />
               </FormField>

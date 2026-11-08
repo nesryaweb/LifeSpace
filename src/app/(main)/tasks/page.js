@@ -719,22 +719,22 @@ export default function TasksPage() {
   const [editingTask, setEditingTask] = useState(null);
   const [parentTask, setParentTask] = useState(null);
   const [saving, setSaving] = useState(false);
-const loadProjects = useCallback(async () => {
-  try {
-    const response = await fetch("/api/projects", {
-      cache: "no-store",
-    });
+  const loadProjects = useCallback(async () => {
+    try {
+      const response = await fetch("/api/projects", {
+        cache: "no-store",
+      });
 
-    if (!response.ok) {
-      throw new Error("Could not load projects.");
+      if (!response.ok) {
+        throw new Error("Could not load projects.");
+      }
+
+      const data = await response.json();
+      setProjects(data.projects || []);
+    } catch (err) {
+      console.error("Load projects error:", err);
     }
-
-    const data = await response.json();
-    setProjects(data.projects || []);
-  } catch (err) {
-    console.error("Load projects error:", err);
-  }
-}, []);
+  }, []);
   const loadTasks = useCallback(async () => {
     try {
       setError("");
@@ -748,7 +748,7 @@ const loadProjects = useCallback(async () => {
       }
 
       const data = await response.json();
-     setTasks(Array.isArray(data) ? data : data.tasks || []);
+      setTasks(Array.isArray(data) ? data : data.tasks || []);
     } catch (err) {
       setError(err.message || "Something went wrong.");
     } finally {
@@ -757,9 +757,9 @@ const loadProjects = useCallback(async () => {
   }, []);
 
   useEffect(() => {
-  loadTasks();
-  loadProjects();
-}, [loadTasks, loadProjects]);
+    loadTasks();
+    loadProjects();
+  }, [loadTasks, loadProjects]);
 
   const allTasks = useMemo(
     () => tasks.flatMap((task) => [task, ...(task.subtasks || [])]),
@@ -874,7 +874,6 @@ const loadProjects = useCallback(async () => {
     setModalOpen(true);
   }
 
-  
   // Update an existing task without fetching the entire task list.
   function updateTaskInList(updatedTask) {
     setTasks((current) =>
@@ -892,10 +891,10 @@ const loadProjects = useCallback(async () => {
           subtasks: (task.subtasks || []).map((subtask) =>
             subtask.id === updatedTask.id
               ? { ...subtask, ...updatedTask }
-              : subtask
+              : subtask,
           ),
         };
-      })
+      }),
     );
   }
 
@@ -912,7 +911,7 @@ const loadProjects = useCallback(async () => {
               ...task,
               subtasks: [...(task.subtasks || []), newTask],
             }
-          : task
+          : task,
       );
     });
   }
@@ -920,20 +919,16 @@ const loadProjects = useCallback(async () => {
   // Remove a task and preserve its children as standalone tasks.
   function removeTaskFromList(taskToRemove) {
     setTasks((current) => {
-      const isMainTask = current.some(
-        (task) => task.id === taskToRemove.id
-      );
+      const isMainTask = current.some((task) => task.id === taskToRemove.id);
 
       if (isMainTask) {
-        const remaining = current.filter(
-          (task) => task.id !== taskToRemove.id
-        );
+        const remaining = current.filter((task) => task.id !== taskToRemove.id);
 
         const detachedSubtasks = (taskToRemove.subtasks || []).map(
           (subtask) => ({
             ...subtask,
             parentId: null,
-          })
+          }),
         );
 
         return [...remaining, ...detachedSubtasks];
@@ -942,16 +937,14 @@ const loadProjects = useCallback(async () => {
       const remaining = current.map((task) => ({
         ...task,
         subtasks: (task.subtasks || []).filter(
-          (subtask) => subtask.id !== taskToRemove.id
+          (subtask) => subtask.id !== taskToRemove.id,
         ),
       }));
 
-      const detachedSubtasks = (taskToRemove.subtasks || []).map(
-        (subtask) => ({
-          ...subtask,
-          parentId: null,
-        })
-      );
+      const detachedSubtasks = (taskToRemove.subtasks || []).map((subtask) => ({
+        ...subtask,
+        parentId: null,
+      }));
 
       return [...remaining, ...detachedSubtasks];
     });
@@ -963,9 +956,7 @@ const loadProjects = useCallback(async () => {
     try {
       const isEditing = Boolean(editingTask);
 
-      const url = isEditing
-        ? `/api/tasks/${editingTask.id}`
-        : "/api/tasks";
+      const url = isEditing ? `/api/tasks/${editingTask.id}` : "/api/tasks";
 
       const method = isEditing ? "PATCH" : "POST";
 
@@ -1025,15 +1016,13 @@ const loadProjects = useCallback(async () => {
   async function toggleTask(task) {
     const previousTasks = tasks;
 
-    const nextStatus =
-      task.status === "DONE" ? "TODO" : "DONE";
+    const nextStatus = task.status === "DONE" ? "TODO" : "DONE";
 
     // Update the interface immediately.
     updateTaskInList({
       ...task,
       status: nextStatus,
-      completedAt:
-        nextStatus === "DONE" ? new Date().toISOString() : null,
+      completedAt: nextStatus === "DONE" ? new Date().toISOString() : null,
     });
 
     try {
@@ -1055,7 +1044,7 @@ const loadProjects = useCallback(async () => {
 
   async function deleteTask(task) {
     const confirmed = window.confirm(
-      `Delete "${task.title}"? Its subtasks will re as standalone tasks.`
+      `Delete "${task.title}"? Its subtasks will re as standalone tasks.`,
     );
 
     if (!confirmed) return;
@@ -1084,14 +1073,11 @@ const loadProjects = useCallback(async () => {
     deleteTask(subtask);
   }
 
-
   return (
-    < className="min-h-screen  px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
+    <main className="min-h-screen  px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-         
-
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B47C96]">
                 Your little steps
@@ -1287,19 +1273,19 @@ const loadProjects = useCallback(async () => {
         </div>
       </div>
 
-     <TaskModal
-  open={modalOpen}
-  onClose={() => {
-    setModalOpen(false);
-    setEditingTask(null);
-    setParentTask(null);
-  }}
-  onSave={saveTask}
-  initialTask={editingTask}
-  parentTask={parentTask}
-  saving={saving}
-  projects={projects}
-/>
+      <TaskModal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          setEditingTask(null);
+          setParentTask(null);
+        }}
+        onSave={saveTask}
+        initialTask={editingTask}
+        parentTask={parentTask}
+        saving={saving}
+        projects={projects}
+      />
     </main>
   );
 }

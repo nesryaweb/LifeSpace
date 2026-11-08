@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -55,28 +54,21 @@ export default function ReviewPage() {
 
   const currentKeyword = deck[currentIndex];
 
-  const selectedPath = paths.find(
-    (path) => path.id === selectedPathId
-  );
+  const selectedPath = paths.find((path) => path.id === selectedPathId);
 
   const selectedLesson = lessons.find(
-    (lesson) => lesson.id === selectedLessonId
+    (lesson) => lesson.id === selectedLessonId,
   );
 
-  const isLoading =
-    loadingPaths || loadingLessons || loadingKeywords;
+  const isLoading = loadingPaths || loadingLessons || loadingKeywords;
 
   const answeredCount = knownIds.length + missedIds.length;
 
   const progress =
-    deck.length > 0
-      ? Math.min((currentIndex / deck.length) * 100, 100)
-      : 0;
+    deck.length > 0 ? Math.min((currentIndex / deck.length) * 100, 100) : 0;
 
   const accuracy =
-    answeredCount > 0
-      ? Math.round((knownIds.length / answeredCount) * 100)
-      : 0;
+    answeredCount > 0 ? Math.round((knownIds.length / answeredCount) * 100) : 0;
 
   const pageSubtitle = useMemo(() => {
     if (!selectedPath) {
@@ -148,9 +140,7 @@ export default function ReviewPage() {
       setSelectedLessonId("");
 
       try {
-        const response = await fetch(
-          `/api/learning/${selectedPathId}/lessons`
-        );
+        const response = await fetch(`/api/learning/${selectedPathId}/lessons`);
 
         if (!response.ok) {
           throw new Error("Could not load lessons.");
@@ -158,9 +148,7 @@ export default function ReviewPage() {
 
         const data = await response.json();
 
-        const lessonList = Array.isArray(data)
-          ? data
-          : data.lessons || [];
+        const lessonList = Array.isArray(data) ? data : data.lessons || [];
 
         if (!cancelled) {
           setLessons(lessonList);
@@ -219,7 +207,7 @@ export default function ReviewPage() {
         }
 
         const response = await fetch(
-          `/api/learning/keywords?${params.toString()}`
+          `/api/learning/keywords?${params.toString()}`,
         );
 
         if (!response.ok) {
@@ -301,7 +289,7 @@ export default function ReviewPage() {
     setKnownIds((previous) =>
       previous.includes(currentKeyword.id)
         ? previous
-        : [...previous, currentKeyword.id]
+        : [...previous, currentKeyword.id],
     );
 
     moveToNextCard();
@@ -313,7 +301,7 @@ export default function ReviewPage() {
     setMissedIds((previous) =>
       previous.includes(currentKeyword.id)
         ? previous
-        : [...previous, currentKeyword.id]
+        : [...previous, currentKeyword.id],
     );
 
     moveToNextCard();
@@ -325,7 +313,7 @@ export default function ReviewPage() {
     setSkippedIds((previous) =>
       previous.includes(currentKeyword.id)
         ? previous
-        : [...previous, currentKeyword.id]
+        : [...previous, currentKeyword.id],
     );
 
     moveToNextCard();
@@ -333,7 +321,7 @@ export default function ReviewPage() {
 
   function reviewMissed() {
     const missedKeywords = keywords.filter((keyword) =>
-      missedIds.includes(keyword.id)
+      missedIds.includes(keyword.id),
     );
 
     if (missedKeywords.length === 0) return;
@@ -349,7 +337,7 @@ export default function ReviewPage() {
 
   function reviewSkipped() {
     const skippedKeywords = keywords.filter((keyword) =>
-      skippedIds.includes(keyword.id)
+      skippedIds.includes(keyword.id),
     );
 
     if (skippedKeywords.length === 0) return;
@@ -364,7 +352,7 @@ export default function ReviewPage() {
   }
 
   return (
-    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto max-w-[1100px]">
         {/* Header */}
         <div className="mb-8">
@@ -411,16 +399,11 @@ export default function ReviewPage() {
         <div className="mb-5 rounded-2xl border border-[#F0E2E9] bg-white/80 p-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-2">
-              <GraduationCap
-                size={17}
-                className="shrink-0 text-[#B87893]"
-              />
+              <GraduationCap size={17} className="shrink-0 text-[#B87893]" />
 
               <div className="min-w-0">
                 <p className="truncate text-xs font-semibold text-[#604D57]">
-                  {selectedPath
-                    ? selectedPath.title
-                    : "Choose what to review"}
+                  {selectedPath ? selectedPath.title : "Choose what to review"}
                 </p>
 
                 <p className="truncate text-[11px] text-[#A58D9A]">
@@ -458,9 +441,7 @@ export default function ReviewPage() {
 
                 <select
                   value={selectedPathId}
-                  onChange={(event) =>
-                    handlePathChange(event.target.value)
-                  }
+                  onChange={(event) => handlePathChange(event.target.value)}
                   disabled={loadingPaths}
                   className="w-full rounded-lg border border-[#EADCE4] bg-[#FFFBFD] px-3 py-2.5 text-xs text-[#604D57] outline-none focus:border-[#D5A8BC] disabled:opacity-60"
                 >
@@ -481,9 +462,7 @@ export default function ReviewPage() {
 
                 <select
                   value={selectedLessonId}
-                  onChange={(event) =>
-                    handleLessonChange(event.target.value)
-                  }
+                  onChange={(event) => handleLessonChange(event.target.value)}
                   disabled={!selectedPathId || loadingLessons}
                   className="w-full rounded-lg border border-[#EADCE4] bg-[#FFFBFD] px-3 py-2.5 text-xs text-[#604D57] outline-none focus:border-[#D5A8BC] disabled:opacity-50"
                 >
@@ -555,32 +534,30 @@ export default function ReviewPage() {
         )}
 
         {/* No keywords */}
-        {!isLoading &&
-          selectedPathId &&
-          keywords.length === 0 && (
-            <div className="rounded-3xl border border-dashed border-[#E5CDD9] bg-[#FFFAFC] px-6 py-16 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F4E7F5] text-[#9274B0]">
-                <BookOpen size={27} />
-              </div>
-
-              <h2 className="text-lg font-semibold text-[#604D57]">
-                No keywords to review yet
-              </h2>
-
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#9B8490]">
-                Add keywords with their meanings to your notes in this
-                learning path. They will appear here automatically.
-              </p>
-
-              <Link
-                href={`/learning/${selectedPathId}`}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B87893] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#A96783]"
-              >
-                Open learning path
-                <ArrowRight size={16} />
-              </Link>
+        {!isLoading && selectedPathId && keywords.length === 0 && (
+          <div className="rounded-3xl border border-dashed border-[#E5CDD9] bg-[#FFFAFC] px-6 py-16 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F4E7F5] text-[#9274B0]">
+              <BookOpen size={27} />
             </div>
-          )}
+
+            <h2 className="text-lg font-semibold text-[#604D57]">
+              No keywords to review yet
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[#9B8490]">
+              Add keywords with their meanings to your notes in this learning
+              path. They will appear here automatically.
+            </p>
+
+            <Link
+              href={`/learning/${selectedPathId}`}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B87893] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#A96783]"
+            >
+              Open learning path
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        )}
 
         {/* Flashcard */}
         {!isLoading &&
@@ -734,8 +711,7 @@ export default function ReviewPage() {
                         onClick={markKnown}
                         className="flex items-center justify-center gap-2 rounded-xl border border-[#D7E8D9] bg-white px-4 py-3 text-sm font-semibold text-[#6F987A] transition hover:bg-[#F3FAF3]"
                       >
-                        <CheckCircle2 size={17} />
-                        I knew it
+                        <CheckCircle2 size={17} />I knew it
                       </button>
                     </div>
                   </div>
@@ -757,100 +733,90 @@ export default function ReviewPage() {
           )}
 
         {/* Results */}
-        {!isLoading &&
-          keywords.length > 0 &&
-          showResults && (
-            <section className="rounded-3xl border border-[#EEDFE7] bg-white p-6 shadow-[0_10px_35px_rgba(111,77,91,0.05)] sm:p-9">
-              <div className="mx-auto max-w-2xl text-center">
-                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F1EAF6] text-[#9274B0]">
-                  <Sparkles size={29} />
+        {!isLoading && keywords.length > 0 && showResults && (
+          <section className="rounded-3xl border border-[#EEDFE7] bg-white p-6 shadow-[0_10px_35px_rgba(111,77,91,0.05)] sm:p-9">
+            <div className="mx-auto max-w-2xl text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F1EAF6] text-[#9274B0]">
+                <Sparkles size={29} />
+              </div>
+
+              <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#A58D9A]">
+                Session complete
+              </p>
+
+              <h2 className="text-2xl font-semibold text-[#604D57] sm:text-3xl">
+                Well done!
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[#927F88]">
+                You reached the end of this review session. Keep revisiting the
+                terms that are still difficult.
+              </p>
+
+              <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div className="rounded-2xl bg-[#F4F8F3] p-4">
+                  <p className="text-2xl font-semibold text-[#6F987A]">
+                    {knownIds.length}
+                  </p>
+                  <p className="mt-1 text-xs text-[#8BA391]">Knew it</p>
                 </div>
 
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#A58D9A]">
-                  Session complete
-                </p>
-
-                <h2 className="text-2xl font-semibold text-[#604D57] sm:text-3xl">
-                  Well done!
-                </h2>
-
-                <p className="mt-2 text-sm leading-6 text-[#927F88]">
-                  You reached the end of this review session. Keep revisiting
-                  the terms that are still difficult.
-                </p>
-
-                <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div className="rounded-2xl bg-[#F4F8F3] p-4">
-                    <p className="text-2xl font-semibold text-[#6F987A]">
-                      {knownIds.length}
-                    </p>
-                    <p className="mt-1 text-xs text-[#8BA391]">
-                      Knew it
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-[#FFF3F3] p-4">
-                    <p className="text-2xl font-semibold text-[#B56F79]">
-                      {missedIds.length}
-                    </p>
-                    <p className="mt-1 text-xs text-[#B98A90]">
-                      Still learning
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-[#F5F0F8] p-4">
-                    <p className="text-2xl font-semibold text-[#9274B0]">
-                      {skippedIds.length}
-                    </p>
-                    <p className="mt-1 text-xs text-[#A18AB4]">
-                      Skipped
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-[#FFF8EF] p-4">
-                    <p className="text-2xl font-semibold text-[#B68D58]">
-                      {accuracy}%
-                    </p>
-                    <p className="mt-1 text-xs text-[#B69A75]">
-                      Accuracy
-                    </p>
-                  </div>
+                <div className="rounded-2xl bg-[#FFF3F3] p-4">
+                  <p className="text-2xl font-semibold text-[#B56F79]">
+                    {missedIds.length}
+                  </p>
+                  <p className="mt-1 text-xs text-[#B98A90]">Still learning</p>
                 </div>
 
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
-                  {missedIds.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={reviewMissed}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#B87893] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#A96783]"
-                    >
-                      <RotateCcw size={16} />
-                      Review missed ({missedIds.length})
-                    </button>
-                  )}
+                <div className="rounded-2xl bg-[#F5F0F8] p-4">
+                  <p className="text-2xl font-semibold text-[#9274B0]">
+                    {skippedIds.length}
+                  </p>
+                  <p className="mt-1 text-xs text-[#A18AB4]">Skipped</p>
+                </div>
 
-                  {skippedIds.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={reviewSkipped}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EADCE4] bg-white px-5 py-3 text-sm font-semibold text-[#876D7A] transition hover:bg-[#FFF9FC]"
-                    >
-                      Review skipped ({skippedIds.length})
-                    </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={resetSession}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EADCE4] bg-white px-5 py-3 text-sm font-semibold text-[#876D7A] transition hover:bg-[#FFF9FC]"
-                  >
-                    <RotateCcw size={16} />
-                    Start again
-                  </button>
+                <div className="rounded-2xl bg-[#FFF8EF] p-4">
+                  <p className="text-2xl font-semibold text-[#B68D58]">
+                    {accuracy}%
+                  </p>
+                  <p className="mt-1 text-xs text-[#B69A75]">Accuracy</p>
                 </div>
               </div>
-            </section>
-          )}
+
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+                {missedIds.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={reviewMissed}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#B87893] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#A96783]"
+                  >
+                    <RotateCcw size={16} />
+                    Review missed ({missedIds.length})
+                  </button>
+                )}
+
+                {skippedIds.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={reviewSkipped}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EADCE4] bg-white px-5 py-3 text-sm font-semibold text-[#876D7A] transition hover:bg-[#FFF9FC]"
+                  >
+                    Review skipped ({skippedIds.length})
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={resetSession}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#EADCE4] bg-white px-5 py-3 text-sm font-semibold text-[#876D7A] transition hover:bg-[#FFF9FC]"
+                >
+                  <RotateCcw size={16} />
+                  Start again
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );

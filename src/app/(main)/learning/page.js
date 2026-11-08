@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -139,7 +138,7 @@ export default function LearningPage() {
 
       if (!pathsResponse.ok) {
         throw new Error(
-          pathsData.error || "Could not load your learning paths."
+          pathsData.error || "Could not load your learning paths.",
         );
       }
 
@@ -147,9 +146,7 @@ export default function LearningPage() {
 
       if (goalsResponse.ok) {
         setGoals(
-          getGoalList(goalsData).filter(
-            (goal) => goal.status !== "COMPLETED"
-          )
+          getGoalList(goalsData).filter((goal) => goal.status !== "COMPLETED"),
         );
       }
     } catch (err) {
@@ -167,17 +164,17 @@ export default function LearningPage() {
     const total = paths.length;
     const active = paths.filter((path) => path.status === "ACTIVE").length;
     const completed = paths.filter(
-      (path) => path.status === "COMPLETED"
+      (path) => path.status === "COMPLETED",
     ).length;
 
     const totalLessons = paths.reduce(
       (sum, path) => sum + (path.totalLessons || 0),
-      0
+      0,
     );
 
     const completedLessons = paths.reduce(
       (sum, path) => sum + (path.completedLessons || 0),
-      0
+      0,
     );
 
     return {
@@ -221,12 +218,8 @@ export default function LearningPage() {
       description: path.description || "",
       goalId: path.goalId || "",
       status: path.status || "ACTIVE",
-      startDate: path.startDate
-        ? path.startDate.slice(0, 10)
-        : "",
-      targetDate: path.targetDate
-        ? path.targetDate.slice(0, 10)
-        : "",
+      startDate: path.startDate ? path.startDate.slice(0, 10) : "",
+      targetDate: path.targetDate ? path.targetDate.slice(0, 10) : "",
     });
     setFormError("");
     setEditorOpen(true);
@@ -258,11 +251,7 @@ export default function LearningPage() {
       return;
     }
 
-    if (
-      form.startDate &&
-      form.targetDate &&
-      form.targetDate < form.startDate
-    ) {
+    if (form.startDate && form.targetDate && form.targetDate < form.startDate) {
       setFormError("The target date cannot be before the start date.");
       return;
     }
@@ -309,7 +298,7 @@ export default function LearningPage() {
 
   async function handleDelete(path) {
     const confirmed = window.confirm(
-      `Delete "${path.title}" and all its lessons, resources, and notes? This cannot be undone.`
+      `Delete "${path.title}" and all its lessons, resources, and notes? This cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -328,9 +317,7 @@ export default function LearningPage() {
         throw new Error(data.error || "Could not delete this learning path.");
       }
 
-      setPaths((current) =>
-        current.filter((item) => item.id !== path.id)
-      );
+      setPaths((current) => current.filter((item) => item.id !== path.id));
     } catch (err) {
       window.alert(err.message || "Something went wrong.");
     } finally {
@@ -339,9 +326,8 @@ export default function LearningPage() {
   }
 
   return (
-    < className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto max-w-[1400px]">
-
         {/* Page heading */}
         <div className="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>
@@ -567,10 +553,7 @@ export default function LearningPage() {
                 const status =
                   STATUS_STYLES[path.status] || STATUS_STYLES.ACTIVE;
 
-                const progress = Math.min(
-                  100,
-                  Math.max(0, path.progress || 0)
-                );
+                const progress = Math.min(100, Math.max(0, path.progress || 0));
 
                 const completedLessons = path.completedLessons || 0;
                 const totalLessons = path.totalLessons || 0;
@@ -613,7 +596,7 @@ export default function LearningPage() {
                         <button
                           onClick={() =>
                             setMenuPathId(
-                              menuPathId === path.id ? null : path.id
+                              menuPathId === path.id ? null : path.id,
                             )
                           }
                           className="flex h-9 w-9 items-center justify-center rounded-xl text-[#A99BA8] transition hover:bg-[#F8F3F6] hover:text-[#756477]"
@@ -638,7 +621,10 @@ export default function LearningPage() {
                               className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-[#B46F7D] hover:bg-[#FCF0F2]"
                             >
                               {deletingId === path.id ? (
-                                <LoaderCircle size={15} className="animate-spin" />
+                                <LoaderCircle
+                                  size={15}
+                                  className="animate-spin"
+                                />
                               ) : (
                                 <Trash2 size={15} />
                               )}
@@ -653,7 +639,9 @@ export default function LearningPage() {
                       <span
                         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold ${status.className}`}
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${status.dot}`} />
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${status.dot}`}
+                        />
                         {status.label}
                       </span>
                     </div>
@@ -663,15 +651,13 @@ export default function LearningPage() {
                     </h3>
 
                     <p className="mt-2 min-h-[42px] text-sm leading-5 text-[#A095A2]">
-                      {path.description || "A new space for your learning journey."}
+                      {path.description ||
+                        "A new space for your learning journey."}
                     </p>
 
                     {path.goal && (
                       <div className="mt-4 flex items-center gap-2 rounded-xl bg-[#FAF6F8] px-3 py-2.5">
-                        <Target
-                          size={15}
-                          className="shrink-0 text-[#B47F98]"
-                        />
+                        <Target size={15} className="shrink-0 text-[#B47F98]" />
                         <div className="min-w-0">
                           <p className="text-[10px] font-medium uppercase tracking-wide text-[#B09DA8]">
                             Connected goal
@@ -721,7 +707,8 @@ export default function LearningPage() {
                         <CalendarDays size={14} />
                         {path.startDate && formatDate(path.startDate)}
                         {path.startDate && path.targetDate && " — "}
-                        {path.targetDate && `Target ${formatDate(path.targetDate)}`}
+                        {path.targetDate &&
+                          `Target ${formatDate(path.targetDate)}`}
                       </div>
                     )}
 
@@ -758,7 +745,9 @@ export default function LearningPage() {
                   </div>
 
                   <h2 className="text-xl font-semibold text-[#665565]">
-                    {editingPath ? "Edit learning path" : "Create a learning path"}
+                    {editingPath
+                      ? "Edit learning path"
+                      : "Create a learning path"}
                   </h2>
 
                   <p className="mt-1 text-xs text-[#A08F9D]">

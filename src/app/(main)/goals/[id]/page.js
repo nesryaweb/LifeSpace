@@ -142,7 +142,7 @@ export default function GoalDetailPage() {
   const [transactionTitle, setTransactionTitle] = useState("");
   const [transactionAmount, setTransactionAmount] = useState("");
   const [transactionDate, setTransactionDate] = useState(
-    new Date().toISOString().slice(0, 10)
+    new Date().toISOString().slice(0, 10),
   );
   const [transactionDescription, setTransactionDescription] = useState("");
   const [savingTransaction, setSavingTransaction] = useState(false);
@@ -162,12 +162,12 @@ export default function GoalDetailPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || data.error || "Could not load this goal.");
+        throw new Error(
+          data.message || data.error || "Could not load this goal.",
+        );
       }
 
-      const found = (data.goals || []).find(
-        (item) => item.id === goalId
-      );
+      const found = (data.goals || []).find((item) => item.id === goalId);
 
       if (!found) {
         throw new Error("This goal could not be found.");
@@ -178,9 +178,9 @@ export default function GoalDetailPage() {
       if (found.financialGoal?.id) {
         const transactionResponse = await fetch(
           `/api/finance/transactions?financialGoalId=${encodeURIComponent(
-            found.financialGoal.id
+            found.financialGoal.id,
           )}`,
-          { cache: "no-store" }
+          { cache: "no-store" },
         );
 
         const transactionData = await transactionResponse.json();
@@ -207,21 +207,19 @@ export default function GoalDetailPage() {
   const projectTasks = useMemo(() => {
     if (!goal?.projectLinks) return [];
 
-    return goal.projectLinks.flatMap((link) =>
-      getProjectTasks(link)
-    );
+    return goal.projectLinks.flatMap((link) => getProjectTasks(link));
   }, [goal]);
 
   const completedTasks = projectTasks.filter(
-    (task) => task.status === "DONE"
+    (task) => task.status === "DONE",
   ).length;
 
   const inProgressTasks = projectTasks.filter(
-    (task) => task.status === "IN_PROGRESS"
+    (task) => task.status === "IN_PROGRESS",
   ).length;
 
   const remainingTasks = projectTasks.filter(
-    (task) => task.status === "TODO"
+    (task) => task.status === "TODO",
   ).length;
 
   const progress = goal?.progress || 0;
@@ -306,16 +304,14 @@ export default function GoalDetailPage() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || data.message || "Could not save this transaction."
+          data.error || data.message || "Could not save this transaction.",
         );
       }
 
       setShowTransactionForm(false);
       await loadGoal();
     } catch (err) {
-      setTransactionError(
-        err.message || "Could not save this transaction."
-      );
+      setTransactionError(err.message || "Could not save this transaction.");
     } finally {
       setSavingTransaction(false);
     }
@@ -323,7 +319,7 @@ export default function GoalDetailPage() {
 
   if (loading) {
     return (
-      < className="flex min-h-screen items-center justify-center bg-[#FAF7F6]">
+      <main className="flex min-h-screen items-center justify-center bg-[#FAF7F6]">
         <div className="flex flex-col items-center gap-3">
           <LoaderCircle size={28} className="animate-spin text-[#B77E99]" />
           <p className="text-xs text-[#998B91]">Opening your goal...</p>
@@ -334,7 +330,7 @@ export default function GoalDetailPage() {
 
   if (!goal) {
     return (
-      < className="flex min-h-screen items-center justify-center bg-[#FAF7F6] px-5">
+      <main className="flex min-h-screen items-center justify-center bg-[#FAF7F6] px-5">
         <div className="max-w-md rounded-2xl border border-[#ECE3E7] bg-white p-8 text-center">
           <AlertCircle size={28} className="mx-auto mb-3 text-[#B77E99]" />
           <h1 className="text-lg font-semibold text-[#55434C]">
@@ -366,7 +362,7 @@ export default function GoalDetailPage() {
       : 0);
 
   return (
-    < className="min-h-screen bg-[#FAF7F6] px-4 py-6 sm:px-7 lg:px-10 lg:py-9">
+    <main className="min-h-screen bg-[#FAF7F6] px-4 py-6 sm:px-7 lg:px-10 lg:py-9">
       <div className="mx-auto max-w-[1200px]">
         <Link
           href="/goals"
@@ -393,7 +389,9 @@ export default function GoalDetailPage() {
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold ${status?.color || ""}`}
               >
-                <span className={`h-1.5 w-1.5 rounded-full ${status?.dot || ""}`} />
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${status?.dot || ""}`}
+                />
                 {status?.label || goal.status}
               </span>
 
@@ -512,14 +510,18 @@ export default function GoalDetailPage() {
                     </div>
 
                     <div className="rounded-2xl bg-[#F0F4EF] p-4">
-                      <p className="text-[11px] text-[#91A091]">Still to save</p>
+                      <p className="text-[11px] text-[#91A091]">
+                        Still to save
+                      </p>
                       <p className="mt-2 break-words text-xl font-semibold text-[#66806A]">
                         {formatMoney(remainingAmount, currency)}
                       </p>
                     </div>
 
                     <div className="rounded-2xl bg-[#F4F1F8] p-4">
-                      <p className="text-[11px] text-[#A097B1]">Target amount</p>
+                      <p className="text-[11px] text-[#A097B1]">
+                        Target amount
+                      </p>
                       <p className="mt-2 break-words text-lg font-semibold text-[#756A91]">
                         {formatMoney(targetAmount, currency)}
                       </p>
@@ -569,7 +571,9 @@ export default function GoalDetailPage() {
 
                   <div className="space-y-4">
                     <div className="flex items-start justify-between gap-3">
-                      <span className="text-xs text-[#A1949A]">Target date</span>
+                      <span className="text-xs text-[#A1949A]">
+                        Target date
+                      </span>
                       <span className="text-right text-xs font-semibold text-[#69555F]">
                         {formatDate(goal.targetDate)}
                       </span>
@@ -590,7 +594,9 @@ export default function GoalDetailPage() {
                     </div>
                     <div className="h-px bg-[#F1EAEC]" />
                     <div className="flex items-start justify-between gap-3">
-                      <span className="text-xs text-[#A1949A]">Vision items</span>
+                      <span className="text-xs text-[#A1949A]">
+                        Vision items
+                      </span>
                       <span className="text-xs font-semibold text-[#69555F]">
                         {goal.visionItems?.length || 0}
                       </span>
@@ -629,8 +635,7 @@ export default function GoalDetailPage() {
               ) : (
                 <div className="divide-y divide-[#F4EBF0]">
                   {transactions.map((transaction) => {
-                    const isDeposit =
-                      transaction.type === "SAVING_DEPOSIT";
+                    const isDeposit = transaction.type === "SAVING_DEPOSIT";
 
                     return (
                       <div
@@ -664,9 +669,7 @@ export default function GoalDetailPage() {
 
                         <p
                           className={`shrink-0 text-sm font-semibold ${
-                            isDeposit
-                              ? "text-emerald-600"
-                              : "text-rose-500"
+                            isDeposit ? "text-emerald-600" : "text-rose-500"
                           }`}
                         >
                           {isDeposit ? "+" : "-"}
@@ -719,9 +722,7 @@ export default function GoalDetailPage() {
                     <p className="text-xl font-semibold text-[#62836A]">
                       {completedTasks}
                     </p>
-                    <p className="mt-1 text-[10px] text-[#8B9E8F]">
-                      Completed
-                    </p>
+                    <p className="mt-1 text-[10px] text-[#8B9E8F]">Completed</p>
                   </div>
                   <div className="rounded-xl bg-[#F2F1F8] p-3">
                     <p className="text-xl font-semibold text-[#7C73A4]">
@@ -735,16 +736,14 @@ export default function GoalDetailPage() {
                     <p className="text-xl font-semibold text-[#A28A5D]">
                       {remainingTasks}
                     </p>
-                    <p className="mt-1 text-[10px] text-[#AA9B7D]">
-                      To do
-                    </p>
+                    <p className="mt-1 text-[10px] text-[#AA9B7D]">To do</p>
                   </div>
                 </div>
 
                 {!projectTasks.length && (
                   <p className="mt-4 rounded-xl bg-[#FAF6F7] p-3 text-xs leading-relaxed text-[#A09298]">
-                    This goal doesn't have any linked project tasks yet.
-                    Connect a project and add tasks to start tracking progress.
+                    This goal doesn't have any linked project tasks yet. Connect
+                    a project and add tasks to start tracking progress.
                   </p>
                 )}
               </div>
@@ -773,7 +772,9 @@ export default function GoalDetailPage() {
                   </div>
                   <div className="h-px bg-[#F1EAEC]" />
                   <div className="flex items-start justify-between gap-3">
-                    <span className="text-xs text-[#A1949A]">Connected projects</span>
+                    <span className="text-xs text-[#A1949A]">
+                      Connected projects
+                    </span>
                     <span className="text-xs font-semibold text-[#69555F]">
                       {goal.projects?.length || 0}
                     </span>
@@ -898,15 +899,15 @@ export default function GoalDetailPage() {
               {goal.projectLinks?.length ? (
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                   {goal.projectLinks.map((link) => (
-                    <ProjectProgress
-                      key={link.project.id}
-                      projectLink={link}
-                    />
+                    <ProjectProgress key={link.project.id} projectLink={link} />
                   ))}
                 </div>
               ) : (
                 <div className="rounded-2xl border border-dashed border-[#DCE2EB] bg-white/70 p-8 text-center">
-                  <FolderKanban size={25} className="mx-auto mb-2 text-[#A1AEC5]" />
+                  <FolderKanban
+                    size={25}
+                    className="mx-auto mb-2 text-[#A1AEC5]"
+                  />
                   <p className="text-sm font-semibold text-[#655C72]">
                     No projects connected yet
                   </p>
@@ -933,8 +934,8 @@ export default function GoalDetailPage() {
                 </p>
                 <p className="mt-1 text-[11px] leading-relaxed text-[#9C8F95]">
                   Completing tasks in any linked project contributes to this
-                  goal's progress. The same task can contribute to more than
-                  one goal if its project is linked to multiple goals.
+                  goal's progress. The same task can contribute to more than one
+                  goal if its project is linked to multiple goals.
                 </p>
               </div>
             </div>
@@ -953,9 +954,7 @@ export default function GoalDetailPage() {
                     ? "Add savings"
                     : "Withdraw savings"}
                 </h2>
-                <p className="mt-1 text-xs text-[#A18F9D]">
-                  {goal.title}
-                </p>
+                <p className="mt-1 text-xs text-[#A18F9D]">{goal.title}</p>
               </div>
 
               <button
@@ -976,9 +975,7 @@ export default function GoalDetailPage() {
                 <input
                   required
                   value={transactionTitle}
-                  onChange={(event) =>
-                    setTransactionTitle(event.target.value)
-                  }
+                  onChange={(event) => setTransactionTitle(event.target.value)}
                   placeholder={
                     transactionType === "SAVING_DEPOSIT"
                       ? "e.g. Monthly savings"
@@ -1015,9 +1012,7 @@ export default function GoalDetailPage() {
                     required
                     type="date"
                     value={transactionDate}
-                    onChange={(event) =>
-                      setTransactionDate(event.target.value)
-                    }
+                    onChange={(event) => setTransactionDate(event.target.value)}
                     className="w-full rounded-xl border border-[#EDE2E9] bg-[#FFFCFE] px-3 py-3 text-sm text-[#554653] outline-none focus:border-[#B99AB8]"
                   />
                 </div>
@@ -1025,7 +1020,8 @@ export default function GoalDetailPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-[#776477]">
-                  Description <span className="font-normal text-[#B5A7B2]">(optional)</span>
+                  Description{" "}
+                  <span className="font-normal text-[#B5A7B2]">(optional)</span>
                 </label>
                 <textarea
                   rows={3}

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -28,7 +27,8 @@ const starterItems = [
     type: "image",
     title: "A new chapter",
     text: "A beautiful new beginning somewhere in the world.",
-    image: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1000",
     size: "large",
     color: "#F7E7E9",
     x: 100,
@@ -53,7 +53,8 @@ const starterItems = [
     type: "image",
     title: "My own little home",
     text: "A peaceful space that feels like mine.",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1000",
     size: "medium",
     color: "#E7DFF7",
     x: 850,
@@ -78,7 +79,8 @@ const starterItems = [
     type: "image",
     title: "Explore the world",
     text: "New places, new experiences, new memories.",
-    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000",
     size: "medium",
     color: "#DCEAF5",
     x: 250,
@@ -103,7 +105,8 @@ const starterItems = [
     type: "image",
     title: "A life of my own",
     text: "A life filled with little adventures.",
-    image: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1000",
     size: "large",
     color: "#F7DCE5",
     x: 1000,
@@ -147,14 +150,8 @@ function createUniqueId() {
 function normalizeItems(items) {
   return items.map((item, index) => ({
     ...item,
-    x:
-      typeof item.x === "number"
-        ? item.x
-        : 80 + (index % 4) * 330,
-    y:
-      typeof item.y === "number"
-        ? item.y
-        : 100 + Math.floor(index / 4) * 420,
+    x: typeof item.x === "number" ? item.x : 80 + (index % 4) * 330,
+    y: typeof item.y === "number" ? item.y : 100 + Math.floor(index / 4) * 420,
     zIndex: item.zIndex || index + 1,
     rotation: item.rotation || "0deg",
     size: sizes[item.size] ? item.size : "medium",
@@ -206,9 +203,7 @@ export default function VisionPage() {
 
         const data = await response.json();
 
-        let restored = Array.isArray(data.items)
-          ? data.items
-          : [];
+        let restored = Array.isArray(data.items) ? data.items : [];
 
         if (restored.length === 0) {
           const savedItems = localStorage.getItem(STORAGE_KEY);
@@ -270,9 +265,7 @@ export default function VisionPage() {
         console.error("Could not load vision board:", error);
 
         if (!cancelled) {
-          setLoadError(
-            error.message || "Could not load your vision board."
-          );
+          setLoadError(error.message || "Could not load your vision board.");
         }
       }
     }
@@ -318,9 +311,7 @@ export default function VisionPage() {
         .catch((error) => {
           console.error("Vision board save error:", error);
 
-          setSaveError(
-            error.message || "Your changes could not be saved."
-          );
+          setSaveError(error.message || "Your changes could not be saved.");
         });
     }, 700);
 
@@ -382,10 +373,8 @@ export default function VisionPage() {
     if (editingItem) {
       setItems((current) =>
         current.map((item) =>
-          item.id === editingItem
-            ? { ...item, ...form }
-            : item
-        )
+          item.id === editingItem ? { ...item, ...form } : item,
+        ),
       );
     } else {
       const lowestY = items.length
@@ -409,13 +398,9 @@ export default function VisionPage() {
   }
 
   function deleteItem(id) {
-    setItems((current) =>
-      current.filter((item) => item.id !== id)
-    );
+    setItems((current) => current.filter((item) => item.id !== id));
 
-    setSelectedItem((current) =>
-      current?.id === id ? null : current
-    );
+    setSelectedItem((current) => (current?.id === id ? null : current));
   }
 
   function bringToFront(id) {
@@ -423,10 +408,8 @@ export default function VisionPage() {
 
     setItems((current) =>
       current.map((item) =>
-        item.id === id
-          ? { ...item, zIndex: nextZ }
-          : item
-      )
+        item.id === id ? { ...item, zIndex: nextZ } : item,
+      ),
     );
   }
 
@@ -457,8 +440,7 @@ export default function VisionPage() {
     const deltaX = event.clientX - drag.startX;
     const deltaY = event.clientY - drag.startY;
 
-    const canvasWidth =
-      canvasRef.current?.clientWidth || window.innerWidth;
+    const canvasWidth = canvasRef.current?.clientWidth || window.innerWidth;
 
     setItems((current) =>
       current.map((item) => {
@@ -469,13 +451,10 @@ export default function VisionPage() {
 
         return {
           ...item,
-          x: Math.min(
-            maxX,
-            Math.max(0, drag.itemX + deltaX)
-          ),
+          x: Math.min(maxX, Math.max(0, drag.itemX + deltaX)),
           y: Math.max(0, drag.itemY + deltaY),
         };
-      })
+      }),
     );
   }
 
@@ -507,9 +486,7 @@ export default function VisionPage() {
     setItems((current) => {
       const next = [...current];
 
-      const fromIndex = next.findIndex(
-        (item) => item.id === draggedId
-      );
+      const fromIndex = next.findIndex((item) => item.id === draggedId);
 
       if (fromIndex < 0) return current;
 
@@ -518,9 +495,7 @@ export default function VisionPage() {
       if (!targetId) {
         next.push(moved);
       } else {
-        const targetIndex = next.findIndex(
-          (item) => item.id === targetId
-        );
+        const targetIndex = next.findIndex((item) => item.id === targetId);
 
         if (targetIndex < 0) {
           next.push(moved);
@@ -542,28 +517,22 @@ export default function VisionPage() {
   // Reset positions without deleting any items.
   function resetArrangement() {
     const confirmed = window.confirm(
-      "Reset the arrangement of your vision board items? Your items will not be deleted."
+      "Reset the arrangement of your vision board items? Your items will not be deleted.",
     );
 
     if (!confirmed) return;
 
     setItems((current) =>
       current.map((item, index) => {
-        const original = starterItems.find(
-          (starter) => starter.id === item.id
-        );
+        const original = starterItems.find((starter) => starter.id === item.id);
 
         return {
           ...item,
-          x: original
-            ? original.x
-            : 80 + (index % 4) * 330,
-          y: original
-            ? original.y
-            : 120 + Math.floor(index / 4) * 430,
+          x: original ? original.x : 80 + (index % 4) * 330,
+          y: original ? original.y : 120 + Math.floor(index / 4) * 430,
           zIndex: index + 1,
         };
-      })
+      }),
     );
   }
 
@@ -575,23 +544,19 @@ export default function VisionPage() {
   }
 
   const canvasHeight = Math.max(
-    typeof window !== "undefined"
-      ? window.innerHeight - 20
-      : 900,
-    ...items.map((item) => (item.y || 0) + 560)
+    typeof window !== "undefined" ? window.innerHeight - 20 : 900,
+    ...items.map((item) => (item.y || 0) + 560),
   );
 
   const selectedIsBareImage = Boolean(
     selectedItem?.type === "image" &&
     !selectedItem.title?.trim() &&
-    !selectedItem.text?.trim()
+    !selectedItem.text?.trim(),
   );
 
   // Shared visual content for each card.
   function renderCardContent(item) {
-    const hasImageCaption = Boolean(
-      item.title?.trim() || item.text?.trim()
-    );
+    const hasImageCaption = Boolean(item.title?.trim() || item.text?.trim());
 
     return (
       <>
@@ -646,18 +611,13 @@ export default function VisionPage() {
               </p>
             )}
 
-            <div className="mt-5 text-right text-xl text-[#b48da0]">
-              ♡
-            </div>
+            <div className="mt-5 text-right text-xl text-[#b48da0]">♡</div>
           </div>
         )}
 
         {item.type === "quote" && (
           <div className="flex min-h-48 flex-col justify-center px-5 py-7 text-center">
-            <Quote
-              size={25}
-              className="mx-auto mb-5 text-[#a58a9c]"
-            />
+            <Quote size={25} className="mx-auto mb-5 text-[#a58a9c]" />
 
             <p className="scrapbook-title text-2xl leading-relaxed text-[#594b54]">
               “{item.text}”
@@ -679,9 +639,7 @@ export default function VisionPage() {
     const isFree = viewMode === "free";
 
     const isBareImage =
-      item.type === "image" &&
-      !item.title?.trim() &&
-      !item.text?.trim();
+      item.type === "image" && !item.title?.trim() && !item.text?.trim();
 
     return (
       <article
@@ -693,15 +651,9 @@ export default function VisionPage() {
             ? (event) => startFreeDrag(event, item)
             : undefined
         }
-        onPointerMove={
-          isEditing && isFree ? moveFreeItem : undefined
-        }
-        onPointerUp={
-          isEditing && isFree ? stopFreeDrag : undefined
-        }
-        onPointerCancel={
-          isEditing && isFree ? stopFreeDrag : undefined
-        }
+        onPointerMove={isEditing && isFree ? moveFreeItem : undefined}
+        onPointerUp={isEditing && isFree ? stopFreeDrag : undefined}
+        onPointerCancel={isEditing && isFree ? stopFreeDrag : undefined}
         draggable={isEditing && !isFree}
         onDragStart={
           isEditing && !isFree
@@ -709,9 +661,7 @@ export default function VisionPage() {
             : undefined
         }
         onDragOver={
-          isEditing && !isFree
-            ? (event) => event.preventDefault()
-            : undefined
+          isEditing && !isFree ? (event) => event.preventDefault() : undefined
         }
         onDrop={
           isEditing && !isFree
@@ -719,9 +669,7 @@ export default function VisionPage() {
             : undefined
         }
         onDragEnd={
-          isEditing && !isFree
-            ? () => setDraggedColumnId(null)
-            : undefined
+          isEditing && !isFree ? () => setDraggedColumnId(null) : undefined
         }
         className={
           isFree
@@ -734,9 +682,7 @@ export default function VisionPage() {
                 isEditing
                   ? "cursor-grab active:cursor-grabbing"
                   : "cursor-pointer"
-              } ${
-                draggedColumnId === item.id ? "opacity-40" : ""
-              }`
+              } ${draggedColumnId === item.id ? "opacity-40" : ""}`
         }
         style={
           isFree
@@ -817,13 +763,11 @@ export default function VisionPage() {
   // Display loading and connection errors before showing the board.
   if (!loaded) {
     return (
-      < className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
+      <main className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
         <div className="text-center">
           {loadError ? (
             <>
-              <p className="mb-4 text-sm text-[#8b626b]">
-                {loadError}
-              </p>
+              <p className="mb-4 text-sm text-[#8b626b]">{loadError}</p>
 
               <button
                 type="button"
@@ -834,9 +778,7 @@ export default function VisionPage() {
               </button>
             </>
           ) : (
-            <p className="text-[#8b626b]">
-              Loading your vision board...
-            </p>
+            <p className="text-[#8b626b]">Loading your vision board...</p>
           )}
         </div>
       </main>
@@ -844,7 +786,7 @@ export default function VisionPage() {
   }
 
   return (
-    < className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
+    <main className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
       {/* Save error message */}
       {saveError && (
         <div className="fixed bottom-5 right-5 z-[9999] rounded-xl bg-red-100 px-4 py-3 text-sm text-red-700 shadow-lg">
@@ -866,14 +808,9 @@ export default function VisionPage() {
             }}
           >
             <div className="absolute left-6 top-5 z-10 flex gap-2">
-              
-
               {/* Small board label */}
               <div className="pointer-events-none flex items-center gap-2 rounded-full bg-white/75 px-3 py-2 text-xs text-[#a18e9c] shadow-sm backdrop-blur-sm sm:left-8">
-                <Heart
-                  size={14}
-                  className="fill-[#f4cbd9] text-[#e8aebe]"
-                />
+                <Heart size={14} className="fill-[#f4cbd9] text-[#e8aebe]" />
                 My little world
               </div>
             </div>
@@ -897,9 +834,7 @@ export default function VisionPage() {
                     }
               }
             >
-              {items.map((item, index) =>
-                renderCard(item, index)
-              )}
+              {items.map((item, index) => renderCard(item, index))}
 
               {items.length === 0 && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
@@ -1003,11 +938,13 @@ export default function VisionPage() {
             <section className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-[#eee5e9] bg-white/90 p-4 shadow-sm sm:p-5">
               <div>
                 <p className="text-xs text-[#a294a3]">
-                  {items.length} {items.length === 1 ? "item" : "items"} on your board
+                  {items.length} {items.length === 1 ? "item" : "items"} on your
+                  board
                 </p>
 
                 <p className="mt-1 text-sm text-[#806b7b]">
-                  Drag cards to arrange them. Your changes are saved as you work.
+                  Drag cards to arrange them. Your changes are saved as you
+                  work.
                 </p>
               </div>
 
@@ -1109,9 +1046,7 @@ export default function VisionPage() {
                   </div>
                 )}
 
-                {items.map((item, index) =>
-                  renderCard(item, index)
-                )}
+                {items.map((item, index) => renderCard(item, index))}
 
                 {items.length === 0 && (
                   <div className="flex min-h-[480px] flex-col items-center justify-center text-center">
@@ -1122,7 +1057,8 @@ export default function VisionPage() {
                     </h2>
 
                     <p className="mt-2 text-sm text-[#a294a3]">
-                      Add pictures, notes, and quotes that represent the life you want.
+                      Add pictures, notes, and quotes that represent the life
+                      you want.
                     </p>
 
                     <button

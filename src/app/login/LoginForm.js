@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -42,7 +41,7 @@ export default function LoginForm() {
   }
 
   return (
-    < className="flex min-h-screen items-center justify-center bg-[#faf8f5] px-5 py-12">
+    <main className="flex min-h-screen items-center justify-center bg-[#faf8f5] px-5 py-12">
       <div className="w-full max-w-md rounded-2xl border border-[#e8e0dc] bg-white p-8 shadow-sm">
         <div className="mb-8 text-center">
           <p className="mb-3 text-sm font-medium tracking-[0.2em] text-[#a17c91]">
