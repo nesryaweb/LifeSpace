@@ -469,283 +469,281 @@ export default function ProjectWorkPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#faf7f8] px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
-      <div className="mx-auto max-w-5xl">
-        <header className="mb-8 flex items-center gap-3">
-          <Link
-            href={`/projects/${projectId}`}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#eee3e9] bg-white text-[#8f7c8c] hover:text-[#9e6d85]"
-            aria-label="Back to project"
-          >
-            <ArrowLeft size={18} />
-          </Link>
+    <>
+      <header className="mb-8 flex items-center gap-3">
+        <Link
+          href={`/projects/${projectId}`}
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#eee3e9] bg-white text-[#8f7c8c] hover:text-[#9e6d85]"
+          aria-label="Back to project"
+        >
+          <ArrowLeft size={18} />
+        </Link>
 
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B47C96]">
+            Project workspace
+          </p>
+          <h1 className="text-2xl font-semibold text-[#493b4a]">
+            Milestones & Tasks
+          </h1>
+        </div>
+      </header>
+
+      {error && (
+        <div className="mb-5 flex items-center justify-between rounded-xl bg-[#fff0f0] px-4 py-3 text-sm text-[#a9515e]">
+          {error}
+          <button onClick={() => setError("")}>
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
+      <section className="mb-7 rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#B47C96]">
-              Project workspace
+            <p className="text-xs text-[#978a98]">Overall project progress</p>
+            <p className="mt-2 text-3xl font-semibold text-[#514352]">
+              {progress}%
             </p>
-            <h1 className="text-2xl font-semibold text-[#493b4a]">
-              Milestones & Tasks
-            </h1>
-          </div>
-        </header>
-
-        {error && (
-          <div className="mb-5 flex items-center justify-between rounded-xl bg-[#fff0f0] px-4 py-3 text-sm text-[#a9515e]">
-            {error}
-            <button onClick={() => setError("")}>
-              <X size={16} />
-            </button>
-          </div>
-        )}
-
-        <section className="mb-7 rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs text-[#978a98]">Overall project progress</p>
-              <p className="mt-2 text-3xl font-semibold text-[#514352]">
-                {progress}%
-              </p>
-              <p className="mt-1 text-xs text-[#a092a0]">
-                {completedCount} of {allTasks.length} tasks completed
-              </p>
-            </div>
-
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f5e9ef] text-[#B47C96]">
-              <FolderKanban size={25} />
-            </div>
+            <p className="mt-1 text-xs text-[#a092a0]">
+              {completedCount} of {allTasks.length} tasks completed
+            </p>
           </div>
 
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-[#f2eaf0]">
-            <div
-              className="h-full rounded-full bg-[#B47C96] transition-all"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f5e9ef] text-[#B47C96]">
+            <FolderKanban size={25} />
           </div>
-        </section>
+        </div>
 
-        {loading ? (
-          <div className="space-y-4">
-            <div className="h-40 animate-pulse rounded-3xl bg-[#f3eaf0]" />
-            <div className="h-64 animate-pulse rounded-3xl bg-[#f3eaf0]" />
-          </div>
-        ) : (
-          <>
-            <section className="mb-7 rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
-              <div className="mb-5 flex items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <Layers3 size={18} className="text-[#B47C96]" />
-                    <h2 className="text-lg font-semibold text-[#514352]">
-                      Milestones
-                    </h2>
-                  </div>
-                  <p className="mt-1 text-xs text-[#a092a0]">
-                    Break your project into meaningful stages.
-                  </p>
+        <div className="mt-5 h-2 overflow-hidden rounded-full bg-[#f2eaf0]">
+          <div
+            className="h-full rounded-full bg-[#B47C96] transition-all"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </section>
+
+      {loading ? (
+        <div className="space-y-4">
+          <div className="h-40 animate-pulse rounded-3xl bg-[#f3eaf0]" />
+          <div className="h-64 animate-pulse rounded-3xl bg-[#f3eaf0]" />
+        </div>
+      ) : (
+        <>
+          <section className="mb-7 rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Layers3 size={18} className="text-[#B47C96]" />
+                  <h2 className="text-lg font-semibold text-[#514352]">
+                    Milestones
+                  </h2>
                 </div>
-
-                <button
-                  onClick={() => setNewMilestone(!newMilestone)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#f5e9ef] px-3 py-2.5 text-xs font-semibold text-[#9c6681] hover:bg-[#efdee7]"
-                >
-                  <Plus size={14} />
-                  Add milestone
-                </button>
+                <p className="mt-1 text-xs text-[#a092a0]">
+                  Break your project into meaningful stages.
+                </p>
               </div>
 
-              {newMilestone && (
-                <form
-                  onSubmit={createMilestone}
-                  className="mb-5 grid gap-3 rounded-2xl border border-[#eadde5] bg-[#fdf9fb] p-4 sm:grid-cols-[1fr_180px_auto]"
+              <button
+                onClick={() => setNewMilestone(!newMilestone)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#f5e9ef] px-3 py-2.5 text-xs font-semibold text-[#9c6681] hover:bg-[#efdee7]"
+              >
+                <Plus size={14} />
+                Add milestone
+              </button>
+            </div>
+
+            {newMilestone && (
+              <form
+                onSubmit={createMilestone}
+                className="mb-5 grid gap-3 rounded-2xl border border-[#eadde5] bg-[#fdf9fb] p-4 sm:grid-cols-[1fr_180px_auto]"
+              >
+                <input
+                  autoFocus
+                  value={milestoneTitle}
+                  onChange={(event) => setMilestoneTitle(event.target.value)}
+                  placeholder="Milestone name"
+                  maxLength={200}
+                  className="min-w-0 rounded-xl border border-[#eadfe5] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#c995ad]"
+                />
+                <input
+                  type="date"
+                  value={milestoneDate}
+                  onChange={(event) => setMilestoneDate(event.target.value)}
+                  className="rounded-xl border border-[#eadfe5] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#c995ad]"
+                />
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="rounded-xl bg-[#B47C96] px-4 py-2.5 text-xs font-semibold text-white disabled:opacity-60"
                 >
-                  <input
-                    autoFocus
-                    value={milestoneTitle}
-                    onChange={(event) => setMilestoneTitle(event.target.value)}
-                    placeholder="Milestone name"
-                    maxLength={200}
-                    className="min-w-0 rounded-xl border border-[#eadfe5] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#c995ad]"
-                  />
-                  <input
-                    type="date"
-                    value={milestoneDate}
-                    onChange={(event) => setMilestoneDate(event.target.value)}
-                    className="rounded-xl border border-[#eadfe5] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#c995ad]"
-                  />
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="rounded-xl bg-[#B47C96] px-4 py-2.5 text-xs font-semibold text-white disabled:opacity-60"
+                  {saving ? "Saving..." : "Create"}
+                </button>
+              </form>
+            )}
+
+            {milestones.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-[#eadde5] bg-[#fdfafb] px-5 py-9 text-center">
+                <Layers3 size={23} className="mx-auto text-[#c5a3b3]" />
+                <p className="mt-3 text-sm font-semibold text-[#655765]">
+                  No milestones yet
+                </p>
+                <p className="mt-1 text-xs text-[#a092a0]">
+                  Add stages to organize the work in this project.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {milestones.map((milestone, index) => (
+                  <div
+                    key={milestone.id}
+                    className="rounded-2xl border border-[#f0e7ec] p-4"
                   >
-                    {saving ? "Saving..." : "Create"}
-                  </button>
-                </form>
-              )}
+                    <div className="flex items-start gap-3">
+                      <button
+                        onClick={() => toggleMilestone(milestone)}
+                        className={`mt-0.5 ${
+                          milestone.completedAt
+                            ? "text-[#91a789]"
+                            : "text-[#c5a3b3]"
+                        }`}
+                        title="Toggle milestone completion"
+                      >
+                        {milestone.completedAt ? (
+                          <CircleCheck size={19} />
+                        ) : (
+                          <Circle size={19} />
+                        )}
+                      </button>
 
-              {milestones.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-[#eadde5] bg-[#fdfafb] px-5 py-9 text-center">
-                  <Layers3 size={23} className="mx-auto text-[#c5a3b3]" />
-                  <p className="mt-3 text-sm font-semibold text-[#655765]">
-                    No milestones yet
-                  </p>
-                  <p className="mt-1 text-xs text-[#a092a0]">
-                    Add stages to organize the work in this project.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {milestones.map((milestone, index) => (
-                    <div
-                      key={milestone.id}
-                      className="rounded-2xl border border-[#f0e7ec] p-4"
-                    >
-                      <div className="flex items-start gap-3">
-                        <button
-                          onClick={() => toggleMilestone(milestone)}
-                          className={`mt-0.5 ${
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className={`text-sm font-semibold ${
                             milestone.completedAt
-                              ? "text-[#91a789]"
-                              : "text-[#c5a3b3]"
+                              ? "text-[#a69ba5] line-through"
+                              : "text-[#514352]"
                           }`}
-                          title="Toggle milestone completion"
                         >
-                          {milestone.completedAt ? (
-                            <CircleCheck size={19} />
-                          ) : (
-                            <Circle size={19} />
-                          )}
-                        </button>
+                          {index + 1}. {milestone.title}
+                        </p>
 
-                        <div className="min-w-0 flex-1">
-                          <p
-                            className={`text-sm font-semibold ${
-                              milestone.completedAt
-                                ? "text-[#a69ba5] line-through"
-                                : "text-[#514352]"
-                            }`}
-                          >
-                            {index + 1}. {milestone.title}
-                          </p>
-
-                          <div className="mt-1 flex flex-wrap gap-3 text-[11px] text-[#9b8d9b]">
-                            <span>
-                              {milestone.completedTaskCount || 0}/
-                              {milestone.taskCount || 0} tasks
+                        <div className="mt-1 flex flex-wrap gap-3 text-[11px] text-[#9b8d9b]">
+                          <span>
+                            {milestone.completedTaskCount || 0}/
+                            {milestone.taskCount || 0} tasks
+                          </span>
+                          {milestone.dueDate && (
+                            <span className="inline-flex items-center gap-1">
+                              <CalendarDays size={11} />
+                              {dateLabel(milestone.dueDate)}
                             </span>
-                            {milestone.dueDate && (
-                              <span className="inline-flex items-center gap-1">
-                                <CalendarDays size={11} />
-                                {dateLabel(milestone.dueDate)}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#f2eaf0]">
-                            <div
-                              className="h-full rounded-full bg-[#a9b69e]"
-                              style={{
-                                width: `${milestone.progress || 0}%`,
-                              }}
-                            />
-                          </div>
+                          )}
                         </div>
 
-                        <button
-                          onClick={() => deleteMilestone(milestone)}
-                          className="rounded-lg p-2 text-[#b9828c] hover:bg-[#fff0f0]"
-                          title="Delete milestone"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#f2eaf0]">
+                          <div
+                            className="h-full rounded-full bg-[#a9b69e]"
+                            style={{
+                              width: `${milestone.progress || 0}%`,
+                            }}
+                          />
+                        </div>
                       </div>
 
                       <button
-                        onClick={() =>
-                          setTaskForm({
-                            milestoneId: milestone.id,
-                          })
-                        }
-                        className="ml-8 mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#a07891] hover:text-[#80576f]"
+                        onClick={() => deleteMilestone(milestone)}
+                        className="rounded-lg p-2 text-[#b9828c] hover:bg-[#fff0f0]"
+                        title="Delete milestone"
                       >
-                        <Plus size={13} />
-                        Add task to this milestone
+                        <Trash2 size={14} />
                       </button>
                     </div>
-                  ))}
-                </div>
-              )}
-            </section>
 
-            <section className="rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <ListTodo size={18} className="text-[#B47C96]" />
-                    <h2 className="text-lg font-semibold text-[#514352]">
-                      Project tasks
-                    </h2>
+                    <button
+                      onClick={() =>
+                        setTaskForm({
+                          milestoneId: milestone.id,
+                        })
+                      }
+                      className="ml-8 mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#a07891] hover:text-[#80576f]"
+                    >
+                      <Plus size={13} />
+                      Add task to this milestone
+                    </button>
                   </div>
-                  <p className="mt-1 text-xs text-[#a092a0]">
-                    All tasks assigned to this project.
-                  </p>
-                </div>
+                ))}
+              </div>
+            )}
+          </section>
 
-                <button
-                  onClick={() => setTaskForm({ milestoneId: null })}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#B47C96] px-3 py-2.5 text-xs font-semibold text-white hover:bg-[#9e6882]"
-                >
-                  <Plus size={14} />
-                  Add task
-                </button>
+          <section className="rounded-3xl border border-[#eee3e9] bg-white p-5 sm:p-6">
+            <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <ListTodo size={18} className="text-[#B47C96]" />
+                  <h2 className="text-lg font-semibold text-[#514352]">
+                    Project tasks
+                  </h2>
+                </div>
+                <p className="mt-1 text-xs text-[#a092a0]">
+                  All tasks assigned to this project.
+                </p>
               </div>
 
-              {taskForm && (
-                <div className="mb-5">
-                  <TaskForm
-                    onSave={saveTask}
-                    onCancel={() => {
-                      setTaskForm(null);
-                      setEditingTask(null);
-                    }}
-                    initialTask={editingTask}
-                    saving={saving}
-                  />
-                </div>
-              )}
+              <button
+                onClick={() => setTaskForm({ milestoneId: null })}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#B47C96] px-3 py-2.5 text-xs font-semibold text-white hover:bg-[#9e6882]"
+              >
+                <Plus size={14} />
+                Add task
+              </button>
+            </div>
 
-              {tasks.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-[#eadde5] bg-[#fdfafb] px-5 py-10 text-center">
-                  <ListTodo size={23} className="mx-auto text-[#c5a3b3]" />
-                  <p className="mt-3 text-sm font-semibold text-[#655765]">
-                    No project tasks yet
-                  </p>
-                  <p className="mt-1 text-xs text-[#a092a0]">
-                    Add your first task or assign one to a milestone.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {tasks.map((task) => (
-                    <TaskItem
-                      key={task.id}
-                      task={task}
-                      onToggle={toggleTask}
-                      onEdit={(item) => {
-                        setEditingTask(item);
-                        setTaskForm({
-                          milestoneId: item.milestoneId || null,
-                        });
-                      }}
-                      onDelete={deleteTask}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          </>
-        )}
-      </div>
-    </main>
+            {taskForm && (
+              <div className="mb-5">
+                <TaskForm
+                  onSave={saveTask}
+                  onCancel={() => {
+                    setTaskForm(null);
+                    setEditingTask(null);
+                  }}
+                  initialTask={editingTask}
+                  saving={saving}
+                />
+              </div>
+            )}
+
+            {tasks.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-[#eadde5] bg-[#fdfafb] px-5 py-10 text-center">
+                <ListTodo size={23} className="mx-auto text-[#c5a3b3]" />
+                <p className="mt-3 text-sm font-semibold text-[#655765]">
+                  No project tasks yet
+                </p>
+                <p className="mt-1 text-xs text-[#a092a0]">
+                  Add your first task or assign one to a milestone.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {tasks.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    onToggle={toggleTask}
+                    onEdit={(item) => {
+                      setEditingTask(item);
+                      setTaskForm({
+                        milestoneId: item.milestoneId || null,
+                      });
+                    }}
+                    onDelete={deleteTask}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        </>
+      )}
+    </>
   );
 }

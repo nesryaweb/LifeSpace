@@ -326,8 +326,8 @@ export default function LearningPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
-      <div className="mx-auto max-w-[1400px]">
+     
+    <>
         {/* Page heading */}
         <div className="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <div>
@@ -924,7 +924,7 @@ export default function LearningPage() {
             </div>
           </div>
         )}
-      </div>
-    </main>
+      </>
+   
   );
 }

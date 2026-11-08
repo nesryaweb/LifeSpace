@@ -367,155 +367,153 @@ export default function ProjectsPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 text-[#51464B] sm:px-7 lg:px-10">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B18A9D]">
-              Make things happen
-            </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#51464B] sm:text-4xl">
-              Projects
-            </h1>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-[#95888D]">
-              Turn your goals into meaningful projects, organize the steps, and
-              see your progress along the way.
-            </p>
-          </div>
+    <>
+      <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B18A9D]">
+            Make things happen
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#51464B] sm:text-4xl">
+            Projects
+          </h1>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-[#95888D]">
+            Turn your goals into meaningful projects, organize the steps, and
+            see your progress along the way.
+          </p>
+        </div>
 
+        <button
+          type="button"
+          onClick={openCreateModal}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#B78AA0] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#A77B91]"
+        >
+          <Plus size={17} />
+          New project
+        </button>
+      </div>
+
+      <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard
+          label="Total projects"
+          value={stats.total}
+          icon={<FolderKanban size={18} />}
+          tone="pink"
+        />
+        <StatCard
+          label="Active"
+          value={stats.active}
+          icon={<Clock3 size={18} />}
+          tone="sage"
+        />
+        <StatCard
+          label="Planned"
+          value={stats.planned}
+          icon={<Target size={18} />}
+          tone="purple"
+        />
+        <StatCard
+          label="Completed"
+          value={stats.completed}
+          icon={<ListTodo size={18} />}
+          tone="beige"
+        />
+      </div>
+
+      <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full sm:max-w-xs">
+          <Search
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#AD9BA2]"
+          />
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search projects or goals..."
+            className={`${inputClass} pl-10`}
+          />
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {STATUSES.map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              onClick={() => setStatusFilter(item.value)}
+              className={`rounded-full px-3.5 py-2 text-xs font-semibold transition ${
+                statusFilter === item.value
+                  ? "bg-[#B78AA0] text-white"
+                  : "border border-[#EDE2E3] bg-white text-[#95858D] hover:bg-[#F8F1F3]"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {error && (
+        <div className="mt-6 rounded-2xl border border-[#F0D7D9] bg-[#FFF3F3] p-4 text-sm text-[#A45F68]">
+          {error}
           <button
             type="button"
-            onClick={openCreateModal}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#B78AA0] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#A77B91]"
+            onClick={loadProjects}
+            className="ml-2 font-semibold underline"
           >
-            <Plus size={17} />
-            New project
+            Try again
           </button>
         </div>
+      )}
 
-        <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard
-            label="Total projects"
-            value={stats.total}
-            icon={<FolderKanban size={18} />}
-            tone="pink"
-          />
-          <StatCard
-            label="Active"
-            value={stats.active}
-            icon={<Clock3 size={18} />}
-            tone="sage"
-          />
-          <StatCard
-            label="Planned"
-            value={stats.planned}
-            icon={<Target size={18} />}
-            tone="purple"
-          />
-          <StatCard
-            label="Completed"
-            value={stats.completed}
-            icon={<ListTodo size={18} />}
-            tone="beige"
-          />
+      {loading ? (
+        <div className="mt-7 grid gap-4 md:grid-cols-2">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="h-56 animate-pulse rounded-3xl border border-[#EFE5E4] bg-white"
+            />
+          ))}
         </div>
-
-        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full sm:max-w-xs">
-            <Search
-              size={16}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#AD9BA2]"
-            />
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search projects or goals..."
-              className={`${inputClass} pl-10`}
-            />
+      ) : filteredProjects.length === 0 ? (
+        <div className="mt-7 rounded-3xl border border-dashed border-[#E8DADB] bg-white px-6 py-16 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F8EEF2] text-[#B78AA0]">
+            <FolderKanban size={26} />
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {STATUSES.map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => setStatusFilter(item.value)}
-                className={`rounded-full px-3.5 py-2 text-xs font-semibold transition ${
-                  statusFilter === item.value
-                    ? "bg-[#B78AA0] text-white"
-                    : "border border-[#EDE2E3] bg-white text-[#95858D] hover:bg-[#F8F1F3]"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
+          <h2 className="mt-5 text-lg font-semibold text-[#62535A]">
+            {search || statusFilter !== "ALL"
+              ? "No matching projects"
+              : "Your project space is waiting"}
+          </h2>
 
-        {error && (
-          <div className="mt-6 rounded-2xl border border-[#F0D7D9] bg-[#FFF3F3] p-4 text-sm text-[#A45F68]">
-            {error}
+          <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#A29499]">
+            {search || statusFilter !== "ALL"
+              ? "Try changing your search or filter."
+              : "Create your first project to start organizing tasks, milestones, and progress."}
+          </p>
+
+          {!search && statusFilter === "ALL" && (
             <button
               type="button"
-              onClick={loadProjects}
-              className="ml-2 font-semibold underline"
+              onClick={openCreateModal}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B78AA0] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#A77B91]"
             >
-              Try again
+              <Plus size={16} />
+              Create a project
             </button>
-          </div>
-        )}
-
-        {loading ? (
-          <div className="mt-7 grid gap-4 md:grid-cols-2">
-            {[1, 2, 3, 4].map((item) => (
-              <div
-                key={item}
-                className="h-56 animate-pulse rounded-3xl border border-[#EFE5E4] bg-white"
-              />
-            ))}
-          </div>
-        ) : filteredProjects.length === 0 ? (
-          <div className="mt-7 rounded-3xl border border-dashed border-[#E8DADB] bg-white px-6 py-16 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F8EEF2] text-[#B78AA0]">
-              <FolderKanban size={26} />
-            </div>
-
-            <h2 className="mt-5 text-lg font-semibold text-[#62535A]">
-              {search || statusFilter !== "ALL"
-                ? "No matching projects"
-                : "Your project space is waiting"}
-            </h2>
-
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#A29499]">
-              {search || statusFilter !== "ALL"
-                ? "Try changing your search or filter."
-                : "Create your first project to start organizing tasks, milestones, and progress."}
-            </p>
-
-            {!search && statusFilter === "ALL" && (
-              <button
-                type="button"
-                onClick={openCreateModal}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B78AA0] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#A77B91]"
-              >
-                <Plus size={16} />
-                Create a project
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="mt-7 grid gap-4 md:grid-cols-2">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onEdit={() => openEditModal(project)}
-                onDelete={() => deleteProject(project)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-7 grid gap-4 md:grid-cols-2">
+          {filteredProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onEdit={() => openEditModal(project)}
+              onDelete={() => deleteProject(project)}
+            />
+          ))}
+        </div>
+      )}
 
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#33252D]/35 p-4 backdrop-blur-[2px]">
@@ -786,7 +784,7 @@ export default function ProjectsPage() {
           </form>
         </div>
       )}
-    </main>
+    </>
   );
 }
 

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -78,11 +77,7 @@ function formatDate(value) {
 function getTodayKey() {
   const today = new Date();
 
-  return dateKey(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
+  return dateKey(today.getFullYear(), today.getMonth(), today.getDate());
 }
 
 function calculatePrediction(records) {
@@ -138,10 +133,7 @@ function calculatePrediction(records) {
 
   const latestRecord = sortedRecords[sortedRecords.length - 1];
 
-  const nextStartDate = addDaysToKey(
-    latestRecord.startDate,
-    cycleLength,
-  );
+  const nextStartDate = addDaysToKey(latestRecord.startDate, cycleLength);
 
   const nextEndDate = addDaysToKey(
     nextStartDate,
@@ -197,10 +189,7 @@ export default function FlowPage() {
     loadRecords();
   }, [loadRecords]);
 
-  const prediction = useMemo(
-    () => calculatePrediction(records),
-    [records],
-  );
+  const prediction = useMemo(() => calculatePrediction(records), [records]);
 
   const openDay = (day) => {
     const record = records.find(
@@ -244,11 +233,9 @@ export default function FlowPage() {
       let endDate;
 
       if (record) {
-        startDate =
-          boundary === "START" ? selectedDay : record.startDate;
+        startDate = boundary === "START" ? selectedDay : record.startDate;
 
-        endDate =
-          boundary === "END" ? selectedDay : record.endDate;
+        endDate = boundary === "END" ? selectedDay : record.endDate;
       } else {
         startDate = selectedDay;
         endDate = selectedDay;
@@ -368,8 +355,7 @@ export default function FlowPage() {
     const yearEnd = `${year}-12-31`;
 
     return records.filter(
-      (record) =>
-        record.startDate <= yearEnd && record.endDate >= yearStart,
+      (record) => record.startDate <= yearEnd && record.endDate >= yearStart,
     );
   }, [records, year]);
 
@@ -450,7 +436,8 @@ export default function FlowPage() {
                 </>
               ) : (
                 <p className="mt-2 text-sm text-[#8F8095]">
-                  Your prediction will appear after you record your first period.
+                  Your prediction will appear after you record your first
+                  period.
                 </p>
               )}
             </div>
@@ -470,8 +457,7 @@ export default function FlowPage() {
         {prediction && (
           <div className="mt-4 border-t border-[#E9DDF0] pt-3">
             <p className="text-xs leading-relaxed text-[#8F8095]">
-              {predictionStatus}
-              {" "}
+              {predictionStatus}{" "}
               {prediction.hasHistory
                 ? `Calculated from ${prediction.intervalsUsed} recorded cycle ${
                     prediction.intervalsUsed === 1 ? "interval" : "intervals"
@@ -648,9 +634,7 @@ export default function FlowPage() {
             <span className="text-sm font-medium">Tracking year</span>
           </div>
 
-          <p className="mt-3 text-3xl font-semibold text-[#59475A]">
-            {year}
-          </p>
+          <p className="mt-3 text-3xl font-semibold text-[#59475A]">{year}</p>
 
           <p className="mt-1 text-xs text-[#9A8B99]">
             Your personal cycle history

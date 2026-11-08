@@ -1195,224 +1195,218 @@ export default function GoalsPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
-      <div className="mx-auto max-w-[1400px]">
-        
-
-        <header className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-[#B47C96]">
-              <Target size={17} />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-                Your direction
-              </span>
-            </div>
-
-            <h1 className="text-[32px] font-semibold tracking-tight text-[#45373F] sm:text-[38px]">
-              Goals
-              <span className="ml-2 text-[#C58FA7]">.</span>
-            </h1>
-
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-[#988A90]">
-              Turn the things you dream about into things you work toward.
-            </p>
+    <>
+      <header className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-[#B47C96]">
+            <Target size={17} />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+              Your direction
+            </span>
           </div>
+
+          <h1 className="text-[32px] font-semibold tracking-tight text-[#45373F] sm:text-[38px]">
+            Goals
+            <span className="ml-2 text-[#C58FA7]">.</span>
+          </h1>
+
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-[#988A90]">
+            Turn the things you dream about into things you work toward.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={openCreateModal}
+          className="inline-flex items-center justify-center gap-2 self-start rounded-xl bg-[#B77E99] px-5 py-3 text-sm font-semibold text-white shadow-[0_5px_14px_rgba(183,126,153,0.2)] transition hover:-translate-y-0.5 hover:bg-[#A76D89] sm:self-auto"
+        >
+          <Plus size={17} />
+          New goal
+        </button>
+      </header>
+
+      {error && (
+        <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-[#F0D5D1] bg-[#FFF1EF] px-4 py-3 text-sm text-[#AD5D55]">
+          <span className="flex items-center gap-2">
+            <AlertCircle size={16} />
+            {error}
+          </span>
 
           <button
             type="button"
-            onClick={openCreateModal}
-            className="inline-flex items-center justify-center gap-2 self-start rounded-xl bg-[#B77E99] px-5 py-3 text-sm font-semibold text-white shadow-[0_5px_14px_rgba(183,126,153,0.2)] transition hover:-translate-y-0.5 hover:bg-[#A76D89] sm:self-auto"
+            onClick={() => setError("")}
+            className="rounded-full p-1 hover:bg-[#FBE1DE]"
           >
-            <Plus size={17} />
-            New goal
+            <X size={15} />
           </button>
-        </header>
+        </div>
+      )}
 
-        {error && (
-          <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-[#F0D5D1] bg-[#FFF1EF] px-4 py-3 text-sm text-[#AD5D55]">
-            <span className="flex items-center gap-2">
-              <AlertCircle size={16} />
-              {error}
+      <section className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="relative overflow-hidden rounded-[20px] border border-[#EEDFE5] bg-[#F9EDF2] p-5">
+          <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
+
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-[#9E788C]">Active goals</p>
+              <p className="mt-2 text-3xl font-semibold text-[#725365]">
+                {counts.ACTIVE}
+              </p>
+            </div>
+
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#B77E99]">
+              <Target size={21} />
             </span>
+          </div>
+        </div>
 
+        <div className="relative overflow-hidden rounded-[20px] border border-[#E2E9E2] bg-[#EFF5EF] p-5">
+          <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
+
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-[#78927B]">
+                Completed goals
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-[#526F57]">
+                {counts.COMPLETED}
+              </p>
+            </div>
+
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#7C9B80]">
+              <CircleCheck size={21} />
+            </span>
+          </div>
+        </div>
+
+        <div className="relative overflow-hidden rounded-[20px] border border-[#E9E4D8] bg-[#F7F2E7] p-5">
+          <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
+
+          <div className="relative flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-[#9A8966]">
+                Average active progress
+              </p>
+              <p className="mt-2 text-3xl font-semibold text-[#756443]">
+                {totalProgress}%
+              </p>
+            </div>
+
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#B69B62]">
+              <Flag size={21} />
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          {FILTERS.map((item) => (
             <button
+              key={item.id}
               type="button"
-              onClick={() => setError("")}
-              className="rounded-full p-1 hover:bg-[#FBE1DE]"
+              onClick={() => setFilter(item.id)}
+              className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
+                filter === item.id
+                  ? "bg-[#705565] text-white shadow-sm"
+                  : "border border-[#EAE1E4] bg-white text-[#92838A] hover:border-[#D6B9C6] hover:text-[#815F72]"
+              }`}
             >
-              <X size={15} />
-            </button>
-          </div>
-        )}
+              {item.label}
 
-        <section className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="relative overflow-hidden rounded-[20px] border border-[#EEDFE5] bg-[#F9EDF2] p-5">
-            <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
-
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-[#9E788C]">
-                  Active goals
-                </p>
-                <p className="mt-2 text-3xl font-semibold text-[#725365]">
-                  {counts.ACTIVE}
-                </p>
-              </div>
-
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#B77E99]">
-                <Target size={21} />
-              </span>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-[20px] border border-[#E2E9E2] bg-[#EFF5EF] p-5">
-            <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
-
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-[#78927B]">
-                  Completed goals
-                </p>
-                <p className="mt-2 text-3xl font-semibold text-[#526F57]">
-                  {counts.COMPLETED}
-                </p>
-              </div>
-
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#7C9B80]">
-                <CircleCheck size={21} />
-              </span>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-[20px] border border-[#E9E4D8] bg-[#F7F2E7] p-5">
-            <div className="absolute -right-4 -top-6 h-24 w-24 rounded-full bg-white/40" />
-
-            <div className="relative flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-[#9A8966]">
-                  Average active progress
-                </p>
-                <p className="mt-2 text-3xl font-semibold text-[#756443]">
-                  {totalProgress}%
-                </p>
-              </div>
-
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/75 text-[#B69B62]">
-                <Flag size={21} />
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {FILTERS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setFilter(item.id)}
-                className={`rounded-full px-4 py-2 text-xs font-semibold transition ${
-                  filter === item.id
-                    ? "bg-[#705565] text-white shadow-sm"
-                    : "border border-[#EAE1E4] bg-white text-[#92838A] hover:border-[#D6B9C6] hover:text-[#815F72]"
+              <span
+                className={`ml-2 ${
+                  filter === item.id ? "text-white/70" : "text-[#B5A7AD]"
                 }`}
               >
-                {item.label}
+                {counts[item.id]}
+              </span>
+            </button>
+          ))}
+        </div>
 
-                <span
-                  className={`ml-2 ${
-                    filter === item.id ? "text-white/70" : "text-[#B5A7AD]"
-                  }`}
-                >
-                  {counts[item.id]}
-                </span>
-              </button>
-            ))}
-          </div>
+        <div className="relative w-full sm:max-w-[260px]">
+          <Search
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#B2A5AA]"
+          />
 
-          <div className="relative w-full sm:max-w-[260px]">
-            <Search
-              size={16}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#B2A5AA]"
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Find a goal..."
+            className="w-full rounded-xl border border-[#EAE1E4] bg-white py-2.5 pl-10 pr-4 text-xs text-[#65545C] outline-none transition placeholder:text-[#B5A9AE] focus:border-[#C994AA]"
+          />
+        </div>
+      </section>
+
+      {loading ? (
+        <div className="flex min-h-[280px] flex-col items-center justify-center gap-3 rounded-[22px] border border-[#EEE5E8] bg-white">
+          <LoaderCircle size={26} className="animate-spin text-[#B77E99]" />
+          <p className="text-xs text-[#9B8C93]">Gathering your goals...</p>
+        </div>
+      ) : filteredGoals.length ? (
+        <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredGoals.map((goal) => (
+            <GoalCard
+              key={goal.id}
+              goal={goal}
+              onEdit={openEditModal}
+              onStatusChange={changeStatus}
+              onDelete={setDeleteGoal}
             />
-
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Find a goal..."
-              className="w-full rounded-xl border border-[#EAE1E4] bg-white py-2.5 pl-10 pr-4 text-xs text-[#65545C] outline-none transition placeholder:text-[#B5A9AE] focus:border-[#C994AA]"
-            />
-          </div>
+          ))}
         </section>
-
-        {loading ? (
-          <div className="flex min-h-[280px] flex-col items-center justify-center gap-3 rounded-[22px] border border-[#EEE5E8] bg-white">
-            <LoaderCircle size={26} className="animate-spin text-[#B77E99]" />
-            <p className="text-xs text-[#9B8C93]">Gathering your goals...</p>
-          </div>
-        ) : filteredGoals.length ? (
-          <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {filteredGoals.map((goal) => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                onEdit={openEditModal}
-                onStatusChange={changeStatus}
-                onDelete={setDeleteGoal}
-              />
-            ))}
-          </section>
-        ) : (
-          <section className="flex min-h-[330px] flex-col items-center justify-center rounded-[22px] border border-dashed border-[#E5D6DD] bg-white/70 px-6 py-12 text-center">
-            <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-[22px] bg-[#F8EDF2] text-[#B77E99]">
-              {search ? <Search size={27} /> : <Sparkles size={27} />}
-            </span>
-
-            <h2 className="text-lg font-semibold text-[#594750]">
-              {search
-                ? "No goals found"
-                : filter === "ALL"
-                  ? "Your next chapter starts here"
-                  : `No ${filter.toLowerCase()} goals`}
-            </h2>
-
-            <p className="mt-2 max-w-sm text-xs leading-relaxed text-[#A09298]">
-              {search
-                ? "Try another search term."
-                : filter === "ALL"
-                  ? "Start by adding something you want to achieve. You can connect it to your vision and projects as you go."
-                  : "Goals with this status will appear here."}
-            </p>
-
-            {!search && filter === "ALL" && (
-              <button
-                type="button"
-                onClick={openCreateModal}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B77E99] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#A76D89]"
-              >
-                <Plus size={15} />
-                Create your first goal
-              </button>
-            )}
-          </section>
-        )}
-
-        <div className="mt-8 flex items-start gap-3 rounded-2xl border border-[#EAE4E7] bg-white/70 p-4">
-          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#F5EDF2] text-[#B47C96]">
-            <Clock3 size={16} />
+      ) : (
+        <section className="flex min-h-[330px] flex-col items-center justify-center rounded-[22px] border border-dashed border-[#E5D6DD] bg-white/70 px-6 py-12 text-center">
+          <span className="mb-4 flex h-16 w-16 items-center justify-center rounded-[22px] bg-[#F8EDF2] text-[#B77E99]">
+            {search ? <Search size={27} /> : <Sparkles size={27} />}
           </span>
 
-          <div>
-            <p className="text-xs font-semibold text-[#69565F]">
-              Your progress updates as you work
-            </p>
+          <h2 className="text-lg font-semibold text-[#594750]">
+            {search
+              ? "No goals found"
+              : filter === "ALL"
+                ? "Your next chapter starts here"
+                : `No ${filter.toLowerCase()} goals`}
+          </h2>
 
-            <p className="mt-1 text-[11px] leading-relaxed text-[#9C8F95]">
-              General goal progress is calculated from completed tasks in linked
-              projects. Financial goal progress is calculated from contributions
-              to its savings jar.
-            </p>
-          </div>
+          <p className="mt-2 max-w-sm text-xs leading-relaxed text-[#A09298]">
+            {search
+              ? "Try another search term."
+              : filter === "ALL"
+                ? "Start by adding something you want to achieve. You can connect it to your vision and projects as you go."
+                : "Goals with this status will appear here."}
+          </p>
+
+          {!search && filter === "ALL" && (
+            <button
+              type="button"
+              onClick={openCreateModal}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#B77E99] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-[#A76D89]"
+            >
+              <Plus size={15} />
+              Create your first goal
+            </button>
+          )}
+        </section>
+      )}
+
+      <div className="mt-8 flex items-start gap-3 rounded-2xl border border-[#EAE4E7] bg-white/70 p-4">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#F5EDF2] text-[#B47C96]">
+          <Clock3 size={16} />
+        </span>
+
+        <div>
+          <p className="text-xs font-semibold text-[#69565F]">
+            Your progress updates as you work
+          </p>
+
+          <p className="mt-1 text-[11px] leading-relaxed text-[#9C8F95]">
+            General goal progress is calculated from completed tasks in linked
+            projects. Financial goal progress is calculated from contributions
+            to its savings jar.
+          </p>
         </div>
       </div>
 
@@ -1471,6 +1465,6 @@ export default function GoalsPage() {
           </div>
         </div>
       )}
-    </main>
+    </>
   );
 }

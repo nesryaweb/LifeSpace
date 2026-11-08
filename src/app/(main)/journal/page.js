@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -128,7 +127,7 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-const [requestedEntryId, setRequestedEntryId] = useState(null);
+  const [requestedEntryId, setRequestedEntryId] = useState(null);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("ALL");
 
@@ -167,26 +166,24 @@ const [requestedEntryId, setRequestedEntryId] = useState(null);
       setLoading(false);
     }
   }, []);
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  setRequestedEntryId(params.get("entry"));
-}, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setRequestedEntryId(params.get("entry"));
+  }, []);
 
-useEffect(() => {
-  if (!requestedEntryId || loading) return;
+  useEffect(() => {
+    if (!requestedEntryId || loading) return;
 
-  const entry = entries.find(
-    (item) => item.id === requestedEntryId
-  );
+    const entry = entries.find((item) => item.id === requestedEntryId);
 
-  if (entry) {
-    setViewingEntry(entry);
-  }
+    if (entry) {
+      setViewingEntry(entry);
+    }
 
-  // Remove the query parameter after handling the request.
-  window.history.replaceState({}, "", "/journal");
-  setRequestedEntryId(null);
-}, [requestedEntryId, loading, entries]);
+    // Remove the query parameter after handling the request.
+    window.history.replaceState({}, "", "/journal");
+    setRequestedEntryId(null);
+  }, [requestedEntryId, loading, entries]);
   useEffect(() => {
     fetchEntries();
   }, [fetchEntries]);
@@ -195,8 +192,7 @@ useEffect(() => {
     const query = search.trim().toLowerCase();
 
     return entries.filter((entry) => {
-      const matchesType =
-        activeFilter === "ALL" || entry.type === activeFilter;
+      const matchesType = activeFilter === "ALL" || entry.type === activeFilter;
 
       const matchesSearch =
         !query ||
@@ -232,30 +228,28 @@ useEffect(() => {
   }
 
   function openPromptEntry() {
-  setViewingEntry(null);
-  setEditingEntry(null);
+    setViewingEntry(null);
+    setEditingEntry(null);
 
-  setForm({
-    title: activePrompt,
-    content: "",
-    type: "DAILY",
-    mood: "",
-    entryDate: getLocalDateString(),
-  });
+    setForm({
+      title: activePrompt,
+      content: "",
+      type: "DAILY",
+      mood: "",
+      entryDate: getLocalDateString(),
+    });
 
-  setError("");
-  setEditorOpen(true);
-}
+    setError("");
+    setEditorOpen(true);
+  }
 
   function showAnotherPrompt() {
     setActivePromptIndex((currentIndex) => {
-      const availableIndexes = WRITING_PROMPTS
-        .map((_, index) => index)
-        .filter((index) => index !== currentIndex);
-
-      const randomIndex = Math.floor(
-        Math.random() * availableIndexes.length
+      const availableIndexes = WRITING_PROMPTS.map((_, index) => index).filter(
+        (index) => index !== currentIndex,
       );
+
+      const randomIndex = Math.floor(Math.random() * availableIndexes.length);
 
       return availableIndexes[randomIndex];
     });
@@ -316,9 +310,7 @@ useEffect(() => {
           content: form.content,
           type: form.type,
           mood: form.mood || null,
-          entryDate: new Date(
-            `${form.entryDate}T12:00:00`
-          ).toISOString(),
+          entryDate: new Date(`${form.entryDate}T12:00:00`).toISOString(),
         }),
       });
 
@@ -342,7 +334,7 @@ useEffect(() => {
 
   async function handleDelete(entry) {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this journal entry?"
+      "Are you sure you want to delete this journal entry?",
     );
 
     if (!confirmed) return;
@@ -360,9 +352,7 @@ useEffect(() => {
         throw new Error(data.error || "Could not delete this entry.");
       }
 
-      setEntries((current) =>
-        current.filter((item) => item.id !== entry.id)
-      );
+      setEntries((current) => current.filter((item) => item.id !== entry.id));
 
       if (viewingEntry?.id === entry.id) {
         setViewingEntry(null);
@@ -406,89 +396,89 @@ useEffect(() => {
           </button>
         </div>
 
-       {/* Welcome card + Writing prompt */}
-<div className="mb-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
-  {/* Welcome card */}
-  <div className="relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-[28px] border border-[#F0E3E8] bg-gradient-to-br from-[#F9EAF0] via-[#F8EEF0] to-[#F2EDF7] p-6 sm:p-7">
-    <div className="relative z-10">
-      <div className="mb-3 flex items-center gap-2 text-[#A66E88]">
-        <Feather size={19} />
-        <span className="text-xs font-semibold tracking-[0.16em]">
-          A NOTE TO YOURSELF
-        </span>
-      </div>
+        {/* Welcome card + Writing prompt */}
+        <div className="mb-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+          {/* Welcome card */}
+          <div className="relative flex min-h-[280px] flex-col justify-between overflow-hidden rounded-[28px] border border-[#F0E3E8] bg-gradient-to-br from-[#F9EAF0] via-[#F8EEF0] to-[#F2EDF7] p-6 sm:p-7">
+            <div className="relative z-10">
+              <div className="mb-3 flex items-center gap-2 text-[#A66E88]">
+                <Feather size={19} />
+                <span className="text-xs font-semibold tracking-[0.16em]">
+                  A NOTE TO YOURSELF
+                </span>
+              </div>
 
-      <h2 className="text-2xl font-semibold leading-snug text-[#66515C]">
-        Your thoughts deserve a place to land.
-      </h2>
+              <h2 className="text-2xl font-semibold leading-snug text-[#66515C]">
+                Your thoughts deserve a place to land.
+              </h2>
 
-      <p className="mt-3 max-w-lg text-sm leading-6 text-[#927D87]">
-        Celebrate the little things, work through the difficult ones,
-        and keep a record of the person you are becoming.
-      </p>
-    </div>
+              <p className="mt-3 max-w-lg text-sm leading-6 text-[#927D87]">
+                Celebrate the little things, work through the difficult ones,
+                and keep a record of the person you are becoming.
+              </p>
+            </div>
 
-    <div className="relative z-10 mt-6">
-      <button
-        onClick={() => openNewEntry("GRATITUDE")}
-        className="inline-flex items-center gap-2 rounded-xl border border-[#DCC2CF] bg-white/70 px-4 py-2.5 text-sm font-medium text-[#94677E] transition hover:bg-white"
-      >
-        <Heart size={16} />
-        Write something you're grateful for
-      </button>
-    </div>
+            <div className="relative z-10 mt-6">
+              <button
+                onClick={() => openNewEntry("GRATITUDE")}
+                className="inline-flex items-center gap-2 rounded-xl border border-[#DCC2CF] bg-white/70 px-4 py-2.5 text-sm font-medium text-[#94677E] transition hover:bg-white"
+              >
+                <Heart size={16} />
+                Write something you're grateful for
+              </button>
+            </div>
 
-    <div className="pointer-events-none absolute -right-5 -top-8 hidden rotate-12 text-[#D7B8C8]/50 sm:block">
-      <BookHeart size={190} strokeWidth={0.8} />
-    </div>
+            <div className="pointer-events-none absolute -right-5 -top-8 hidden rotate-12 text-[#D7B8C8]/50 sm:block">
+              <BookHeart size={190} strokeWidth={0.8} />
+            </div>
 
-    <Sparkles
-      className="pointer-events-none absolute bottom-7 right-10 text-[#C69DB2]"
-      size={24}
-    />
-  </div>
+            <Sparkles
+              className="pointer-events-none absolute bottom-7 right-10 text-[#C69DB2]"
+              size={24}
+            />
+          </div>
 
-  {/* Writing prompt */}
-  <div className="flex min-h-[280px] flex-col justify-between rounded-[28px] border border-[#E9E1F0] bg-gradient-to-br from-[#F5F0FA] to-[#F9F5F8] p-6 sm:p-7">
-    <div>
-      <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-[#9277AE] shadow-sm">
-          <Sparkles size={21} />
+          {/* Writing prompt */}
+          <div className="flex min-h-[280px] flex-col justify-between rounded-[28px] border border-[#E9E1F0] bg-gradient-to-br from-[#F5F0FA] to-[#F9F5F8] p-6 sm:p-7">
+            <div>
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white text-[#9277AE] shadow-sm">
+                  <Sparkles size={21} />
+                </div>
+
+                <p className="text-xs font-semibold tracking-[0.14em] text-[#9277AE]">
+                  A LITTLE INSPIRATION
+                </p>
+              </div>
+
+              <h2 className="text-xl font-semibold leading-relaxed text-[#665873]">
+                {activePrompt}
+              </h2>
+
+              <p className="mt-3 text-sm leading-6 text-[#A193AA]">
+                No perfect answers. Just write whatever comes to mind.
+              </p>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <button
+                onClick={showAnotherPrompt}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#DED2E9] bg-white/80 px-4 py-2.5 text-xs font-medium text-[#806B99] transition hover:bg-white"
+              >
+                <RefreshCw size={14} />
+                Another prompt
+              </button>
+
+              <button
+                onClick={openPromptEntry}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-medium text-white transition hover:bg-[#80669C]"
+              >
+                <PenLine size={14} />
+                Use this prompt
+              </button>
+            </div>
+          </div>
         </div>
-
-        <p className="text-xs font-semibold tracking-[0.14em] text-[#9277AE]">
-          A LITTLE INSPIRATION
-        </p>
-      </div>
-
-      <h2 className="text-xl font-semibold leading-relaxed text-[#665873]">
-        {activePrompt}
-      </h2>
-
-      <p className="mt-3 text-sm leading-6 text-[#A193AA]">
-        No perfect answers. Just write whatever comes to mind.
-      </p>
-    </div>
-
-    <div className="mt-6 flex flex-wrap items-center gap-2">
-      <button
-        onClick={showAnotherPrompt}
-        className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#DED2E9] bg-white/80 px-4 py-2.5 text-xs font-medium text-[#806B99] transition hover:bg-white"
-      >
-        <RefreshCw size={14} />
-        Another prompt
-      </button>
-
-      <button
-        onClick={openPromptEntry}
-        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-medium text-white transition hover:bg-[#80669C]"
-      >
-        <PenLine size={14} />
-        Use this prompt
-      </button>
-    </div>
-  </div>
-</div>
 
         {/* Small stats */}
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -520,18 +510,14 @@ useEffect(() => {
               <span className="text-xs font-medium">Your space</span>
             </div>
 
-            <p className="text-sm font-medium text-[#5D5057]">
-              Just for you
-            </p>
+            <p className="text-sm font-medium text-[#5D5057]">Just for you</p>
           </div>
         </div>
 
         {/* Entries section */}
         <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-[#5D5057]">
-              Your pages
-            </h2>
+            <h2 className="text-xl font-semibold text-[#5D5057]">Your pages</h2>
 
             <p className="mt-1 text-sm text-[#A09299]">
               {filteredEntries.length}{" "}
@@ -864,13 +850,13 @@ useEffect(() => {
                     }
                     className="w-full rounded-xl border border-[#EDE2E7] bg-white px-3 py-3 text-sm text-[#65545D] outline-none focus:border-[#C99DB2]"
                   >
-                    {ENTRY_TYPES.filter(
-                      (item) => item.value !== "ALL"
-                    ).map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
-                      </option>
-                    ))}
+                    {ENTRY_TYPES.filter((item) => item.value !== "ALL").map(
+                      (type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
 

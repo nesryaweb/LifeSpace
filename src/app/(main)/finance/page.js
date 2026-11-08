@@ -70,12 +70,12 @@ export default function FinancePage() {
 
       if (!transactionResponse.ok) {
         throw new Error(
-          transactionData.error || "Unable to load transactions."
+          transactionData.error || "Unable to load transactions.",
         );
       }
 
       if (!goalResponse.ok) {
-        throw new Error(goalData.error || "Unable to load financial goals.")
+        throw new Error(goalData.error || "Unable to load financial goals.");
       }
 
       setTransactions(transactionData.transactions || []);
@@ -97,9 +97,9 @@ export default function FinancePage() {
         (goal) =>
           goal.type === "FINANCIAL" &&
           goal.status === "ACTIVE" &&
-          goal.financialGoal
+          goal.financialGoal,
       ),
-    [goals]
+    [goals],
   );
 
   const income = transactions
@@ -186,7 +186,7 @@ export default function FinancePage() {
     }
 
     const selectedGoal = financialGoals.find(
-      (goal) => goal.id === form.financialGoalId
+      (goal) => goal.id === form.financialGoalId,
     );
 
     setSaving(true);
@@ -212,7 +212,7 @@ export default function FinancePage() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || data.message || "Could not save this transaction."
+          data.error || data.message || "Could not save this transaction.",
         );
       }
 
@@ -234,22 +234,17 @@ export default function FinancePage() {
     }
   }
 
-  const isSavingType = [
-    "SAVING_DEPOSIT",
-    "SAVING_WITHDRAWAL",
-  ].includes(form.type);
+  const isSavingType = ["SAVING_DEPOSIT", "SAVING_WITHDRAWAL"].includes(
+    form.type,
+  );
 
   return (
     <div className="min-h-screen bg-[#FCF9FB] px-4 py-6 sm:px-7 lg:px-10">
       <div className="mx-auto max-w-7xl space-y-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-[#A18F9D]">
-              Your money, organized
-            </p>
-            <h1 className="mt-1 text-3xl font-bold text-[#554653]">
-              Finance
-            </h1>
+            <p className="text-sm text-[#A18F9D]">Your money, organized</p>
+            <h1 className="mt-1 text-3xl font-bold text-[#554653]">Finance</h1>
             <p className="mt-2 text-sm text-[#9B8997]">
               Keep track of your income, expenses, and savings.
             </p>
@@ -312,8 +307,8 @@ export default function FinancePage() {
                 No active savings jars yet
               </h3>
               <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-[#A18F9D]">
-                Create a financial goal from your Goals page and its savings
-                jar will appear here.
+                Create a financial goal from your Goals page and its savings jar
+                will appear here.
               </p>
               <Link
                 href="/goals"
@@ -415,8 +410,7 @@ export default function FinancePage() {
               {transactions.map((transaction) => {
                 const isIncome = transaction.type === "INCOME";
                 const isDeposit = transaction.type === "SAVING_DEPOSIT";
-                const isWithdrawal =
-                  transaction.type === "SAVING_WITHDRAWAL";
+                const isWithdrawal = transaction.type === "SAVING_WITHDRAWAL";
 
                 const Icon = isIncome
                   ? TrendingUp
@@ -462,7 +456,7 @@ export default function FinancePage() {
                       {isPositive ? "+" : "-"}
                       {formatMoney(
                         Number(transaction.amount),
-                        transaction.currency || "ETB"
+                        transaction.currency || "ETB",
                       )}
                     </p>
                   </div>
@@ -548,9 +542,7 @@ export default function FinancePage() {
                 <input
                   required
                   value={form.title}
-                  onChange={(event) =>
-                    updateForm("title", event.target.value)
-                  }
+                  onChange={(event) => updateForm("title", event.target.value)}
                   placeholder={
                     form.type === "INCOME"
                       ? "e.g. Monthly salary"
@@ -591,9 +583,7 @@ export default function FinancePage() {
                     required
                     type="date"
                     value={form.date}
-                    onChange={(event) =>
-                      updateForm("date", event.target.value)
-                    }
+                    onChange={(event) => updateForm("date", event.target.value)}
                     className="w-full rounded-xl border border-[#EDE2E9] bg-[#FFFCFE] px-3 py-3 text-sm text-[#554653] outline-none focus:border-[#B99AB8]"
                   />
                 </div>
@@ -601,7 +591,8 @@ export default function FinancePage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-semibold text-[#776477]">
-                  Description <span className="font-normal text-[#B5A7B2]">(optional)</span>
+                  Description{" "}
+                  <span className="font-normal text-[#B5A7B2]">(optional)</span>
                 </label>
                 <textarea
                   rows={3}
@@ -634,7 +625,9 @@ export default function FinancePage() {
                   disabled={saving}
                   className="inline-flex items-center gap-2 rounded-xl bg-[#9B83A5] px-5 py-2.5 text-xs font-semibold text-white hover:bg-[#856D90] disabled:opacity-60"
                 >
-                  {saving && <LoaderCircle size={14} className="animate-spin" />}
+                  {saving && (
+                    <LoaderCircle size={14} className="animate-spin" />
+                  )}
                   Save transaction
                 </button>
               </div>

@@ -850,660 +850,656 @@ export default function LearningPathPage() {
   });
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
-      <div className="mx-auto w-full max-w-[1400px]">
-        <Link
-          href="/learning"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#9277AE] transition hover:text-[#80669C]"
-        >
-          <ArrowLeft size={17} />
-          All learning paths
-        </Link>
+    <>
+      <Link
+        href="/learning"
+        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#9277AE] transition hover:text-[#80669C]"
+      >
+        <ArrowLeft size={17} />
+        All learning paths
+      </Link>
 
-        {/* Path heading */}
-        <section className="relative mb-7 overflow-hidden rounded-[28px] border border-[#E9E1F0] bg-gradient-to-br from-[#F4EEF9] via-[#F8F0F5] to-[#F8EBF0] p-6 sm:p-8">
-          <div className="relative z-10 max-w-3xl">
-            <div className="mb-4 flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
-                  STATUS_STYLES[path.status] || STATUS_STYLES.ACTIVE
-                }`}
-              >
-                {path.status?.replaceAll("_", " ") || "Active"}
-              </span>
+      {/* Path heading */}
+      <section className="relative mb-7 overflow-hidden rounded-[28px] border border-[#E9E1F0] bg-gradient-to-br from-[#F4EEF9] via-[#F8F0F5] to-[#F8EBF0] p-6 sm:p-8">
+        <div className="relative z-10 max-w-3xl">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span
+              className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
+                STATUS_STYLES[path.status] || STATUS_STYLES.ACTIVE
+              }`}
+            >
+              {path.status?.replaceAll("_", " ") || "Active"}
+            </span>
 
-              <span className="flex items-center gap-1.5 text-xs text-[#A18FA6]">
-                <GraduationCap size={15} />
-                Learning path
-              </span>
-            </div>
-
-            <h1 className="text-3xl font-semibold leading-tight text-[#594B5D] sm:text-4xl">
-              {path.title}
-            </h1>
-
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#96899E]">
-              {path.description ||
-                "Your personal space to learn, practice, and grow."}
-            </p>
-
-            {path.goal && (
-              <div className="mt-5 inline-flex max-w-full items-center gap-2 rounded-xl border border-white/70 bg-white/65 px-3.5 py-2.5">
-                <Target size={16} className="shrink-0 text-[#B47F98]" />
-                <div className="min-w-0">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-[#B09DA8]">
-                    Connected goal
-                  </p>
-                  <p className="truncate text-sm font-medium text-[#806B79]">
-                    {path.goal.title}
-                  </p>
-                </div>
-              </div>
-            )}
+            <span className="flex items-center gap-1.5 text-xs text-[#A18FA6]">
+              <GraduationCap size={15} />
+              Learning path
+            </span>
           </div>
 
-          <div className="pointer-events-none absolute -right-5 -top-8 hidden rotate-[-12deg] text-[#CBB8D9]/40 sm:block">
-            <BookOpen size={210} strokeWidth={0.7} />
-          </div>
-          <Sparkles
-            size={22}
-            className="pointer-events-none absolute bottom-8 right-12 text-[#B79BCB]"
-          />
-        </section>
+          <h1 className="text-3xl font-semibold leading-tight text-[#594B5D] sm:text-4xl">
+            {path.title}
+          </h1>
 
-        {/* Progress and dates */}
-        <section className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-[24px] border border-[#E9E1F0] bg-white p-5 lg:col-span-2">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-[#96899E]">
-                  Overall progress
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#96899E]">
+            {path.description ||
+              "Your personal space to learn, practice, and grow."}
+          </p>
+
+          {path.goal && (
+            <div className="mt-5 inline-flex max-w-full items-center gap-2 rounded-xl border border-white/70 bg-white/65 px-3.5 py-2.5">
+              <Target size={16} className="shrink-0 text-[#B47F98]" />
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-[#B09DA8]">
+                  Connected goal
                 </p>
-                <p className="mt-1 text-2xl font-semibold text-[#716083]">
-                  {progress}%
+                <p className="truncate text-sm font-medium text-[#806B79]">
+                  {path.goal.title}
                 </p>
               </div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#F2EDF7] text-[#9277AE]">
-                <GraduationCap size={21} />
-              </div>
             </div>
+          )}
+        </div>
 
-            <div className="h-3 overflow-hidden rounded-full bg-[#F1EDF1]">
-              <div
-                className="h-full rounded-full bg-[#AC91C5] transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+        <div className="pointer-events-none absolute -right-5 -top-8 hidden rotate-[-12deg] text-[#CBB8D9]/40 sm:block">
+          <BookOpen size={210} strokeWidth={0.7} />
+        </div>
+        <Sparkles
+          size={22}
+          className="pointer-events-none absolute bottom-8 right-12 text-[#B79BCB]"
+        />
+      </section>
 
-            <p className="mt-3 text-xs text-[#A397A5]">
-              {completedLessons} of {totalLessons} lessons completed
-            </p>
-          </div>
-
-          <div className="rounded-[24px] border border-[#F0E5EA] bg-white p-5">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F9EAF0] text-[#B77D96]">
-              <CalendarDays size={19} />
-            </div>
-
-            <p className="text-xs text-[#A18E98]">Learning timeline</p>
-            <p className="mt-2 text-sm font-semibold text-[#66515C]">
-              {formatDate(path.startDate)}
-            </p>
-            <p className="mt-1 text-xs text-[#A18E98]">Start date</p>
-
-            <div className="my-3 border-t border-[#F2EBEF]" />
-
-            <p className="text-sm font-semibold text-[#66515C]">
-              {formatDate(path.targetDate)}
-            </p>
-            <p className="mt-1 text-xs text-[#A18E98]">Target date</p>
-          </div>
-        </section>
-
-        {/* Shared action error */}
-        {actionError && (
-          <div className="mb-5 flex items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-600">
-            <AlertCircle size={15} />
-            {actionError}
-          </div>
-        )}
-
-        {/* Lessons */}
-        <section className="mb-8">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+      {/* Progress and dates */}
+      <section className="mb-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="rounded-[24px] border border-[#E9E1F0] bg-white p-5 lg:col-span-2">
+          <div className="mb-4 flex items-center justify-between">
             <div>
-              <div className="flex items-center gap-2">
-                <BookMarked size={19} className="text-[#B77D96]" />
-                <h2 className="text-xl font-semibold text-[#625464]">
-                  Lessons
-                </h2>
-              </div>
-              <p className="mt-1 text-sm text-[#A095A2]">
-                Your topics, milestones, and learning steps.
+              <p className="text-xs font-medium text-[#96899E]">
+                Overall progress
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-[#716083]">
+                {progress}%
               </p>
             </div>
-
-            <div className="flex items-center gap-3">
-              <span className="rounded-full bg-[#F9EDF1] px-3 py-1 text-xs font-medium text-[#A66F86]">
-                {lessons.length} lessons
-              </span>
-              <button
-                onClick={openAddLesson}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
-              >
-                <Plus size={15} />
-                Add lesson
-              </button>
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#F2EDF7] text-[#9277AE]">
+              <GraduationCap size={21} />
             </div>
           </div>
 
-          {lessons.length === 0 ? (
-            <EmptySection
-              icon={BookOpen}
-              title="No lessons added yet"
-              description="Start organizing this learning path by adding your first lesson."
-            >
-              <button
-                onClick={openAddLesson}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
-              >
-                <Plus size={15} />
-                Add your first lesson
-              </button>
-            </EmptySection>
-          ) : (
-            <div className="overflow-hidden rounded-[24px] border border-[#EFE6EB] bg-white">
-              {lessons.map((lesson, index) => {
-                const status =
-                  LESSON_STYLES[lesson.status] || LESSON_STYLES.NOT_STARTED;
-                const StatusIcon = status.icon;
+          <div className="h-3 overflow-hidden rounded-full bg-[#F1EDF1]">
+            <div
+              className="h-full rounded-full bg-[#AC91C5] transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
 
-                return (
-                  <div
-                    key={lesson.id}
-                    className={`flex flex-wrap items-center gap-3 px-4 py-4 sm:flex-nowrap sm:gap-4 sm:px-5 ${
-                      index !== lessons.length - 1
-                        ? "border-b border-[#F2EBEF]"
-                        : ""
-                    }`}
-                  >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F7F2F7] text-xs font-semibold text-[#9277AE]">
-                      {index + 1}
+          <p className="mt-3 text-xs text-[#A397A5]">
+            {completedLessons} of {totalLessons} lessons completed
+          </p>
+        </div>
+
+        <div className="rounded-[24px] border border-[#F0E5EA] bg-white p-5">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-[#F9EAF0] text-[#B77D96]">
+            <CalendarDays size={19} />
+          </div>
+
+          <p className="text-xs text-[#A18E98]">Learning timeline</p>
+          <p className="mt-2 text-sm font-semibold text-[#66515C]">
+            {formatDate(path.startDate)}
+          </p>
+          <p className="mt-1 text-xs text-[#A18E98]">Start date</p>
+
+          <div className="my-3 border-t border-[#F2EBEF]" />
+
+          <p className="text-sm font-semibold text-[#66515C]">
+            {formatDate(path.targetDate)}
+          </p>
+          <p className="mt-1 text-xs text-[#A18E98]">Target date</p>
+        </div>
+      </section>
+
+      {/* Shared action error */}
+      {actionError && (
+        <div className="mb-5 flex items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-xs text-red-600">
+          <AlertCircle size={15} />
+          {actionError}
+        </div>
+      )}
+
+      {/* Lessons */}
+      <section className="mb-8">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <BookMarked size={19} className="text-[#B77D96]" />
+              <h2 className="text-xl font-semibold text-[#625464]">Lessons</h2>
+            </div>
+            <p className="mt-1 text-sm text-[#A095A2]">
+              Your topics, milestones, and learning steps.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="rounded-full bg-[#F9EDF1] px-3 py-1 text-xs font-medium text-[#A66F86]">
+              {lessons.length} lessons
+            </span>
+            <button
+              onClick={openAddLesson}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
+            >
+              <Plus size={15} />
+              Add lesson
+            </button>
+          </div>
+        </div>
+
+        {lessons.length === 0 ? (
+          <EmptySection
+            icon={BookOpen}
+            title="No lessons added yet"
+            description="Start organizing this learning path by adding your first lesson."
+          >
+            <button
+              onClick={openAddLesson}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
+            >
+              <Plus size={15} />
+              Add your first lesson
+            </button>
+          </EmptySection>
+        ) : (
+          <div className="overflow-hidden rounded-[24px] border border-[#EFE6EB] bg-white">
+            {lessons.map((lesson, index) => {
+              const status =
+                LESSON_STYLES[lesson.status] || LESSON_STYLES.NOT_STARTED;
+              const StatusIcon = status.icon;
+
+              return (
+                <div
+                  key={lesson.id}
+                  className={`flex flex-wrap items-center gap-3 px-4 py-4 sm:flex-nowrap sm:gap-4 sm:px-5 ${
+                    index !== lessons.length - 1
+                      ? "border-b border-[#F2EBEF]"
+                      : ""
+                  }`}
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F7F2F7] text-xs font-semibold text-[#9277AE]">
+                    {index + 1}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-semibold text-[#695A6C]">
+                      {lesson.title}
+                    </h3>
+                    {lesson.description && (
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#A397A5]">
+                        {lesson.description}
+                      </p>
+                    )}
+                    {lesson.dueDate && (
+                      <p className="mt-1 text-[11px] text-[#A99BA8]">
+                        Due {formatDate(lesson.dueDate)}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex w-full shrink-0 items-center justify-between gap-2 sm:w-auto sm:justify-end">
+                    <div className="flex items-center gap-1.5">
+                      <StatusIcon size={14} className={status.color} />
+                      <select
+                        value={lesson.status}
+                        onChange={(event) =>
+                          handleStatusChange(lesson, event.target.value)
+                        }
+                        className={`max-w-[125px] cursor-pointer rounded-full border-0 px-2.5 py-1.5 text-[10px] font-medium outline-none ${status.background} ${status.color}`}
+                      >
+                        <option value="NOT_STARTED">Not started</option>
+                        <option value="IN_PROGRESS">In progress</option>
+                        <option value="COMPLETED">Completed</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => openAddNote(lesson.id)}
+                        title="Add a note to this lesson"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#78977D] transition hover:bg-[#EDF3EC]"
+                      >
+                        <NotebookPen size={14} />
+                      </button>
+                      <button
+                        onClick={() => openEditLesson(lesson)}
+                        title="Edit lesson"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9277AE] transition hover:bg-[#F4EEF8]"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteLesson(lesson)}
+                        disabled={deletingLessonId === lesson.id}
+                        title="Delete lesson"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
+                      >
+                        {deletingLessonId === lesson.id ? (
+                          <LoaderCircle size={14} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={14} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Resources */}
+      <section className="mb-8">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <Library size={19} className="text-[#9277AE]" />
+              <h2 className="text-xl font-semibold text-[#625464]">
+                Resources
+              </h2>
+            </div>
+            <p className="mt-1 text-sm text-[#A095A2]">
+              Books, courses, videos, websites, and useful materials.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="rounded-full bg-[#F2EDF7] px-3 py-1 text-xs font-medium text-[#9277AE]">
+              {resources.length} resources
+            </span>
+            <button
+              onClick={openAddResource}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
+            >
+              <Plus size={15} />
+              Add resource
+            </button>
+          </div>
+        </div>
+
+        {resources.length === 0 ? (
+          <EmptySection
+            icon={Library}
+            title="Your resource library is empty"
+            description="Keep useful learning materials together in this space."
+          >
+            <button
+              onClick={openAddResource}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
+            >
+              <Plus size={15} />
+              Add your first resource
+            </button>
+          </EmptySection>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {resources.map((resource) => {
+              const ResourceIcon = getResourceIcon(resource.type);
+
+              return (
+                <article
+                  key={resource.id}
+                  className="rounded-[22px] border border-[#EFE6EB] bg-white p-4 transition hover:border-[#DED1E7]"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F4EEF8] text-[#9277AE]">
+                      <ResourceIcon size={19} />
                     </div>
 
                     <div className="min-w-0 flex-1">
                       <h3 className="text-sm font-semibold text-[#695A6C]">
-                        {lesson.title}
+                        {resource.title}
                       </h3>
-                      {lesson.description && (
-                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#A397A5]">
-                          {lesson.description}
-                        </p>
-                      )}
-                      {lesson.dueDate && (
-                        <p className="mt-1 text-[11px] text-[#A99BA8]">
-                          Due {formatDate(lesson.dueDate)}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="flex w-full shrink-0 items-center justify-between gap-2 sm:w-auto sm:justify-end">
-                      <div className="flex items-center gap-1.5">
-                        <StatusIcon size={14} className={status.color} />
-                        <select
-                          value={lesson.status}
-                          onChange={(event) =>
-                            handleStatusChange(lesson, event.target.value)
-                          }
-                          className={`max-w-[125px] cursor-pointer rounded-full border-0 px-2.5 py-1.5 text-[10px] font-medium outline-none ${status.background} ${status.color}`}
-                        >
-                          <option value="NOT_STARTED">Not started</option>
-                          <option value="IN_PROGRESS">In progress</option>
-                          <option value="COMPLETED">Completed</option>
-                        </select>
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => openAddNote(lesson.id)}
-                          title="Add a note to this lesson"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#78977D] transition hover:bg-[#EDF3EC]"
-                        >
-                          <NotebookPen size={14} />
-                        </button>
-                        <button
-                          onClick={() => openEditLesson(lesson)}
-                          title="Edit lesson"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9277AE] transition hover:bg-[#F4EEF8]"
-                        >
-                          <Pencil size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteLesson(lesson)}
-                          disabled={deletingLessonId === lesson.id}
-                          title="Delete lesson"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
-                        >
-                          {deletingLessonId === lesson.id ? (
-                            <LoaderCircle size={14} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={14} />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
-
-        {/* Resources */}
-        <section className="mb-8">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <Library size={19} className="text-[#9277AE]" />
-                <h2 className="text-xl font-semibold text-[#625464]">
-                  Resources
-                </h2>
-              </div>
-              <p className="mt-1 text-sm text-[#A095A2]">
-                Books, courses, videos, websites, and useful materials.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <span className="rounded-full bg-[#F2EDF7] px-3 py-1 text-xs font-medium text-[#9277AE]">
-                {resources.length} resources
-              </span>
-              <button
-                onClick={openAddResource}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
-              >
-                <Plus size={15} />
-                Add resource
-              </button>
-            </div>
-          </div>
-
-          {resources.length === 0 ? (
-            <EmptySection
-              icon={Library}
-              title="Your resource library is empty"
-              description="Keep useful learning materials together in this space."
-            >
-              <button
-                onClick={openAddResource}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#9277AE] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#80669C]"
-              >
-                <Plus size={15} />
-                Add your first resource
-              </button>
-            </EmptySection>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {resources.map((resource) => {
-                const ResourceIcon = getResourceIcon(resource.type);
-
-                return (
-                  <article
-                    key={resource.id}
-                    className="rounded-[22px] border border-[#EFE6EB] bg-white p-4 transition hover:border-[#DED1E7]"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F4EEF8] text-[#9277AE]">
-                        <ResourceIcon size={19} />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-sm font-semibold text-[#695A6C]">
-                          {resource.title}
-                        </h3>
-                        <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-[#A397A5]">
-                          {resource.type?.replaceAll("_", " ") || "Resource"}
-                        </p>
-                        {resource.author && (
-                          <p className="mt-1 text-xs text-[#A095A2]">
-                            {resource.author}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex shrink-0 items-center gap-0.5">
-                        <button
-                          onClick={() => openEditResource(resource)}
-                          title="Edit resource"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9277AE] transition hover:bg-[#F4EEF8]"
-                        >
-                          <Pencil size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteResource(resource)}
-                          disabled={deletingResourceId === resource.id}
-                          title="Delete resource"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
-                        >
-                          {deletingResourceId === resource.id ? (
-                            <LoaderCircle size={14} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={14} />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-
-                    {resource.description && (
-                      <p className="mt-3 whitespace-pre-wrap text-xs leading-5 text-[#A095A2]">
-                        {resource.description}
+                      <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-[#A397A5]">
+                        {resource.type?.replaceAll("_", " ") || "Resource"}
                       </p>
-                    )}
+                      {resource.author && (
+                        <p className="mt-1 text-xs text-[#A095A2]">
+                          {resource.author}
+                        </p>
+                      )}
+                    </div>
 
-                    {resource.url && (
-                      <a
-                        href={resource.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#9277AE] hover:text-[#80669C]"
+                    <div className="flex shrink-0 items-center gap-0.5">
+                      <button
+                        onClick={() => openEditResource(resource)}
+                        title="Edit resource"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#9277AE] transition hover:bg-[#F4EEF8]"
                       >
-                        Open resource
-                        <ExternalLink size={13} />
-                      </a>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-          )}
-        </section>
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteResource(resource)}
+                        disabled={deletingResourceId === resource.id}
+                        title="Delete resource"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
+                      >
+                        {deletingResourceId === resource.id ? (
+                          <LoaderCircle size={14} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={14} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
 
-        {/* Learning Notes */}
-        <section className="mb-8">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <NotebookPen size={19} className="text-[#78977D]" />
-                <h2 className="text-xl font-semibold text-[#625464]">
-                  Learning notes
-                </h2>
-              </div>
-              <p className="mt-1 text-sm text-[#A095A2]">
-                Build your personal knowledge library with explanations,
-                examples, and useful keywords.
-              </p>
-            </div>
+                  {resource.description && (
+                    <p className="mt-3 whitespace-pre-wrap text-xs leading-5 text-[#A095A2]">
+                      {resource.description}
+                    </p>
+                  )}
 
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-[#EDF3EC] px-3 py-1 text-xs font-medium text-[#78977D]">
-                {notes.length} notes
-              </span>
-              <span className="rounded-full bg-[#FAF3E7] px-3 py-1 text-xs font-medium text-[#B18A55]">
-                {favoriteNotes} favorites
-              </span>
-              <button
-                onClick={() => openAddNote()}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#78977D] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#66866C]"
-              >
-                <Plus size={15} />
-                Add note
-              </button>
-              <Link
-                href="/learning/glossary"
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E6DDEC] bg-white px-4 py-2.5 text-xs font-semibold text-[#9277AE] transition hover:bg-[#F7F2FA]"
-              >
-                <Library size={15} />
-                My glossary
-              </Link>
+                  {resource.url && (
+                    <a
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#9277AE] hover:text-[#80669C]"
+                    >
+                      Open resource
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Learning Notes */}
+      <section className="mb-8">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <NotebookPen size={19} className="text-[#78977D]" />
+              <h2 className="text-xl font-semibold text-[#625464]">
+                Learning notes
+              </h2>
             </div>
+            <p className="mt-1 text-sm text-[#A095A2]">
+              Build your personal knowledge library with explanations, examples,
+              and useful keywords.
+            </p>
           </div>
 
-          {notes.length > 0 && (
-            <div className="mb-5 flex flex-col gap-3 sm:flex-row">
-              <div className="relative flex-1">
-                <Search
-                  size={16}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A397A5]"
-                />
-                <input
-                  type="search"
-                  value={noteSearch}
-                  onChange={(event) => setNoteSearch(event.target.value)}
-                  placeholder="Search notes, explanations, examples, keywords..."
-                  className="w-full rounded-xl border border-[#E9E0E8] bg-white py-3 pl-10 pr-4 text-sm text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#A7BDA8]"
-                />
-              </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-[#EDF3EC] px-3 py-1 text-xs font-medium text-[#78977D]">
+              {notes.length} notes
+            </span>
+            <span className="rounded-full bg-[#FAF3E7] px-3 py-1 text-xs font-medium text-[#B18A55]">
+              {favoriteNotes} favorites
+            </span>
+            <button
+              onClick={() => openAddNote()}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#78977D] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#66866C]"
+            >
+              <Plus size={15} />
+              Add note
+            </button>
+            <Link
+              href="/learning/glossary"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#E6DDEC] bg-white px-4 py-2.5 text-xs font-semibold text-[#9277AE] transition hover:bg-[#F7F2FA]"
+            >
+              <Library size={15} />
+              My glossary
+            </Link>
+          </div>
+        </div>
 
-              <div className="relative sm:w-52">
-                <Filter
-                  size={15}
-                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A397A5]"
-                />
-                <select
-                  value={noteFilter}
-                  onChange={(event) => setNoteFilter(event.target.value)}
-                  className="w-full appearance-none rounded-xl border border-[#E9E0E8] bg-white py-3 pl-9 pr-4 text-sm text-[#766779] outline-none focus:border-[#A7BDA8]"
-                >
-                  <option value="ALL">All notes</option>
-                  <option value="FAVORITES">Favorites</option>
-                  <option value="REVIEW">Has review date</option>
-                  <option value="NOT_UNDERSTOOD">Not understood</option>
-                  <option value="LEARNING">Learning</option>
-                  <option value="UNDERSTOOD">Understood</option>
-                </select>
-              </div>
+        {notes.length > 0 && (
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row">
+            <div className="relative flex-1">
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A397A5]"
+              />
+              <input
+                type="search"
+                value={noteSearch}
+                onChange={(event) => setNoteSearch(event.target.value)}
+                placeholder="Search notes, explanations, examples, keywords..."
+                className="w-full rounded-xl border border-[#E9E0E8] bg-white py-3 pl-10 pr-4 text-sm text-[#625464] outline-none placeholder:text-[#B9AFB9] focus:border-[#A7BDA8]"
+              />
             </div>
-          )}
 
-          {notes.length === 0 ? (
-            <EmptySection
-              icon={NotebookPen}
-              title="No notes written yet"
-              description="Save your explanations, examples, discoveries, and important takeaways here."
-            >
-              <button
-                onClick={() => openAddNote()}
-                className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#78977D] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#66866C]"
+            <div className="relative sm:w-52">
+              <Filter
+                size={15}
+                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A397A5]"
+              />
+              <select
+                value={noteFilter}
+                onChange={(event) => setNoteFilter(event.target.value)}
+                className="w-full appearance-none rounded-xl border border-[#E9E0E8] bg-white py-3 pl-9 pr-4 text-sm text-[#766779] outline-none focus:border-[#A7BDA8]"
               >
-                <Plus size={15} />
-                Write your first note
-              </button>
-            </EmptySection>
-          ) : filteredNotes.length === 0 ? (
-            <EmptySection
-              icon={Search}
-              title="No matching notes"
-              description="Try another search term or change your note filter."
+                <option value="ALL">All notes</option>
+                <option value="FAVORITES">Favorites</option>
+                <option value="REVIEW">Has review date</option>
+                <option value="NOT_UNDERSTOOD">Not understood</option>
+                <option value="LEARNING">Learning</option>
+                <option value="UNDERSTOOD">Understood</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        {notes.length === 0 ? (
+          <EmptySection
+            icon={NotebookPen}
+            title="No notes written yet"
+            description="Save your explanations, examples, discoveries, and important takeaways here."
+          >
+            <button
+              onClick={() => openAddNote()}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#78977D] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#66866C]"
             >
-              <button
-                onClick={() => {
-                  setNoteSearch("");
-                  setNoteFilter("ALL");
-                }}
-                className="mt-4 text-xs font-semibold text-[#78977D] underline"
+              <Plus size={15} />
+              Write your first note
+            </button>
+          </EmptySection>
+        ) : filteredNotes.length === 0 ? (
+          <EmptySection
+            icon={Search}
+            title="No matching notes"
+            description="Try another search term or change your note filter."
+          >
+            <button
+              onClick={() => {
+                setNoteSearch("");
+                setNoteFilter("ALL");
+              }}
+              className="mt-4 text-xs font-semibold text-[#78977D] underline"
+            >
+              Clear filters
+            </button>
+          </EmptySection>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {filteredNotes.map((note) => (
+              <article
+                key={note.id}
+                className="rounded-[22px] border border-[#E6EEE6] bg-white p-5 transition hover:shadow-sm"
               >
-                Clear filters
-              </button>
-            </EmptySection>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {filteredNotes.map((note) => (
-                <article
-                  key={note.id}
-                  className="rounded-[22px] border border-[#E6EEE6] bg-white p-5 transition hover:shadow-sm"
-                >
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="rounded-full bg-[#F2EAF7] px-2.5 py-1 text-[10px] font-semibold text-[#9274B0]">
-                          {NOTE_TYPES.find((item) => item.value === note.type)
-                            ?.label || "Note"}
-                        </span>
-                        <NoteStatusBadge status={note.status} />
-                      </div>
-
-                      <h3 className="text-base font-semibold text-[#627365]">
-                        {note.title || "Untitled note"}
-                      </h3>
-
-                      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                        {note.lesson ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#F2EDF7] px-2.5 py-1 text-[10px] font-medium text-[#9277AE]">
-                            <BookOpen size={11} />
-                            {note.lesson.title}
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#EDF3EC] px-2.5 py-1 text-[10px] font-medium text-[#78977D]">
-                            <StickyNote size={11} />
-                            General note
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => handleToggleFavorite(note)}
-                      title={
-                        note.isFavorite
-                          ? "Remove from favorites"
-                          : "Add to favorites"
-                      }
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[#B18A55] transition hover:bg-[#FAF4E9]"
-                    >
-                      <Star
-                        size={17}
-                        fill={note.isFavorite ? "currentColor" : "none"}
-                      />
-                    </button>
-                  </div>
-
-                  <p className="whitespace-pre-wrap break-words text-sm leading-6 text-[#8C998D]">
-                    {note.content}
-                  </p>
-
-                  {note.examples && (
-                    <div className="mt-4 rounded-xl bg-[#FBF3F6] p-3.5">
-                      <div className="mb-1.5 flex items-center gap-1.5">
-                        <Lightbulb size={14} className="text-[#B96F91]" />
-                        <p className="text-xs font-semibold text-[#B96F91]">
-                          Examples
-                        </p>
-                      </div>
-                      <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#8C7C85]">
-                        {note.examples}
-                      </p>
-                    </div>
-                  )}
-
-                  {note.keywords?.length > 0 && (
-                    <div className="mt-4">
-                      <div className="mb-3 flex items-center gap-1.5">
-                        <Tag size={13} className="text-[#9277AE]" />
-                        <span className="text-[10px] font-semibold text-[#9277AE]">
-                          Keywords & meanings
-                        </span>
-                      </div>
-
-                      <div className="space-y-2">
-                        {note.keywords.map((keyword) => (
-                          <div
-                            key={keyword.id}
-                            className="rounded-xl border border-[#EAE2F0] bg-[#FCFAFD] p-3"
-                          >
-                            <p className="text-xs font-semibold text-[#80669C]">
-                              {keyword.name}
-                            </p>
-
-                            <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-[#817487]">
-                              {keyword.meaning || "No meaning added yet."}
-                            </p>
-
-                            {keyword.example && (
-                              <div className="mt-2 border-t border-[#EEE8F2] pt-2">
-                                <p className="text-[10px] font-semibold text-[#A18FA6]">
-                                  Example
-                                </p>
-                                <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-[#9B909F]">
-                                  {keyword.example}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {note.keyTakeaways && (
-                    <div className="mt-4 rounded-xl bg-[#F0F5EF] p-3.5">
-                      <p className="mb-1.5 text-xs font-semibold text-[#78977D]">
-                        Key takeaways
-                      </p>
-                      <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#7F9181]">
-                        {note.keyTakeaways}
-                      </p>
-                    </div>
-                  )}
-
-                  {note.questions && (
-                    <div className="mt-4 rounded-xl bg-[#FAF5E9] p-3.5">
-                      <div className="mb-1.5 flex items-center gap-1.5">
-                        <HelpCircle size={13} className="text-[#B18A55]" />
-                        <p className="text-xs font-semibold text-[#B18A55]">
-                          Questions to revisit
-                        </p>
-                      </div>
-                      <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#97866D]">
-                        {note.questions}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#EDF1EC] pt-3">
-                    <div className="flex flex-wrap items-center gap-2 text-[10px] text-[#A0A99F]">
-                      <span>{note.difficulty || "BEGINNER"}</span>
-                      <span>·</span>
-                      <span>Updated {formatDate(note.updatedAt)}</span>
-                    </div>
-
-                    {note.reviewDate && (
-                      <span className="flex items-center gap-1 rounded-full bg-[#F2EDF7] px-2.5 py-1 text-[10px] font-medium text-[#9277AE]">
-                        <CalendarDays size={11} />
-                        Review {formatDate(note.reviewDate)}
+                <div className="mb-3 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-[#F2EAF7] px-2.5 py-1 text-[10px] font-semibold text-[#9274B0]">
+                        {NOTE_TYPES.find((item) => item.value === note.type)
+                          ?.label || "Note"}
                       </span>
-                    )}
-                  </div>
+                      <NoteStatusBadge status={note.status} />
+                    </div>
 
-                  <div className="mt-3 flex justify-end gap-1">
-                    <button
-                      onClick={() => openEditNote(note)}
-                      title="Edit note"
-                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-[#78977D] transition hover:bg-[#EDF3EC]"
-                    >
-                      <Pencil size={13} />
-                      Edit
-                    </button>
+                    <h3 className="text-base font-semibold text-[#627365]">
+                      {note.title || "Untitled note"}
+                    </h3>
 
-                    <button
-                      onClick={() => handleDeleteNote(note)}
-                      disabled={deletingNoteId === note.id}
-                      title="Delete note"
-                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
-                    >
-                      {deletingNoteId === note.id ? (
-                        <LoaderCircle size={13} className="animate-spin" />
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                      {note.lesson ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#F2EDF7] px-2.5 py-1 text-[10px] font-medium text-[#9277AE]">
+                          <BookOpen size={11} />
+                          {note.lesson.title}
+                        </span>
                       ) : (
-                        <Trash2 size={13} />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#EDF3EC] px-2.5 py-1 text-[10px] font-medium text-[#78977D]">
+                          <StickyNote size={11} />
+                          General note
+                        </span>
                       )}
-                      Delete
-                    </button>
+                    </div>
                   </div>
-                </article>
-              ))}
-            </div>
-          )}
-        </section>
-      </div>
+
+                  <button
+                    onClick={() => handleToggleFavorite(note)}
+                    title={
+                      note.isFavorite
+                        ? "Remove from favorites"
+                        : "Add to favorites"
+                    }
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[#B18A55] transition hover:bg-[#FAF4E9]"
+                  >
+                    <Star
+                      size={17}
+                      fill={note.isFavorite ? "currentColor" : "none"}
+                    />
+                  </button>
+                </div>
+
+                <p className="whitespace-pre-wrap break-words text-sm leading-6 text-[#8C998D]">
+                  {note.content}
+                </p>
+
+                {note.examples && (
+                  <div className="mt-4 rounded-xl bg-[#FBF3F6] p-3.5">
+                    <div className="mb-1.5 flex items-center gap-1.5">
+                      <Lightbulb size={14} className="text-[#B96F91]" />
+                      <p className="text-xs font-semibold text-[#B96F91]">
+                        Examples
+                      </p>
+                    </div>
+                    <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#8C7C85]">
+                      {note.examples}
+                    </p>
+                  </div>
+                )}
+
+                {note.keywords?.length > 0 && (
+                  <div className="mt-4">
+                    <div className="mb-3 flex items-center gap-1.5">
+                      <Tag size={13} className="text-[#9277AE]" />
+                      <span className="text-[10px] font-semibold text-[#9277AE]">
+                        Keywords & meanings
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {note.keywords.map((keyword) => (
+                        <div
+                          key={keyword.id}
+                          className="rounded-xl border border-[#EAE2F0] bg-[#FCFAFD] p-3"
+                        >
+                          <p className="text-xs font-semibold text-[#80669C]">
+                            {keyword.name}
+                          </p>
+
+                          <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-[#817487]">
+                            {keyword.meaning || "No meaning added yet."}
+                          </p>
+
+                          {keyword.example && (
+                            <div className="mt-2 border-t border-[#EEE8F2] pt-2">
+                              <p className="text-[10px] font-semibold text-[#A18FA6]">
+                                Example
+                              </p>
+                              <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-[#9B909F]">
+                                {keyword.example}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {note.keyTakeaways && (
+                  <div className="mt-4 rounded-xl bg-[#F0F5EF] p-3.5">
+                    <p className="mb-1.5 text-xs font-semibold text-[#78977D]">
+                      Key takeaways
+                    </p>
+                    <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#7F9181]">
+                      {note.keyTakeaways}
+                    </p>
+                  </div>
+                )}
+
+                {note.questions && (
+                  <div className="mt-4 rounded-xl bg-[#FAF5E9] p-3.5">
+                    <div className="mb-1.5 flex items-center gap-1.5">
+                      <HelpCircle size={13} className="text-[#B18A55]" />
+                      <p className="text-xs font-semibold text-[#B18A55]">
+                        Questions to revisit
+                      </p>
+                    </div>
+                    <p className="whitespace-pre-wrap break-words text-sm leading-5 text-[#97866D]">
+                      {note.questions}
+                    </p>
+                  </div>
+                )}
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[#EDF1EC] pt-3">
+                  <div className="flex flex-wrap items-center gap-2 text-[10px] text-[#A0A99F]">
+                    <span>{note.difficulty || "BEGINNER"}</span>
+                    <span>·</span>
+                    <span>Updated {formatDate(note.updatedAt)}</span>
+                  </div>
+
+                  {note.reviewDate && (
+                    <span className="flex items-center gap-1 rounded-full bg-[#F2EDF7] px-2.5 py-1 text-[10px] font-medium text-[#9277AE]">
+                      <CalendarDays size={11} />
+                      Review {formatDate(note.reviewDate)}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-3 flex justify-end gap-1">
+                  <button
+                    onClick={() => openEditNote(note)}
+                    title="Edit note"
+                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-[#78977D] transition hover:bg-[#EDF3EC]"
+                  >
+                    <Pencil size={13} />
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDeleteNote(note)}
+                    disabled={deletingNoteId === note.id}
+                    title="Delete note"
+                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-[#B77D96] transition hover:bg-[#FBEFF3] disabled:opacity-50"
+                  >
+                    {deletingNoteId === note.id ? (
+                      <LoaderCircle size={13} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={13} />
+                    )}
+                    Delete
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* ---------------- LESSON MODAL ---------------- */}
       {lessonModalOpen && (
@@ -2145,6 +2141,6 @@ export default function LearningPathPage() {
           </div>
         </div>
       )}
-    </main>
+    </>
   );
 }

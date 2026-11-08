@@ -9,13 +9,12 @@ import PageLoader from "@/components/PageLoader";
 export default function MainLayoutClient({ children }) {
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  // Hide the loader when the destination page changes.
   useEffect(() => {
     setLoading(false);
   }, [pathname]);
 
-  // Detect internal navigation immediately when a link is clicked.
   function handleNavigation(event) {
     if (
       event.defaultPrevented ||
@@ -50,13 +49,13 @@ export default function MainLayoutClient({ children }) {
 
   return (
     <div
-      className="flex min-h-screen w-full bg-[#FAF7F5]"
+      className="min-h-screen w-full bg-[#FAF7F5]"
       onClickCapture={handleNavigation}
     >
       <AppSidebar />
 
-      <main
-        className="min-h-screen min-w-0 flex-1 px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9"
+      {/* Main content area */}
+      <main className="min-h-screen w-full min-w-0 px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9"
         style={{
           backgroundImage:
             "radial-gradient(circle, #eedabfde 1px, transparent 2px)",

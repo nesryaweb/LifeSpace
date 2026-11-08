@@ -763,7 +763,7 @@ export default function VisionPage() {
   // Display loading and connection errors before showing the board.
   if (!loaded) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
+      <div className="flex min-h-screen items-center justify-center bg-[#faf8f5]">
         <div className="text-center">
           {loadError ? (
             <>
@@ -771,7 +771,7 @@ export default function VisionPage() {
 
               <button
                 type="button"
-                onClick={() => window.location.reload()}
+                onClick={() => window.location.reload()}``
                 className="rounded-full bg-[#765b70] px-5 py-3 text-sm text-white"
               >
                 Try again
@@ -781,12 +781,12 @@ export default function VisionPage() {
             <p className="text-[#8b626b]">Loading your vision board...</p>
           )}
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
+    <div className="min-h-screen w-full bg-[#faf8f5] text-[#514656]">
       {/* Save error message */}
       {saveError && (
         <div className="fixed bottom-5 right-5 z-[9999] rounded-xl bg-red-100 px-4 py-3 text-sm text-red-700 shadow-lg">
@@ -1298,6 +1298,6 @@ export default function VisionPage() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

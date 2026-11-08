@@ -224,8 +224,8 @@ export default function LearningGlossaryPage() {
   );
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
-      <div className="mx-auto w-full max-w-[1400px]">
+     
+       <>
         <Link
           href="/learning"
           className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#9277AE] transition hover:text-[#80669C]"
@@ -468,7 +468,7 @@ export default function LearningGlossaryPage() {
           Your glossary is automatically built from the keywords you add to your
           learning notes.
         </p>
-      </div>
+ 
 
       {/* Edit modal */}
       {editingKeyword && (
@@ -576,6 +576,6 @@ export default function LearningGlossaryPage() {
           </div>
         </div>
       )}
-    </main>
+</>
   );
 }

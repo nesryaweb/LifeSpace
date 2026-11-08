@@ -1074,8 +1074,7 @@ export default function TasksPage() {
   }
 
   return (
-    <main className="min-h-screen  px-4 py-6 text-[#4d414e] sm:px-7 lg:px-10">
-      <div className="mx-auto max-w-6xl">
+    <>
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div>
@@ -1271,7 +1270,7 @@ export default function TasksPage() {
             View projects
           </Link>
         </div>
-      </div>
+      
 
       <TaskModal
         open={modalOpen}
@@ -1286,6 +1285,6 @@ export default function TasksPage() {
         saving={saving}
         projects={projects}
       />
-    </main>
+    </>
   );
 }

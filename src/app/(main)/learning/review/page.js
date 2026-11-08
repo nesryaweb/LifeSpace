@@ -352,7 +352,7 @@ export default function ReviewPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9">
+    <>
       <div className="mx-auto max-w-[1100px]">
         {/* Header */}
         <div className="mb-8">
@@ -818,6 +818,6 @@ export default function ReviewPage() {
           </section>
         )}
       </div>
-    </main>
+    </>
   );
 }
