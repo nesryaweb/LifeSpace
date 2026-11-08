@@ -51,15 +51,17 @@ export default function MainLayoutClient({ children }) {
     >
       <AppSidebar />
 
-      <main
-        className="min-w-0 flex-1 pt-16 lg:pt-0"
+         <main className="min-h-screen px-4 py-6 text-[#51434A] sm:px-7 lg:px-10 lg:py-9"
         style={{
           backgroundImage:
             "radial-gradient(circle, #eedabfde 1px, transparent 2px)",
           backgroundSize: "30px 30px",
         }}
       >
+        
+            <div className="mx-auto max-w-[1400px]">
         {children}
+        </div>
       </main>
 
       <PageLoader loading={loading} />
