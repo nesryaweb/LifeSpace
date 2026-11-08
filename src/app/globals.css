@@ -68,25 +68,4 @@ button {
 .soft-shadow {
   box-shadow: 0 8px 25px rgba(70, 50, 70, 0.07);
 }
-/* Subtle sidebar scrollbar */
-.sidebar-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #E8DDE5 transparent;
-}
 
-.sidebar-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background: #E8DDE5;
-  border-radius: 999px;
-}
-
-.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #CDB9C7;
-}

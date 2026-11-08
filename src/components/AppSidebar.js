@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -8,19 +9,20 @@ import {
   Compass,
   CalendarDays,
   FolderHeart,
+  SquareCheck,
   Wallet,
-  Dumbbell,
+  Droplet,
   BookOpen,
   BookHeart,
   ChartNoAxesCombined,
   Settings,
-  SquareCheck,
+  Menu,
+  X,
   ChevronLeft,
   ChevronRight,
-  Menu,
-  Droplet,
-  X,
+  Sparkles,
 } from "lucide-react";
+import BrandIcon from "@/components/BrandIcon";
 
 const navigation = [
   { name: "My Home", href: "/", icon: Home },
@@ -38,208 +40,381 @@ const navigation = [
 
 export default function AppSidebar() {
   const pathname = usePathname();
-
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("lifespace-sidebar-collapsed");
+  const navRef = useRef(null);
+  const trackRef = useRef(null);
+  const dragRef = useRef(null);
 
-    if (saved !== null) {
-      setCollapsed(saved === "true");
+  const [scrollbar, setScrollbar] = useState({
+    height: 40,
+    top: 0,
+    visible: false,
+  });
+
+  const isActive = (href) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
+  // Calculate the custom scrollbar size and position.
+  const updateScrollbar = useCallback(() => {
+    const nav = navRef.current;
+    const track = trackRef.current;
+
+    if (!nav || !track) return;
+
+    const trackHeight = track.clientHeight;
+    const clientHeight = nav.clientHeight;
+    const scrollHeight = nav.scrollHeight;
+
+    if (
+      !trackHeight ||
+      !clientHeight ||
+      scrollHeight <= clientHeight
+    ) {
+      setScrollbar((previous) => ({
+        ...previous,
+        visible: false,
+        top: 0,
+      }));
+      return;
     }
+
+    const thumbHeight = Math.min(
+      trackHeight,
+      Math.max(36, (clientHeight / scrollHeight) * trackHeight)
+    );
+
+    const maxThumbTop = trackHeight - thumbHeight;
+    const maxScrollTop = scrollHeight - clientHeight;
+
+    const thumbTop =
+      (nav.scrollTop / maxScrollTop) * maxThumbTop;
+
+    setScrollbar({
+      height: thumbHeight,
+      top: thumbTop,
+      visible: true,
+    });
   }, []);
 
+  // Keep the custom scrollbar updated when scrolling or resizing.
   useEffect(() => {
-    localStorage.setItem("lifespace-sidebar-collapsed", String(collapsed));
-  }, [collapsed]);
+    const nav = navRef.current;
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+    if (!nav) return;
 
-  useEffect(() => {
-    if (!mobileOpen) return;
+    updateScrollbar();
 
-    function handleEscape(event) {
-      if (event.key === "Escape") {
-        setMobileOpen(false);
-      }
+    nav.addEventListener("scroll", updateScrollbar);
+    window.addEventListener("resize", updateScrollbar);
+
+    const observer = new ResizeObserver(updateScrollbar);
+    observer.observe(nav);
+
+    if (nav.firstElementChild) {
+      observer.observe(nav.firstElementChild);
     }
 
-    window.addEventListener("keydown", handleEscape);
-
     return () => {
-      window.removeEventListener("keydown", handleEscape);
+      nav.removeEventListener("scroll", updateScrollbar);
+      window.removeEventListener("resize", updateScrollbar);
+      observer.disconnect();
     };
-  }, [mobileOpen]);
+  }, [updateScrollbar, collapsed, mobileOpen]);
 
-  function isActive(href) {
-    if (href === "/") return pathname === "/";
+  // Click on the scrollbar track to jump to that position.
+  const handleTrackClick = (event) => {
+    if (event.target !== event.currentTarget) return;
 
-    return pathname === href || pathname.startsWith(`${href}/`);
-  }
+    const nav = navRef.current;
+    const track = trackRef.current;
+
+    if (!nav || !track) return;
+
+    const rect = track.getBoundingClientRect();
+    const clickPosition = event.clientY - rect.top;
+    const ratio = clickPosition / track.clientHeight;
+
+    nav.scrollTop =
+      ratio * (nav.scrollHeight - nav.clientHeight);
+  };
+
+  // Drag the rounded scrollbar thumb.
+  const handleThumbPointerDown = (event) => {
+    event.preventDefault();
+
+    dragRef.current = {
+      startY: event.clientY,
+      startTop: scrollbar.top,
+    };
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleThumbPointerMove = (event) => {
+    if (!dragRef.current) return;
+
+    const nav = navRef.current;
+    const track = trackRef.current;
+
+    if (!nav || !track) return;
+
+    const trackHeight = track.clientHeight;
+    const maxThumbTop = trackHeight - scrollbar.height;
+    const maxScrollTop = nav.scrollHeight - nav.clientHeight;
+
+    if (maxThumbTop <= 0 || maxScrollTop <= 0) return;
+
+    const delta = event.clientY - dragRef.current.startY;
+
+    const nextThumbTop = Math.max(
+      0,
+      Math.min(maxThumbTop, dragRef.current.startTop + delta)
+    );
+
+    nav.scrollTop =
+      (nextThumbTop / maxThumbTop) * maxScrollTop;
+  };
+
+  const handleThumbPointerUp = () => {
+    dragRef.current = null;
+  };
 
   return (
     <>
-      {/* MOBILE HEADER */}
-      <div className="fixed left-0 right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-[#eee8ed] bg-white px-4 lg:hidden">
+      {/* Mobile header */}
+      <div className="fixed left-0 right-0 top-0 z-40 flex h-16 items-center justify-between border-b border-[#EDE5F5] bg-[#FFFCFE] px-4 shadow-sm lg:hidden">
+        <Link href="/" className="flex items-center gap-2">
+          <BrandIcon size={36} />
+          <span className="text-xl font-bold tracking-tight text-[#795D8F]">
+            LifeSpace
+          </span>
+        </Link>
+
         <button
-          type="button"
-          onClick={() => setMobileOpen(true)}
-          aria-label="Open navigation"
-          className="rounded-xl p-2 text-[#735F92] hover:bg-[#F8F4F9]"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="rounded-xl p-2 text-[#9479B5] transition hover:bg-[#EDE5F8] hover:text-[#795D8F]"
+          aria-label="Toggle menu"
         >
-          <Menu size={22} />
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-
-        <h1 className="scrapbook-title text-2xl font-bold text-[#65547D]">
-          LifeSpace<span className="text-[#E9A8B9]">.</span>
-        </h1>
-
-        <div className="w-9" />
       </div>
 
-      {/* MOBILE OVERLAY */}
+      {/* Mobile overlay */}
       {mobileOpen && (
-        <button
-          type="button"
-          aria-label="Close navigation"
+        <div
+          className="fixed inset-0 z-40 bg-[#795D8F]/20 backdrop-blur-[2px] lg:hidden"
           onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* Sidebar */}
       <aside
         className={`
           fixed left-0 top-0 z-50 flex h-screen flex-col
-          border-r border-[#eee8ed] bg-white
-          transition-all duration-300 ease-in-out
-          lg:sticky lg:z-20 lg:translate-x-0
-          ${collapsed ? "lg:w-[82px]" : "lg:w-[255px]"}
-          w-[270px]
+          border-r border-[#EDE5F5] bg-[#FFFCFE]
+          shadow-[3px_0_20px_rgba(145,115,175,0.07)]
+          transition-all duration-300
+          ${collapsed ? "w-[88px]" : "w-[260px]"}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
         `}
       >
-        {/* BRAND + COLLAPSE BUTTON */}
-        <div className="flex h-[90px] shrink-0 items-center justify-between px-5">
-          <div className={collapsed ? "lg:hidden" : ""}>
-            <h1 className="scrapbook-title text-3xl font-bold text-[#65547D]">
-              LifeSpace<span className="text-[#E9A8B9]">.</span>
-            </h1>
+        {/* Brand header */}
+        <div
+          className={`flex h-[88px] shrink-0 items-center border-b border-[#F1EBF7] ${
+            collapsed ? "justify-center px-3" : "justify-between px-5"
+          }`}
+        >
+          {collapsed ? (
+            <button
+              onClick={() => setCollapsed(false)}
+              className="group relative flex h-10 w-10 items-center justify-center rounded-xl bg-transparent text-[#8063A3] transition-all duration-200 hover:bg-[#C9C8F0] hover:text-[#674F82]"
+              title="Expand sidebar"
+              aria-label="Expand sidebar"
+            >
+              <span className="transition duration-200 group-hover:scale-75 group-hover:opacity-0">
+                <BrandIcon size={34} />
+              </span>
 
-            <p className="mt-1 text-[10px] uppercase tracking-[3px] text-gray-400">
-              My little world
-            </p>
-          </div>
-
-          {collapsed && (
-            <span className="hidden scrapbook-title text-2xl font-bold text-[#65547D] lg:block">
-              L<span className="text-[#E9A8B9]">.</span>
-            </span>
-          )}
-
-          {/* DESKTOP COLLAPSE BUTTON */}
-          <button
-            type="button"
-            onClick={() => setCollapsed((value) => !value)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="hidden lg:flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#eee8ed] text-[#927BA9] transition hover:bg-[#F8F4F9]"
-          >
-            {collapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
-          </button>
-
-          {/* MOBILE CLOSE BUTTON */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Close navigation"
-            className="rounded-lg p-2 text-gray-500 hover:bg-[#FAF7FA] lg:hidden"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* SECTION LABEL */}
-        <div className={`mb-3 px-6 ${collapsed ? "lg:hidden" : ""}`}>
-          <p className="text-[10px] font-bold uppercase tracking-[2px] text-gray-400">
-            Your journal
-          </p>
-        </div>
-
-        {/* NAVIGATION */}
-        <nav className="sidebar-scrollbar flex-1 space-y-1 overflow-y-auto px-3 pb-4">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-            const selected = isActive(item.href);
-
-            return (
+              <span className="absolute inset-0 flex items-center justify-center rounded-xl opacity-0 transition duration-200 group-hover:opacity-100">
+                <ChevronRight size={21} strokeWidth={2.3} />
+              </span>
+            </button>
+          ) : (
+            <>
               <Link
-                key={item.name}
-                href={item.href}
-                title={collapsed ? item.name : undefined}
+                href="/"
+                className="flex min-w-0 items-center gap-3"
                 onClick={() => setMobileOpen(false)}
-                className={`
-                  flex items-center gap-3 rounded-xl px-4 py-3
-                  text-sm transition-all
-                  ${collapsed ? "lg:justify-center lg:px-2" : ""}
-                  ${
-                    selected
-                      ? "bg-[#EDE6F6] font-bold text-[#735F92]"
-                      : "text-gray-500 hover:bg-[#FAF7FA]"
-                  }
-                `}
               >
-                <Icon size={19} className="shrink-0" />
+                <BrandIcon size={42} />
 
-                <span className={collapsed ? "lg:hidden" : ""}>
-                  {item.name}
-                </span>
-
-                {selected && !collapsed && (
-                  <span className="ml-auto text-[#AA92C9]">✿</span>
-                )}
+                <div className="min-w-0">
+                  <p className="text-2xl font-bold leading-none tracking-tight text-[#795D8F]">
+                    LifeSpace
+                  </p>
+                  <p className="mt-1 text-[9px] font-semibold tracking-[2.5px] text-[#A18BBE]">
+                    YOUR LITTLE WORLD
+                  </p>
+                </div>
               </Link>
-            );
-          })}
-        </nav>
 
-        {/* REMINDER */}
-        <div className={`px-4 pb-4 ${collapsed ? "lg:hidden" : ""}`}>
-          <div className="relative overflow-hidden rounded-2xl bg-[#F9EDF0] p-4">
-            <span className="text-2xl">🌸</span>
-
-            <p className="mt-2 text-sm font-semibold text-[#755D6A]">
-              A gentle reminder
-            </p>
-
-            <p className="mt-1 text-xs leading-relaxed text-[#987E8A]">
-              You don't have to do everything today. Just keep going.
-            </p>
-
-            <div className="absolute -bottom-3 -right-2 text-5xl opacity-20">
-              ✿
-            </div>
-          </div>
+              <button
+                onClick={() => setCollapsed(true)}
+                className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#C9C8F0] bg-transparent text-[#8063A3] transition-all duration-200 hover:border-[#B9B7E8] hover:bg-[#C9C8F0] hover:text-[#674F82] lg:flex"
+                title="Collapse sidebar"
+                aria-label="Collapse sidebar"
+              >
+                <ChevronLeft size={19} strokeWidth={2.3} />
+              </button>
+            </>
+          )}
         </div>
 
-        {/* SETTINGS */}
-        <div className="border-t border-[#F1EAEF] p-3">
-          <button
-            type="button"
-            title={collapsed ? "Settings" : undefined}
-            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-gray-500 transition hover:bg-[#FAF7FA] ${
-              collapsed ? "lg:justify-center lg:px-2" : ""
+        {/* Navigation and custom scrollbar */}
+        <div className="relative flex-1 min-h-0 px-3 py-5">
+          <nav
+            ref={navRef}
+            className="sidebar-scrollbar h-full space-y-1 overflow-y-auto pr-3"
+          >
+            {!collapsed && (
+              <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[2px] text-[#A995C2]">
+                Your Space
+              </p>
+            )}
+
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  title={collapsed ? item.name : undefined}
+                  className={`
+                    group flex items-center gap-3 rounded-xl
+                    px-3 py-3 transition-all duration-200
+                    ${
+                      active
+                        ? "bg-[#DDD0F2] font-semibold text-[#674F82] shadow-[0_2px_8px_rgba(160,135,195,0.10)]"
+                        : "text-[#927CA8] hover:bg-[#E5D5F5] hover:text-[#674F82]"
+                    }
+                    ${collapsed ? "justify-center px-0" : ""}
+                  `}
+                >
+                  <Icon
+                    size={19}
+                    strokeWidth={active ? 2.3 : 1.9}
+                    className={`shrink-0 transition-colors ${
+                      active
+                        ? "text-[#8063A3]"
+                        : "text-[#B09ACB] group-hover:text-[#8063A3]"
+                    }`}
+                  />
+
+                  {!collapsed && (
+                    <span className="truncate text-[13px]">
+                      {item.name}
+                    </span>
+                  )}
+
+                  {!collapsed && active && (
+                    <Sparkles
+                      size={13}
+                      className="ml-auto shrink-0 text-[#987DB8]"
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Custom rounded scrollbar */}
+          <div
+            ref={trackRef}
+            onPointerDown={handleTrackClick}
+            className={`absolute bottom-5 right-1 top-5 w-[7px] rounded-full transition-colors duration-200 hover:bg-[#F3EDFA] ${
+              scrollbar.visible ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            <Settings size={19} className="shrink-0" />
-
-            <span className={collapsed ? "lg:hidden" : ""}>Settings</span>
-          </button>
+            <div
+              onPointerDown={handleThumbPointerDown}
+              onPointerMove={handleThumbPointerMove}
+              onPointerUp={handleThumbPointerUp}
+              onPointerCancel={handleThumbPointerUp}
+              className="absolute left-0 right-0 cursor-grab rounded-full bg-[#C9C8F0] transition-colors hover:bg-[#A99BDC] active:cursor-grabbing"
+              style={{
+                height: `${scrollbar.height}px`,
+                transform: `translateY(${scrollbar.top}px)`,
+                touchAction: "none",
+              }}
+            />
+          </div>
         </div>
+
+        {/* Bottom reminder */}
+        <div className="shrink-0 px-3 pb-3">
+          {!collapsed && (
+            <div className="mb-4 rounded-2xl border border-[#E9E1F5] bg-[#F3EDFA] p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#DDD0F2] text-[#8063A3]">
+                  <Sparkles size={15} />
+                </span>
+                <p className="text-xs font-semibold text-[#674F82]">
+                  A gentle reminder
+                </p>
+              </div>
+
+              <p className="text-[11px] leading-relaxed text-[#8C79A3]">
+                Little steps every day create a life you love.
+              </p>
+            </div>
+          )}
+
+          <Link
+            href="/settings"
+            onClick={() => setMobileOpen(false)}
+            title={collapsed ? "Settings" : undefined}
+            className={`
+              flex items-center gap-3 rounded-xl px-3 py-3
+              text-[#927CA8] transition hover:bg-[#E5D5F5] hover:text-[#674F82]
+              ${collapsed ? "justify-center px-0" : ""}
+            `}
+          >
+            <Settings size={19} className="shrink-0 text-[#B09ACB]" />
+            {!collapsed && <span className="text-[13px]">Settings</span>}
+          </Link>
+        </div>
+
+        {/* Footer */}
+        {!collapsed && (
+          <div className="border-t border-[#F1EBF7] px-5 py-3">
+            <p className="text-center text-[10px] text-[#A995C2]">
+              Made with love, for your life ♡
+            </p>
+          </div>
+        )}
       </aside>
+
+      {/* Hide the browser's native scrollbar in all browsers */}
+      <style jsx global>{`
+        .sidebar-scrollbar {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .sidebar-scrollbar::-webkit-scrollbar {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+      `}</style>
     </>
   );
 }
