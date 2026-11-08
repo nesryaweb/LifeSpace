@@ -1,0 +1,518 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum VisionItemType {
+  IMAGE
+  NOTE
+  QUOTE
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+enum GoalType {
+  GENERAL
+  FINANCIAL
+}
+
+enum ProjectStatus {
+  PLANNED
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum LearningNoteType {
+  CONCEPT
+  TUTORIAL
+  VOCABULARY
+  RESEARCH
+  SUMMARY
+  PROBLEM_SOLUTION
+  OTHER
+}
+
+enum LearningNoteStatus {
+  NOT_UNDERSTOOD
+  LEARNING
+  UNDERSTOOD
+}
+
+enum LearningNoteDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum FinanceTransactionType {
+  INCOME
+  EXPENSE
+  SAVING_DEPOSIT
+  SAVING_WITHDRAWAL
+}
+
+enum JournalEntryType {
+  DAILY
+  GRATITUDE
+  BRAIN_DUMP
+  REFLECTION
+  IDEA
+}
+
+enum LearningPathStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum LearningResourceType {
+  BOOK
+  VIDEO
+  WEBSITE
+  COURSE
+  ARTICLE
+  OTHER
+}
+
+enum LearningLessonStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ==========================================
+// USER
+// ==========================================
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  visionBoard         VisionBoard?
+  goals               Goal[]
+  projects            Project[]
+  tasks               Task[]
+  financeTransactions FinanceTransaction[]
+  periodRecords       PeriodRecord[]
+  journalEntries      JournalEntry[]
+  learningPaths       LearningPath[]
+  learningNotes       LearningNote[]
+  learningKeywords    LearningKeyword[]
+}
+
+// ==========================================
+// VISION BOARD
+// ==========================================
+
+model VisionBoard {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items VisionItem[]
+}
+
+model VisionItem {
+  id          String         @id @default(cuid())
+  boardId     String
+  type        VisionItemType @default(IMAGE)
+  title       String?
+  description String?
+  imageUrl    String?
+  positionX   Float          @default(0)
+  positionY   Float          @default(0)
+  width       Float          @default(240)
+  rotation    Float          @default(0)
+  zIndex      Int            @default(0)
+  color       String         @default("#F7DCE5")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  board     VisionBoard      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  goalLinks VisionItemGoal[]
+
+  @@index([boardId])
+}
+
+// ==========================================
+// PERIOD TRACKER / FLOW
+// ==========================================
+
+model PeriodRecord {
+  id        String   @id @default(cuid())
+  userId    String
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startDate])
+}
+
+// ==========================================
+// GOALS
+// ==========================================
+
+model Goal {
+  id          String     @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  status      GoalStatus @default(ACTIVE)
+  type        GoalType   @default(GENERAL)
+  targetDate  DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  visionLinks   VisionItemGoal[]
+  projectLinks  ProjectGoal[]
+  financialGoal FinancialGoal?
+  learningPaths LearningPath[]
+
+  @@index([userId])
+}
+
+model VisionItemGoal {
+  visionItemId String
+  goalId       String
+
+  visionItem VisionItem @relation(fields: [visionItemId], references: [id], onDelete: Cascade)
+  goal       Goal       @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@id([visionItemId, goalId])
+}
+
+// ==========================================
+// FINANCIAL GOALS AND SAVINGS JARS
+// ==========================================
+
+model FinancialGoal {
+  id           String   @id @default(cuid())
+  goalId       String   @unique
+  targetAmount Decimal  @db.Decimal(14, 2)
+  currency     String   @default("ETB")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  goal         Goal                 @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  transactions FinanceTransaction[]
+
+  @@index([currency])
+}
+
+// ==========================================
+// FINANCE TRANSACTIONS
+// ==========================================
+
+model FinanceTransaction {
+  id              String                 @id @default(cuid())
+  userId          String
+  financialGoalId String?
+  type            FinanceTransactionType
+  title           String
+  description     String?
+  amount          Decimal                @db.Decimal(14, 2)
+  currency        String                 @default("ETB")
+  category        String?
+  date            DateTime               @default(now())
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  financialGoal FinancialGoal? @relation(fields: [financialGoalId], references: [id], onDelete: SetNull)
+
+  @@index([userId, date])
+  @@index([financialGoalId])
+  @@index([type])
+}
+
+// ==========================================
+// PROJECTS
+// ==========================================
+
+model Project {
+  id          String        @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  status      ProjectStatus @default(PLANNED)
+  priority    Priority      @default(MEDIUM)
+  startDate   DateTime?
+  dueDate     DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalLinks  ProjectGoal[]
+  milestones Milestone[]
+  tasks      Task[]
+
+  @@index([userId])
+}
+
+model ProjectGoal {
+  projectId String
+  goalId    String
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  goal    Goal    @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, goalId])
+}
+
+// ==========================================
+// MILESTONES
+// ==========================================
+
+model Milestone {
+  id          String    @id @default(cuid())
+  projectId   String
+  title       String
+  description String?
+  dueDate     DateTime?
+  completedAt DateTime?
+  position    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks   Task[]
+
+  @@index([projectId])
+}
+
+// ==========================================
+// TASKS
+// ==========================================
+
+model Task {
+  id          String     @id @default(cuid())
+  userId      String
+  projectId   String?
+  milestoneId String?
+  parentId    String?
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+  completedAt DateTime?
+  position    Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull)
+  parent    Task?      @relation("TaskHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  subtasks  Task[]     @relation("TaskHierarchy")
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([milestoneId])
+  @@index([parentId])
+}
+
+// ==========================================
+// JOURNAL
+// ==========================================
+
+model JournalEntry {
+  id        String           @id @default(cuid())
+  userId    String
+  title     String?
+  content   String           @db.Text
+  type      JournalEntryType @default(DAILY)
+  mood      String?
+  entryDate DateTime         @default(now())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, entryDate])
+  @@index([userId, type])
+}
+
+// ==========================================
+// LEARNING PATHS
+// ==========================================
+
+model LearningPath {
+  id          String             @id @default(cuid())
+  userId      String
+  goalId      String?
+  title       String
+  description String?
+  status      LearningPathStatus @default(ACTIVE)
+  startDate   DateTime?
+  targetDate  DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal      Goal?              @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  resources LearningResource[]
+  lessons   LearningLesson[]
+  notes     LearningNote[]
+
+  @@index([userId])
+  @@index([goalId])
+  @@index([userId, status])
+}
+
+// ==========================================
+// LEARNING RESOURCES
+// ==========================================
+
+model LearningResource {
+  id             String               @id @default(cuid())
+  learningPathId String
+  title          String
+  description    String?
+  type           LearningResourceType @default(OTHER)
+  url            String?
+  author         String?
+  completed      Boolean              @default(false)
+  position       Int                  @default(0)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  learningPath LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+
+  @@index([learningPathId])
+}
+
+// ==========================================
+// LEARNING LESSONS
+// ==========================================
+
+model LearningLesson {
+  id             String               @id @default(cuid())
+  learningPathId String
+  title          String
+  description    String?
+  status         LearningLessonStatus @default(NOT_STARTED)
+  completedAt    DateTime?
+  position       Int                  @default(0)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  learningPath LearningPath   @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  notes        LearningNote[]
+
+  @@index([learningPathId])
+  @@index([learningPathId, status])
+}
+
+// ==========================================
+// LEARNING NOTES
+// ==========================================
+
+model LearningNote {
+  id             String  @id @default(cuid())
+  userId         String
+  learningPathId String
+  lessonId       String?
+
+  title        String?
+  content      String  @db.Text
+  examples     String? @db.Text
+  keyTakeaways String? @db.Text
+  questions    String? @db.Text
+
+  type       LearningNoteType       @default(CONCEPT)
+  status     LearningNoteStatus     @default(LEARNING)
+  difficulty LearningNoteDifficulty @default(BEGINNER)
+
+  isFavorite Boolean   @default(false)
+  reviewDate DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningPath LearningPath          @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  lesson       LearningLesson?       @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  keywords     LearningNoteKeyword[]
+
+  @@index([userId])
+  @@index([learningPathId])
+  @@index([lessonId])
+  @@index([userId, status])
+  @@index([userId, isFavorite])
+}
+
+// ==========================================
+// REUSABLE LEARNING KEYWORDS / GLOSSARY
+// ==========================================
+
+model LearningKeyword {
+  id             String   @id @default(cuid())
+  userId         String
+  name           String
+  normalizedName String
+  meaning        String   @db.Text
+  example        String?  @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user  User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes LearningNoteKeyword[]
+
+  @@unique([userId, normalizedName])
+  @@index([userId])
+}
+
+// ==========================================
+// LEARNING NOTE ↔ KEYWORD RELATION
+// ==========================================
+
+model LearningNoteKeyword {
+  id                String @id @default(cuid())
+  learningNoteId    String
+  learningKeywordId String
+
+  learningNote    LearningNote    @relation(fields: [learningNoteId], references: [id], onDelete: Cascade)
+  learningKeyword LearningKeyword @relation(fields: [learningKeywordId], references: [id], onDelete: Cascade)
+
+  @@unique([learningNoteId, learningKeywordId])
+  @@index([learningNoteId])
+  @@index([learningKeywordId])
+}

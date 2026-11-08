@@ -1,0 +1,92 @@
+
+@import "tailwindcss";
+
+:root {
+  --background: #faf8f5;
+  --foreground: #383344;
+  --card: #ffffff;
+  --muted: #f0edf4;
+  --border: #eee8ed;
+  --pink: #f7dce5;
+  --purple: #e7dff7;
+  --yellow: #f8edc9;
+  --green: #dceee1;
+  --blue: #dceaf5;
+  --peach: #f9e3d5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #faf8f5;
+  background-image: radial-gradient(
+    circle,
+    #eedabfc9  1.5px,
+    transparent 2px
+  );
+  background-size: 30px 30px;
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: #eadcf5;
+  color: #383344;
+}
+
+.scrapbook-title {
+  font-family: Georgia, serif;
+  letter-spacing: -1.5px;
+}
+
+.paper-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: 0 4px 18px rgba(70, 50, 70, 0.035);
+}
+
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-5deg);
+  border-radius: 9px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.soft-shadow {
+  box-shadow: 0 8px 25px rgba(70, 50, 70, 0.07);
+}
+/* Subtle sidebar scrollbar */
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #E8DDE5 transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: #E8DDE5;
+  border-radius: 999px;
+}
+
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #CDB9C7;
+}
